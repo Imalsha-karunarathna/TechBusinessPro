@@ -1,26 +1,32 @@
 "use client";
 
 import { Search, LogIn, LogOut, User } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-// import { useAuth } from "@/hooks/use-auth";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const [location] = useLocation();
-  //   const { user, logoutMutation } = useAuth();
-  const user = null;
+  const { user, logoutMutation } = useAuth();
+  const router = useRouter();
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
-  //   const handleLogout = () => {
-  //     logoutMutation.mutate();
-  //   };
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        window.location.href = "/";
+        // router.push("/");
+      },
+    });
+  };
 
   return (
     <nav className="bg-white shadow fixed w-full z-10">
@@ -100,22 +106,22 @@ const Navbar = () => {
                     <User className="h-5 w-5 text-gray-600" />
                   </div>
                   <span className="ml-2 text-sm font-medium text-gray-700">
-                    {/* {user.username} */}
+                    {user.username}
                   </span>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   className="flex items-center text-gray-500"
-                  //   onClick={handleLogout}
-                  //   disabled={logoutMutation.isPending}
+                  onClick={handleLogout}
+                  disabled={logoutMutation.isPending}
                 >
                   <LogOut className="h-4 w-4 mr-1" />
-                  Log out
+                  {logoutMutation.isPending ? "Logging out..." : "Log out"}
                 </Button>
               </div>
             ) : (
-              <Link href="/auth-page" target="_self">
+              <Link href="/auth-page">
                 <Button
                   variant="outline"
                   size="sm"
@@ -212,21 +218,21 @@ const Navbar = () => {
                       <User className="h-5 w-5 text-gray-600" />
                     </div>
                     <span className="ml-2 text-sm font-medium text-gray-700">
-                      {/* {user.username} */}
+                      {user.username}
                     </span>
                   </div>
                 </div>
                 <button
                   className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                  //   onClick={handleLogout}
-                  //   disabled={logoutMutation.isPending}
+                  onClick={handleLogout}
+                  disabled={logoutMutation.isPending}
                 >
                   <LogOut className="h-4 w-4 mr-2" />
-                  {/* {logoutMutation.isPending ? "Logging out..." : "Log out"} */}
+                  {logoutMutation.isPending ? "Logging out..." : "Log out"}
                 </button>
               </div>
             ) : (
-              <Link href="/auth">
+              <Link href="/auth-page">
                 <span className="block px-4 py-2 text-center border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                   <span className="flex justify-center items-center">
                     <LogIn className="h-4 w-4 mr-2" />
