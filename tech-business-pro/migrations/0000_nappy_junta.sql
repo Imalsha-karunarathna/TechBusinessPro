@@ -3,6 +3,35 @@ CREATE TYPE "public"."deal_status" AS ENUM('proposed', 'negotiating', 'accepted'
 CREATE TYPE "public"."solution_category" AS ENUM('website_development', 'it_security', 'crm_systems', 'business_applications', 'other');--> statement-breakpoint
 CREATE TYPE "public"."status" AS ENUM('pending', 'approved', 'rejected');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('admin', 'solution_provider', 'solution_seeker');--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"username" text NOT NULL,
+	"password" text NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL,
+	"role" "user_role" DEFAULT 'solution_seeker' NOT NULL,
+	"avatar_url" text,
+	"organization_id" integer,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"last_login" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "users_username_unique" UNIQUE("username")
+);
+--> statement-breakpoint
+CREATE TABLE "solution_providers" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"description" text NOT NULL,
+	"email" text NOT NULL,
+	"website" text,
+	"phone" text,
+	"logo_url" text,
+	"regions_served" text[],
+	"verification_status" "status" DEFAULT 'pending' NOT NULL,
+	"approved_date" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "blog_posts" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
@@ -98,18 +127,17 @@ CREATE TABLE "partner_applications" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "solution_providers" (
+CREATE TABLE "statistics" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"description" text NOT NULL,
-	"email" text NOT NULL,
-	"website" text,
-	"phone" text,
-	"logo_url" text,
-	"regions_served" text[],
-	"verification_status" "status" DEFAULT 'pending' NOT NULL,
-	"approved_date" timestamp,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"date" timestamp DEFAULT now() NOT NULL,
+	"visitors_count" integer DEFAULT 0 NOT NULL,
+	"solutions_views" integer DEFAULT 0 NOT NULL,
+	"conversations_started" integer DEFAULT 0 NOT NULL,
+	"deals_proposed" integer DEFAULT 0 NOT NULL,
+	"deals_closed" integer DEFAULT 0 NOT NULL,
+	"new_users" integer DEFAULT 0 NOT NULL,
+	"chat_interactions" integer DEFAULT 0 NOT NULL,
+	"search_queries" jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "solutions" (
@@ -127,34 +155,6 @@ CREATE TABLE "solutions" (
 	"inquiries_count" integer DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "statistics" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"date" timestamp DEFAULT now() NOT NULL,
-	"visitors_count" integer DEFAULT 0 NOT NULL,
-	"solutions_views" integer DEFAULT 0 NOT NULL,
-	"conversations_started" integer DEFAULT 0 NOT NULL,
-	"deals_proposed" integer DEFAULT 0 NOT NULL,
-	"deals_closed" integer DEFAULT 0 NOT NULL,
-	"new_users" integer DEFAULT 0 NOT NULL,
-	"chat_interactions" integer DEFAULT 0 NOT NULL,
-	"search_queries" jsonb DEFAULT '{}'::jsonb NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "users" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"username" text NOT NULL,
-	"password" text NOT NULL,
-	"name" text NOT NULL,
-	"email" text NOT NULL,
-	"role" "user_role" DEFAULT 'solution_seeker' NOT NULL,
-	"avatar_url" text,
-	"organization_id" integer,
-	"is_active" boolean DEFAULT true NOT NULL,
-	"last_login" timestamp,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "users_username_unique" UNIQUE("username")
 );
 --> statement-breakpoint
 CREATE TABLE "visitor_chats" (
