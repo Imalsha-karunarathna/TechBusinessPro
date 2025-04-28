@@ -1,8 +1,7 @@
 import type React from "react";
-import { Providers } from "./providers";
 
 import "./globals.css";
-import Navbar from "../components/Navbar";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
@@ -13,7 +12,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <Navbar />
           <main className="pt-16">{children}</main>
         </Providers>
       </body>

@@ -6,14 +6,16 @@ import {
   useMutation,
   type UseMutationResult,
 } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import { getQueryFn, apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { User } from "./db/schema";
+import type { User } from "./db/schema";
 
 type LoginData = {
   username: string;
   password: string;
+  isAdmin?: boolean;
 };
 
 type RegisterData = LoginData & {
@@ -34,6 +36,8 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
+  const router = useRouter();
+
   const {
     data: user,
     error,
@@ -54,11 +58,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Login successful",
         description: `Welcome back, ${user.username}!`,
       });
+
+      // Immediate redirect based on user role
+      if (user.role === "admin") {
+        router.push("/admin/partner-application");
+      } else {
+        router.push("/");
+      }
     },
     onError: (error: Error) => {
       toast({
         title: "Login failed",
         description: error.message || "Invalid username or password",
+        // variant: "destructive",
       });
     },
   });
@@ -74,11 +86,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Registration successful",
         description: "Your account has been created",
       });
+
+      // Redirect to home page after registration
+      router.push("/");
     },
     onError: (error: Error) => {
       toast({
         title: "Registration failed",
         description: error.message || "Could not create account",
+        // variant: "destructive",
       });
     },
   });
@@ -93,12 +109,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Logged out",
         description: "You have been logged out successfully",
       });
-    },
 
+      // Redirect to home page after logout
+      router.push("/");
+    },
     onError: (error: Error) => {
       toast({
         title: "Logout failed",
         description: error.message,
+        //  variant: "destructive",
       });
     },
   });

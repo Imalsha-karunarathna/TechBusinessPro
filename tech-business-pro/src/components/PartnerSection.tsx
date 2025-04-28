@@ -54,7 +54,7 @@ const partnerFormSchema = z.object({
 const PartnerSection = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<PartnerApplication>({
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
@@ -71,6 +71,41 @@ const PartnerSection = () => {
     },
   });
 
+  async function onSubmit(data: PartnerApplication) {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/partner-applications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSubmitted(true);
+        toast({
+          title: "Application Submitted",
+          description:
+            "Your partner application has been submitted successfully.",
+        });
+      } else {
+        throw new Error(result.message || "Failed to submit application");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission Failed",
+        description:
+          "There was an error submitting your application. Please try again.",
+        //variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
   return (
     <div id="partner" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -178,7 +213,10 @@ const PartnerSection = () => {
               </div>
             ) : (
               <Form {...form}>
-                <form className="space-y-4">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <FormField
                       control={form.control}
@@ -271,7 +309,7 @@ const PartnerSection = () => {
                               />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="z-[100] overflow-y-auto max-h-[200px]">
+                          <SelectContent className=" max-h-[600px] bg-yellow-500">
                             <SelectItem
                               value="IT Security"
                               className="hover:bg-blue-500 cursor-pointer"
@@ -374,8 +412,9 @@ const PartnerSection = () => {
                   <Button
                     type="submit"
                     className="w-full bg-blue-500 text-white"
+                    disabled={isSubmitting}
                   >
-                    Submit Application
+                    {isSubmitting ? "Submitting..." : "Submit Application"}
                   </Button>
                 </form>
               </Form>

@@ -5,8 +5,8 @@ import { getUserById } from "@/lib/db/users/read";
 export async function GET(request: NextRequest) {
   try {
     // Get session cookie
-    const cookieStore = cookies();
-    const sessionCookie = (await cookieStore).get("session");
+    const cookieStore = cookies(); // no await here
+    const sessionCookie = (await cookieStore).get("session"); // no await here
 
     if (!sessionCookie?.value) {
       return NextResponse.json(null, { status: 401 });

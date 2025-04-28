@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Form,
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Lock, Mail, User } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -41,9 +42,20 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
-  const { user, loginMutation, registerMutation } = useAuth();
+  const { user, loginMutation, registerMutation, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("login");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const error = searchParams.get("error");
+  const registered = searchParams.get("registered");
+
+  // Set active tab to login if user just registered
+  useEffect(() => {
+    if (registered) {
+      setActiveTab("login");
+    }
+  }, [registered]);
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -65,26 +77,37 @@ export default function AuthPage() {
   });
 
   const onLoginSubmit = (data: LoginFormValues) => {
-    loginMutation.mutate(data, {
-      onSuccess: () => {
-        router.push("/");
-      },
-    });
+    loginMutation.mutate(data);
   };
 
   const onRegisterSubmit = (data: RegisterFormValues) => {
     // Omit confirmPassword as it's not needed for the API
     const { confirmPassword, ...registerData } = data;
-    registerMutation.mutate(registerData, {
-      onSuccess: () => {
-        router.push("/");
-      },
-    });
+    registerMutation.mutate(registerData);
   };
 
-  // If user is already logged in, redirect to home
+  // If user is already logged in, redirect to appropriate page
+  useEffect(() => {
+    if (!isLoading && user) {
+      if (user.role === "admin") {
+        router.push("/admin/partner-application");
+      } else {
+        router.push("/");
+      }
+    }
+  }, [user, isLoading, router]);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  // If user is already authenticated, don't render the form
   if (user) {
-    router.push("/");
     return null;
   }
 
@@ -155,6 +178,26 @@ export default function AuthPage() {
                 : "Register to explore our solution marketplace"}
             </p>
           </div>
+
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>
+                {error === "unauthorized"
+                  ? "You need to be logged in to access that page."
+                  : error === "admin_required"
+                  ? "You need administrator privileges to access that page."
+                  : "An error occurred. Please try again."}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {registered && (
+            <Alert className="mb-6 bg-green-50 border-green-200 text-green-800">
+              <AlertDescription>
+                Registration successful! Please sign in with your new account.
+              </AlertDescription>
+            </Alert>
+          )}
 
           <Tabs
             defaultValue="login"

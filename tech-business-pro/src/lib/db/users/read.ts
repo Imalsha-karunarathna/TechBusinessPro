@@ -66,7 +66,6 @@ export async function validateUserCredentials(
       return null;
     }
 
-    // Update last login time
     await db
       .update(users)
       .set({ last_login: new Date() })
