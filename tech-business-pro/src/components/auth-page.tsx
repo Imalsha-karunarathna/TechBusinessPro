@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Lock, Mail, User } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -90,7 +91,7 @@ export default function AuthPage() {
   useEffect(() => {
     if (!isLoading && user) {
       if (user.role === "admin") {
-        router.push("/admin/partner-application");
+        router.push("/admin/partner-applications");
       } else {
         router.push("/");
       }
@@ -395,6 +396,15 @@ export default function AuthPage() {
               >
                 {activeTab === "login" ? "Register" : "Log in"}
               </button>
+            </p>
+            <p className="mt-2">
+              Are you a solution provider?{" "}
+              <Link
+                href="/provider-registration"
+                className="text-primary-600 hover:underline font-medium"
+              >
+                Register as a provider
+              </Link>
             </p>
           </div>
         </div>

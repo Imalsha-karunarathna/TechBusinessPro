@@ -5,6 +5,56 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/server-auth";
 import { db } from "@/db";
+import { unstable_noStore as noStore } from "next/cache";
+
+export async function getPartnerApplications(status?: string) {
+  // Prevent caching to ensure fresh data every time
+  noStore();
+
+  try {
+    await requireAdmin();
+
+    // Normalize the status parameter
+    const normalizedStatus = status?.trim().toLowerCase() || "all";
+
+    // If status is "all", return all applications
+    if (normalizedStatus === "all") {
+      const allApplications = await db.query.partnerApplications.findMany({
+        with: {
+          reviewer: true,
+        },
+        orderBy: (partnerApplications, { desc }) => [
+          desc(partnerApplications.created_at),
+        ],
+      });
+
+      return allApplications;
+    }
+
+    // Otherwise filter by specific status
+    if (["pending", "approved", "rejected"].includes(normalizedStatus)) {
+      // Use a direct query with explicit casting to ensure proper filtering
+      const filteredApplications = await db.query.partnerApplications.findMany({
+        where: (partnerApplications, { eq }) =>
+          eq(partnerApplications.application_status, normalizedStatus as any),
+        with: {
+          reviewer: true,
+        },
+        orderBy: (partnerApplications, { desc }) => [
+          desc(partnerApplications.created_at),
+        ],
+      });
+
+      return filteredApplications;
+    }
+
+    // Invalid status — return empty array
+    return [];
+  } catch (error) {
+    console.error("Error fetching partner applications:", error);
+    return [];
+  }
+}
 
 export async function updateApplicationStatus(
   applicationId: number,
@@ -24,7 +74,16 @@ export async function updateApplicationStatus(
       })
       .where(eq(partnerApplications.id, applicationId));
 
+    // Revalidate all paths to ensure fresh data
     revalidatePath("/admin/partner-application");
+    revalidatePath(`/admin/partner-application/${applicationId}`);
+
+    // Force revalidation of all status tabs
+    revalidatePath("/admin/partner-application?status=pending");
+    revalidatePath("/admin/partner-application?status=approved");
+    revalidatePath("/admin/partner-application?status=rejected");
+    revalidatePath("/admin/partner-application?status=all");
+
     return { success: true };
   } catch (error) {
     console.error("Error updating application status:", error);
@@ -32,45 +91,9 @@ export async function updateApplicationStatus(
   }
 }
 
-export async function getPartnerApplications(status?: string) {
-  try {
-    await requireAdmin();
-
-    // If status is "all" or not provided, return all applications
-    if (!status || status === "all") {
-      return await db.query.partnerApplications.findMany({
-        with: {
-          reviewer: true,
-        },
-        orderBy: (partnerApplications, { desc }) => [
-          desc(partnerApplications.created_at),
-        ],
-      });
-    }
-
-    // Otherwise, filter by the specified status
-    if (["pending", "approved", "rejected"].includes(status)) {
-      return await db.query.partnerApplications.findMany({
-        where: (partnerApplications, { eq }) =>
-          eq(partnerApplications.application_status, status as any),
-        with: {
-          reviewer: true,
-        },
-        orderBy: (partnerApplications, { desc }) => [
-          desc(partnerApplications.created_at),
-        ],
-      });
-    }
-
-    // Default return empty array if status is invalid
-    return [];
-  } catch (error) {
-    console.error("Error fetching partner applications:", error);
-    return [];
-  }
-}
-
 export async function getPartnerApplicationById(id: number) {
+  noStore(); // Prevent caching
+
   try {
     await requireAdmin();
 

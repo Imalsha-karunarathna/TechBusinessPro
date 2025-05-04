@@ -309,7 +309,7 @@ const PartnerSection = () => {
                               />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className=" max-h-[600px] bg-yellow-500">
+                          <SelectContent className=" max-h-[600px] bg-white">
                             <SelectItem
                               value="IT Security"
                               className="hover:bg-blue-500 cursor-pointer"

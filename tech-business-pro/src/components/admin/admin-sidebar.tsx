@@ -9,17 +9,15 @@ import {
   Briefcase,
   Settings,
   LogOut,
+  LogOutIcon,
 } from "lucide-react";
+import { Button } from "../ui/button";
+import { useAuth } from "@/lib/auth";
 
 export function AdminSidebar() {
   const pathname = usePathname();
 
   const navItems = [
-    {
-      name: "Dashboard",
-      href: "/admin",
-      icon: LayoutDashboard,
-    },
     {
       name: "Partner Applications",
       href: "/admin/partner-application",
@@ -36,6 +34,16 @@ export function AdminSidebar() {
       icon: Settings,
     },
   ];
+  const { user, logoutMutation } = useAuth();
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        window.location.href = "/";
+        // router.push("/");
+      },
+    });
+  };
 
   return (
     <div className="w-64 bg-gray-900 text-white min-h-screen p-4">
@@ -62,13 +70,17 @@ export function AdminSidebar() {
       </nav>
 
       <div className="absolute bottom-4 w-52">
-        <Link
-          href="/api/auth/signout"
-          className="flex items-center px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center text-gray-500 cursor-pointer"
+          onClick={handleLogout}
+          disabled={logoutMutation.isPending}
         >
-          <LogOut className="h-5 w-5 mr-3" />
-          Sign Out
-        </Link>
+          <LogOutIcon className="h-4 w-4 mr-1" />
+
+          {logoutMutation.isPending ? "Logging out..." : "Log out"}
+        </Button>
       </div>
     </div>
   );

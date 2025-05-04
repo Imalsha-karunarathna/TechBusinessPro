@@ -5,18 +5,31 @@ export interface Solution {
   category: string;
   provider_id: number;
   regions: string[];
-  image_url: string;
-  created_at: string;
+  image_url?: string;
+  features?: string[]; // Make features optional
+  pricing_info?: string;
+  is_featured?: boolean;
+  views_count?: number;
+  inquiries_count?: number;
+  created_at?: string;
+  updated_at?: string;
+  provider?: SolutionProvider; // Optional provider relation
 }
 
 export interface SolutionProvider {
   id: number;
   name: string;
   description: string;
-  website: string;
   email: string;
-  phone: string;
+  website?: string;
+  phone?: string;
+  logo_url?: string;
+  regions_served?: string[];
+  verification_status: "pending" | "approved" | "rejected";
+  approved_date?: string;
   created_at: string;
+  rating?: number; // Added for UI display
+  reviews?: number; // Added for UI display
 }
 
 export interface SolutionWithProvider {

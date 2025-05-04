@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface PartnerApplicationDetailProps {
   application: any;
@@ -31,6 +32,7 @@ export function PartnerApplicationDetail({
   application,
 }: PartnerApplicationDetailProps) {
   const { toast } = useToast();
+  const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [reviewNotes, setReviewNotes] = useState(
     application.review_notes || ""
@@ -55,8 +57,15 @@ export function PartnerApplicationDetail({
           description: `Application has been ${status}.`,
         });
         setIsReviewDialogOpen(false);
-        // Force a refresh to show the updated data
-        window.location.reload();
+
+        // Force a refresh of the current page data
+        router.refresh();
+
+        // Redirect to the appropriate tab after a short delay
+        setTimeout(() => {
+          // Use router.push with { forceOptimisticNavigation: true } to force a fresh fetch
+          router.push(`/admin/partner-application?status=${status}`);
+        }, 1000);
       } else {
         throw new Error(result.error || "Failed to update status");
       }

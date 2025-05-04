@@ -2,6 +2,7 @@ import { partnerApplications } from "@/lib/db/tables/partnerApplications";
 import { insertPartnerApplicationSchema } from "@/lib/db/schemas/partnerApplicationSchema";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
+import { getPartnerApplications } from "@/app/actions/partner-applications";
 
 export async function POST(request: Request) {
   try {

@@ -1,38 +1,64 @@
 import { getPartnerApplications } from "@/app/actions/partner-applications";
 import { PartnerApplicationsTable } from "@/components/admin/partner-applications-table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function PartnerApplicationsPage({
+// Async data fetching component
+async function FetchApplications({ status }: { status: string }) {
+  const applications = await getPartnerApplications(status);
+  return <PartnerApplicationsTable applications={applications} />;
+}
+
+export default function PartnerApplicationsPage({
   searchParams,
 }: {
   searchParams: { status?: string };
 }) {
-  const status = searchParams.status || "pending";
-  const applications = await getPartnerApplications(status);
+  // Normalize the status parameter
+  const status = searchParams.status?.trim().toLowerCase() || "all";
 
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-2xl font-bold mb-6">Partner Applications</h1>
 
-      <Tabs defaultValue={status} className="w-full">
+      <Tabs value={status} className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="pending" asChild>
-            <a href="/admin/partner-application?status=pending">Pending</a>
+            <Link
+              href="/admin/partner-application?status=pending"
+              prefetch={false}
+            >
+              Pending
+            </Link>
           </TabsTrigger>
           <TabsTrigger value="approved" asChild>
-            <a href="/admin/partner-application?status=approved">Approved</a>
+            <Link
+              href="/admin/partner-application?status=approved"
+              prefetch={false}
+            >
+              Approved
+            </Link>
           </TabsTrigger>
           <TabsTrigger value="rejected" asChild>
-            <a href="/admin/partner-application?status=rejected">Rejected</a>
+            <Link
+              href="/admin/partner-application?status=rejected"
+              prefetch={false}
+            >
+              Rejected
+            </Link>
           </TabsTrigger>
           <TabsTrigger value="all" asChild>
-            <a href="/admin/partner-application?status=all">All</a>
+            <Link href="/admin/partner-application?status=all" prefetch={false}>
+              All
+            </Link>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value={status} className="mt-0">
-          <PartnerApplicationsTable applications={applications} />
-        </TabsContent>
+        {/* Use a key to force re-render when status changes */}
+        <Suspense key={status} fallback={<div>Loading applications...</div>}>
+          <FetchApplications status={status} />
+        </Suspense>
       </Tabs>
     </div>
   );

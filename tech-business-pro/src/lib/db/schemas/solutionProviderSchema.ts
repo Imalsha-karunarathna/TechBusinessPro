@@ -19,3 +19,4 @@ export type InsertSolutionProvider = z.infer<
   typeof insertSolutionProviderSchema
 >;
 export type SolutionProvider = typeof solutionProviders.$inferSelect;
+export type NewSolutionProvider = z.infer<typeof insertSolutionProviderSchema>;

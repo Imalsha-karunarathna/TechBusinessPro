@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import { db } from "@/db";
 import { users } from "@/lib/db/tables/users";
-import { count } from "drizzle-orm"; // Import count for SQL functions
-import { sql } from "drizzle-orm"; // Import sql for writing raw queries
+import { count } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
@@ -17,11 +17,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Corrected query to count the number of admin users
     const adminCount = await db
-      .select({ count: count() }) // Count the number of matching rows
-      .from(users) // From the users table
-      .where(sql`users.role = 'admin'`); // Filter by role using sql
+      .select({ count: count() })
+      .from(users)
+      .where(sql`users.role = 'admin'`);
 
     // Check if admin already exists
     if (adminCount[0].count > 0) {
