@@ -1,12 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { eq } from "drizzle-orm";
-import { solutionProviders } from "@/lib/db/schema";
+import { type NextRequest, NextResponse } from 'next/server';
+import { db } from '@/db';
+import { eq } from 'drizzle-orm';
+import { solutionProviders } from '@/lib/db/schema';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
+    const id = searchParams.get('id');
 
     if (id) {
       const provider = await db
@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
 
       if (provider.length === 0) {
         return NextResponse.json(
-          { error: "Provider not found" },
-          { status: 404 }
+          { error: 'Provider not found' },
+          { status: 404 },
         );
       }
 
@@ -28,10 +28,10 @@ export async function GET(request: NextRequest) {
     const providers = await db.select().from(solutionProviders);
     return NextResponse.json(providers);
   } catch (error) {
-    console.error("Error fetching solution providers:", error);
+    console.error('Error fetching solution providers:', error);
     return NextResponse.json(
-      { error: "Failed to fetch solution providers" },
-      { status: 500 }
+      { error: 'Failed to fetch solution providers' },
+      { status: 500 },
     );
   }
 }
@@ -43,8 +43,8 @@ export async function POST(request: NextRequest) {
     // Validate the required fields
     if (!data.name || !data.description || !data.email) {
       return NextResponse.json(
-        { error: "Name, description, and email are required" },
-        { status: 400 }
+        { error: 'Name, description, and email are required' },
+        { status: 400 },
       );
     }
 
@@ -57,19 +57,19 @@ export async function POST(request: NextRequest) {
       phone: data.phone,
       logo_url: data.logo_url,
       regions_served: data.regions_served,
-      verification_status: "pending", // New providers start as pending
+      verification_status: 'pending', // New providers start as pending
       created_at: new Date(),
     });
 
     return NextResponse.json({
       success: true,
-      message: "Provider created successfully and pending verification",
+      message: 'Provider created successfully and pending verification',
     });
   } catch (error) {
-    console.error("Error creating solution provider:", error);
+    console.error('Error creating solution provider:', error);
     return NextResponse.json(
-      { error: "Failed to create solution provider" },
-      { status: 500 }
+      { error: 'Failed to create solution provider' },
+      { status: 500 },
     );
   }
 }

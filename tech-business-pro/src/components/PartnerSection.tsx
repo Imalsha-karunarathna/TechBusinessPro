@@ -1,8 +1,8 @@
-"use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
+'use client';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 import {
   Form,
@@ -12,41 +12,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Briefcase, Users, Globe } from "lucide-react";
-import type { PartnerApplication } from "@/lib/types";
-import { useState } from "react";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Briefcase, Users, Globe } from 'lucide-react';
+import type { PartnerApplication } from '@/lib/types';
+import { useState } from 'react';
 
 const partnerFormSchema = z.object({
   partner_name: z
     .string()
-    .min(2, { message: "Partner name must be at least 2 characters." }),
+    .min(2, { message: 'Partner name must be at least 2 characters.' }),
   organization_name: z
     .string()
-    .min(2, { message: "Organization name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+    .min(2, { message: 'Organization name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
   phone: z.string().optional(),
-  website: z.string().url({ message: "Please enter a valid URL." }).optional(),
+  website: z.string().url({ message: 'Please enter a valid URL.' }).optional(),
   expertise: z
     .string()
-    .min(1, { message: "Please select an area of expertise." }),
+    .min(1, { message: 'Please select an area of expertise.' }),
   collaboration: z.string().min(10, {
-    message: "Please provide details about your proposed collaboration.",
+    message: 'Please provide details about your proposed collaboration.',
   }),
   experience_years: z.number().int().positive().optional(),
   reason: z
     .string()
-    .max(100, { message: "Response should be 100 words or less." })
+    .max(100, { message: 'Response should be 100 words or less.' })
     .optional(),
   additional_notes: z.string().optional(),
 });
@@ -58,26 +58,26 @@ const PartnerSection = () => {
   const form = useForm<PartnerApplication>({
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
-      partner_name: "",
-      organization_name: "",
-      email: "",
-      phone: "",
-      website: "",
-      expertise: "",
-      collaboration: "",
+      partner_name: '',
+      organization_name: '',
+      email: '',
+      phone: '',
+      website: '',
+      expertise: '',
+      collaboration: '',
       experience_years: undefined,
-      reason: "",
-      additional_notes: "",
+      reason: '',
+      additional_notes: '',
     },
   });
 
   async function onSubmit(data: PartnerApplication) {
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/partner-applications", {
-        method: "POST",
+      const response = await fetch('/api/partner-applications', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
@@ -87,19 +87,19 @@ const PartnerSection = () => {
       if (result.success) {
         setIsSubmitted(true);
         toast({
-          title: "Application Submitted",
+          title: 'Application Submitted',
           description:
-            "Your partner application has been submitted successfully.",
+            'Your partner application has been submitted successfully.',
         });
       } else {
-        throw new Error(result.message || "Failed to submit application");
+        throw new Error(result.message || 'Failed to submit application');
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
       toast({
-        title: "Submission Failed",
+        title: 'Submission Failed',
         description:
-          "There was an error submitting your application. Please try again.",
+          'There was an error submitting your application. Please try again.',
         //variant: "destructive",
       });
     } finally {
@@ -380,7 +380,7 @@ const PartnerSection = () => {
                               field.onChange(
                                 e.target.value
                                   ? Number.parseInt(e.target.value)
-                                  : undefined
+                                  : undefined,
                               )
                             }
                           />
@@ -414,7 +414,7 @@ const PartnerSection = () => {
                     className="w-full bg-blue-500 text-white"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Application"}
+                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
                   </Button>
                 </form>
               </Form>

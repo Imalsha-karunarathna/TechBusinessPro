@@ -1,5 +1,5 @@
-"use client";
-import { Zap, Building, Shield, TrendingUp } from "lucide-react";
+'use client';
+import { Zap, Building, Shield, TrendingUp } from 'lucide-react';
 
 const AboutSection = () => {
   return (

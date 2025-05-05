@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Form,
   FormControl,
@@ -13,29 +13,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Lock, Mail, User } from "lucide-react";
-import { useAuth } from "@/lib/auth";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Lock, Mail, User } from 'lucide-react';
+import { useAuth } from '@/lib/auth';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const loginSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 const registerSchema = loginSchema
   .extend({
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.string().email("Please enter a valid email address"),
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Please enter a valid email address'),
     confirmPassword: z
       .string()
-      .min(6, "Password must be at least 6 characters"),
+      .min(6, 'Password must be at least 6 characters'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
   });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -43,35 +43,35 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
   const { user, loginMutation, registerMutation, isLoading } = useAuth();
-  const [activeTab, setActiveTab] = useState<string>("login");
+  const [activeTab, setActiveTab] = useState<string>('login');
   const router = useRouter();
   const searchParams = useSearchParams();
-  const error = searchParams.get("error");
-  const registered = searchParams.get("registered");
+  const error = searchParams.get('error');
+  const registered = searchParams.get('registered');
 
   // Set active tab to login if user just registered
   useEffect(() => {
     if (registered) {
-      setActiveTab("login");
+      setActiveTab('login');
     }
   }, [registered]);
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
   });
 
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -89,12 +89,12 @@ export default function AuthPage() {
   // If user is already logged in, redirect to appropriate page
   useEffect(() => {
     if (!isLoading && user) {
-      if (user.role === "admin") {
-        router.push("/admin/partner-applications");
-      } else if (user.role === "solution_provider") {
-        router.push("/solutionProvider");
+      if (user.role === 'admin') {
+        router.push('/admin/partner-applications');
+      } else if (user.role === 'solution_provider') {
+        router.push('/solutionProvider');
       } else {
-        router.push("/");
+        router.push('/');
       }
     }
   }, [user, isLoading, router]);
@@ -170,25 +170,25 @@ export default function AuthPage() {
               <span className="ml-3 text-2xl font-bold">Tech Mista</span>
             </div>
             <h2 className="text-2xl font-bold text-gray-900">
-              {activeTab === "login"
-                ? "Sign in to your account"
-                : "Create an account"}
+              {activeTab === 'login'
+                ? 'Sign in to your account'
+                : 'Create an account'}
             </h2>
             <p className="mt-2 text-gray-600">
-              {activeTab === "login"
-                ? "Enter your credentials to access solutions"
-                : "Register to explore our solution marketplace"}
+              {activeTab === 'login'
+                ? 'Enter your credentials to access solutions'
+                : 'Register to explore our solution marketplace'}
             </p>
           </div>
 
           {error && (
             <Alert variant="destructive" className="mb-6">
               <AlertDescription>
-                {error === "unauthorized"
-                  ? "You need to be logged in to access that page."
-                  : error === "admin_required"
-                  ? "You need administrator privileges to access that page."
-                  : "An error occurred. Please try again."}
+                {error === 'unauthorized'
+                  ? 'You need to be logged in to access that page.'
+                  : error === 'admin_required'
+                    ? 'You need administrator privileges to access that page.'
+                    : 'An error occurred. Please try again.'}
               </AlertDescription>
             </Alert>
           )}
@@ -264,7 +264,7 @@ export default function AuthPage() {
                     className="w-full mt-6 bg-blue-500 text-white"
                     disabled={loginMutation.isPending}
                   >
-                    {loginMutation.isPending ? "Signing in..." : "Sign in"}
+                    {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
                   </Button>
                 </form>
               </Form>
@@ -375,8 +375,8 @@ export default function AuthPage() {
                     disabled={registerMutation.isPending}
                   >
                     {registerMutation.isPending
-                      ? "Creating account..."
-                      : "Create account"}
+                      ? 'Creating account...'
+                      : 'Create account'}
                   </Button>
                 </form>
               </Form>
@@ -385,17 +385,17 @@ export default function AuthPage() {
 
           <div className="mt-8 text-center text-sm text-gray-500">
             <p>
-              {activeTab === "login"
+              {activeTab === 'login'
                 ? "Don't have an account? "
-                : "Already have an account? "}
+                : 'Already have an account? '}
               <button
                 type="button"
                 onClick={() =>
-                  setActiveTab(activeTab === "login" ? "register" : "login")
+                  setActiveTab(activeTab === 'login' ? 'register' : 'login')
                 }
                 className="text-primary-600 hover:underline font-medium"
               >
-                {activeTab === "login" ? "Register" : "Log in"}
+                {activeTab === 'login' ? 'Register' : 'Log in'}
               </button>
             </p>
             {/* <p className="mt-2">

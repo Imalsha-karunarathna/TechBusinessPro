@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Table,
   TableBody,
@@ -6,12 +6,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { formatDistanceToNow } from "date-fns";
-import Link from "next/link";
-import { Eye } from "lucide-react";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { formatDistanceToNow } from 'date-fns';
+import Link from 'next/link';
+import { Eye } from 'lucide-react';
 
 interface PartnerApplicationsTableProps {
   /*eslint-disable @typescript-eslint/no-explicit-any */
@@ -65,7 +65,7 @@ export function PartnerApplicationsTable({
                     ? formatDistanceToNow(new Date(application.created_at), {
                         addSuffix: true,
                       })
-                    : "Unknown"}
+                    : 'Unknown'}
                 </TableCell>
                 <TableCell className="text-right">
                   <Link href={`/admin/partner-application/${application.id}`}>
@@ -86,7 +86,7 @@ export function PartnerApplicationsTable({
 
 function StatusBadge({ status }: { status: string }) {
   switch (status) {
-    case "pending":
+    case 'pending':
       return (
         <Badge
           variant="outline"
@@ -95,7 +95,7 @@ function StatusBadge({ status }: { status: string }) {
           Pending
         </Badge>
       );
-    case "approved":
+    case 'approved':
       return (
         <Badge
           variant="outline"
@@ -104,7 +104,7 @@ function StatusBadge({ status }: { status: string }) {
           Approved
         </Badge>
       );
-    case "rejected":
+    case 'rejected':
       return (
         <Badge
           variant="outline"

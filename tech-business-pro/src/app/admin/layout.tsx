@@ -1,6 +1,6 @@
-import type React from "react";
-import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import { requireAdmin } from "@/lib/server-auth";
+import type React from 'react';
+import { AdminSidebar } from '@/components/admin/admin-sidebar';
+import { requireAdmin } from '@/lib/server-auth';
 
 export default async function AdminLayout({
   children,

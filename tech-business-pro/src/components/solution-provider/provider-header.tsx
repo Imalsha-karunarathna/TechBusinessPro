@@ -1,7 +1,7 @@
-"use client";
-import { Bell, Menu, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+'use client';
+import { Bell, Menu, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +9,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
-import { ProviderSidebar } from "./provider-sidebar";
+} from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useState } from 'react';
+import { ProviderSidebar } from './provider-sidebar';
 
 export function ProviderHeader() {
   // const { user, logout } = useAuth()
-  const [activeTab, setActiveTab] = useState<string>("solutions");
+  const [activeTab, setActiveTab] = useState<string>('solutions');
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-10">

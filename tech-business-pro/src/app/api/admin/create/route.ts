@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { hash } from "bcrypt";
-import { db } from "@/db";
-import { users } from "@/lib/db/tables/users";
-import { count } from "drizzle-orm";
-import { sql } from "drizzle-orm";
+import { NextResponse } from 'next/server';
+import { hash } from 'bcrypt';
+import { db } from '@/db';
+import { users } from '@/lib/db/tables/users';
+import { count } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 export async function POST(request: Request) {
   try {
@@ -12,8 +12,8 @@ export async function POST(request: Request) {
 
     if (!username || !password || !name || !email) {
       return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
+        { error: 'Missing required fields' },
+        { status: 400 },
       );
     }
 
@@ -27,9 +27,9 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Admin already exists. For security reasons, additional admins must be created by an existing admin.",
+            'Admin already exists. For security reasons, additional admins must be created by an existing admin.',
         },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         password: hashedPassword,
         name,
         email,
-        role: "admin",
+        role: 'admin',
         created_at: new Date(),
       })
       .returning();
@@ -50,14 +50,14 @@ export async function POST(request: Request) {
     const { password: _, ...userWithoutPassword } = result[0];
 
     return NextResponse.json({
-      message: "Admin user created successfully",
+      message: 'Admin user created successfully',
       user: userWithoutPassword,
     });
   } catch (error) {
-    console.error("Error creating admin user:", error);
+    console.error('Error creating admin user:', error);
     return NextResponse.json(
-      { error: "Failed to create admin user" },
-      { status: 500 }
+      { error: 'Failed to create admin user' },
+      { status: 500 },
     );
   }
 }

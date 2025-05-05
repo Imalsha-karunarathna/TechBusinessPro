@@ -1,10 +1,10 @@
-import { cookies } from "next/headers";
-import { getUserById } from "@/lib/db/users/read";
-import { redirect } from "next/navigation";
+import { cookies } from 'next/headers';
+import { getUserById } from '@/lib/db/users/read';
+import { redirect } from 'next/navigation';
 
 export async function auth() {
   const cookieStore = cookies();
-  const sessionCookie = (await cookieStore).get("session");
+  const sessionCookie = (await cookieStore).get('session');
 
   if (!sessionCookie?.value) {
     return null;
@@ -24,17 +24,17 @@ export async function auth() {
     return {
       user: {
         ...user,
-        isAdmin: user.role === "admin",
+        isAdmin: user.role === 'admin',
       },
     };
   } catch (error) {
-    console.error("Error authenticating user:", error);
+    console.error('Error authenticating user:', error);
     return null;
   }
 }
 
 export async function requireAuth(
-  redirectTo = "/auth-page?error=unauthorized"
+  redirectTo = '/auth-page?error=unauthorized',
 ) {
   const session = await auth();
 
@@ -46,11 +46,11 @@ export async function requireAuth(
 }
 
 export async function requireAdmin(
-  redirectTo = "/admin-auth-page?error=admin_required"
+  redirectTo = '/admin-auth-page?error=admin_required',
 ) {
   const session = await auth();
 
-  if (!session?.user || session.user.role !== "admin") {
+  if (!session?.user || session.user.role !== 'admin') {
     redirect(redirectTo);
   }
 

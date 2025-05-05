@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { updateApplicationStatus } from "@/app/actions/partner-applications";
-import { Button } from "@/components/ui/button";
+import { updateApplicationStatus } from '@/app/actions/partner-applications';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -17,12 +17,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { formatDistanceToNow } from "date-fns";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { formatDistanceToNow } from 'date-fns';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PartnerApplicationDetailProps {
   /*eslint-disable @typescript-eslint/no-explicit-any */
@@ -36,25 +36,25 @@ export function PartnerApplicationDetail({
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [reviewNotes, setReviewNotes] = useState(
-    application.review_notes || ""
+    application.review_notes || '',
   );
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<
-    "approved" | "rejected" | null
+    'approved' | 'rejected' | null
   >(null);
 
-  const handleStatusUpdate = async (status: "approved" | "rejected") => {
+  const handleStatusUpdate = async (status: 'approved' | 'rejected') => {
     setIsUpdating(true);
     try {
       const result = await updateApplicationStatus(
         application.id,
         status,
-        reviewNotes
+        reviewNotes,
       );
 
       if (result.success) {
         toast({
-          title: "Status Updated",
+          title: 'Status Updated',
           description: `Application has been ${status}.`,
         });
         setIsReviewDialogOpen(false);
@@ -68,13 +68,13 @@ export function PartnerApplicationDetail({
           router.push(`/admin/partner-application?status=${status}`);
         }, 1000);
       } else {
-        throw new Error(result.error || "Failed to update status");
+        throw new Error(result.error || 'Failed to update status');
       }
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error('Error updating status:', error);
       toast({
-        title: "Update Failed",
-        description: "There was an error updating the application status.",
+        title: 'Update Failed',
+        description: 'There was an error updating the application status.',
         //variant: "destructive",
       });
     } finally {
@@ -82,7 +82,7 @@ export function PartnerApplicationDetail({
     }
   };
 
-  const openReviewDialog = (status: "approved" | "rejected") => {
+  const openReviewDialog = (status: 'approved' | 'rejected') => {
     setSelectedStatus(status);
     setIsReviewDialogOpen(true);
   };
@@ -93,12 +93,12 @@ export function PartnerApplicationDetail({
         <CardHeader>
           <CardTitle>Application Details</CardTitle>
           <CardDescription>
-            Submitted{" "}
+            Submitted{' '}
             {application.created_at
               ? formatDistanceToNow(new Date(application.created_at), {
                   addSuffix: true,
                 })
-              : "Unknown"}
+              : 'Unknown'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -127,7 +127,7 @@ export function PartnerApplicationDetail({
               <h3 className="text-sm font-medium text-muted-foreground mb-1">
                 Phone
               </h3>
-              <p>{application.phone || "Not provided"}</p>
+              <p>{application.phone || 'Not provided'}</p>
             </div>
             <div>
               <h3 className="text-sm font-medium text-muted-foreground mb-1">
@@ -144,7 +144,7 @@ export function PartnerApplicationDetail({
                     {application.website}
                   </a>
                 ) : (
-                  "Not provided"
+                  'Not provided'
                 )}
               </p>
             </div>
@@ -152,7 +152,7 @@ export function PartnerApplicationDetail({
               <h3 className="text-sm font-medium text-muted-foreground mb-1">
                 Years of Experience
               </h3>
-              <p>{application.experience_years || "Not specified"}</p>
+              <p>{application.experience_years || 'Not specified'}</p>
             </div>
           </div>
 
@@ -195,14 +195,14 @@ export function PartnerApplicationDetail({
             <div className="mr-4">
               <span className="text-sm font-medium text-muted-foreground">
                 Status:
-              </span>{" "}
+              </span>{' '}
               <span
                 className={`font-medium ${
-                  application.application_status === "approved"
-                    ? "text-green-600"
-                    : application.application_status === "rejected"
-                    ? "text-red-600"
-                    : "text-yellow-600"
+                  application.application_status === 'approved'
+                    ? 'text-green-600'
+                    : application.application_status === 'rejected'
+                      ? 'text-red-600'
+                      : 'text-yellow-600'
                 }`}
               >
                 {application.application_status.charAt(0).toUpperCase() +
@@ -214,26 +214,26 @@ export function PartnerApplicationDetail({
               <div>
                 <span className="text-sm font-medium text-muted-foreground">
                   Reviewed by:
-                </span>{" "}
+                </span>{' '}
                 <span className="font-medium">
-                  {application.reviewer?.name || "Unknown"}
+                  {application.reviewer?.name || 'Unknown'}
                 </span>
               </div>
             )}
           </div>
 
-          {application.application_status === "pending" && (
+          {application.application_status === 'pending' && (
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 className="border-red-200 text-red-700 hover:bg-red-50"
-                onClick={() => openReviewDialog("rejected")}
+                onClick={() => openReviewDialog('rejected')}
               >
                 Reject
               </Button>
               <Button
                 className="bg-green-600 hover:bg-green-700"
-                onClick={() => openReviewDialog("approved")}
+                onClick={() => openReviewDialog('approved')}
               >
                 Approve
               </Button>
@@ -247,12 +247,12 @@ export function PartnerApplicationDetail({
           <CardHeader>
             <CardTitle>Review Notes</CardTitle>
             <CardDescription>
-              Added{" "}
+              Added{' '}
               {application.reviewed_at
                 ? formatDistanceToNow(new Date(application.reviewed_at), {
                     addSuffix: true,
                   })
-                : "Unknown"}
+                : 'Unknown'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -265,12 +265,12 @@ export function PartnerApplicationDetail({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {selectedStatus === "approved" ? "Approve" : "Reject"} Application
+              {selectedStatus === 'approved' ? 'Approve' : 'Reject'} Application
             </DialogTitle>
             <DialogDescription>
-              {selectedStatus === "approved"
-                ? "The applicant will be notified that their application has been approved."
-                : "Please provide a reason for rejecting this application."}
+              {selectedStatus === 'approved'
+                ? 'The applicant will be notified that their application has been approved.'
+                : 'Please provide a reason for rejecting this application.'}
             </DialogDescription>
           </DialogHeader>
 
@@ -279,7 +279,7 @@ export function PartnerApplicationDetail({
               htmlFor="review-notes"
               className="text-sm font-medium mb-2 block"
             >
-              Review Notes {selectedStatus === "rejected" && "(Required)"}
+              Review Notes {selectedStatus === 'rejected' && '(Required)'}
             </label>
             <Textarea
               id="review-notes"
@@ -301,19 +301,19 @@ export function PartnerApplicationDetail({
               onClick={() => handleStatusUpdate(selectedStatus!)}
               disabled={
                 isUpdating ||
-                (selectedStatus === "rejected" && !reviewNotes.trim())
+                (selectedStatus === 'rejected' && !reviewNotes.trim())
               }
               className={
-                selectedStatus === "approved"
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "bg-red-600 hover:bg-red-700"
+                selectedStatus === 'approved'
+                  ? 'bg-green-600 hover:bg-green-700'
+                  : 'bg-red-600 hover:bg-red-700'
               }
             >
               {isUpdating
-                ? "Processing..."
-                : selectedStatus === "approved"
-                ? "Approve"
-                : "Reject"}
+                ? 'Processing...'
+                : selectedStatus === 'approved'
+                  ? 'Approve'
+                  : 'Reject'}
             </Button>
           </DialogFooter>
         </DialogContent>

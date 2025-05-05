@@ -1,7 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { validateUserCredentials } from "@/lib/db/users/read";
-import { z } from "zod";
-import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from 'next/server';
+import { validateUserCredentials } from '@/lib/db/users/read';
+import { z } from 'zod';
+import { cookies } from 'next/headers';
 
 const loginSchema = z.object({
   username: z.string().min(3),
@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
     const result = loginSchema.safeParse(body);
     if (!result.success) {
       return NextResponse.json(
-        { error: "Invalid request data", details: result.error.format() },
-        { status: 400 }
+        { error: 'Invalid request data', details: result.error.format() },
+        { status: 400 },
       );
     }
 
@@ -29,16 +29,16 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid username or password" },
-        { status: 401 }
+        { error: 'Invalid username or password' },
+        { status: 401 },
       );
     }
 
     // If isAdmin flag is set, verify the user is actually an admin
-    if (isAdmin && user.role !== "admin") {
+    if (isAdmin && user.role !== 'admin') {
       return NextResponse.json(
-        { error: "You do not have administrator privileges" },
-        { status: 403 }
+        { error: 'You do not have administrator privileges' },
+        { status: 403 },
       );
     }
 
@@ -48,20 +48,20 @@ export async function POST(request: NextRequest) {
     // Set session cookie
     const cookieStore = cookies();
     (await cookieStore).set({
-      name: "session",
+      name: 'session',
       value: String(user.id),
       httpOnly: true,
-      path: "/",
-      secure: process.env.NODE_ENV === "production",
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24 * 7, // 1 week
     });
 
     return NextResponse.json(userWithoutPassword);
   } catch (error) {
-    console.error("Login error:", error);
+    console.error('Login error:', error);
     return NextResponse.json(
-      { error: "An error occurred during login" },
-      { status: 500 }
+      { error: 'An error occurred during login' },
+      { status: 500 },
     );
   }
 }

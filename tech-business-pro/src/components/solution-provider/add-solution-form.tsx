@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,53 +12,53 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { SOLUTION_CATEGORIES } from "@/lib/constants";
+} from '@/components/ui/select';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { SOLUTION_CATEGORIES } from '@/lib/constants';
 
 const solutionFormSchema = z.object({
-  title: z.string().min(5, "Title must be at least 5 characters"),
-  description: z.string().min(20, "Description must be at least 20 characters"),
-  category: z.string().min(1, "Please select a category"),
+  title: z.string().min(5, 'Title must be at least 5 characters'),
+  description: z.string().min(20, 'Description must be at least 20 characters'),
+  category: z.string().min(1, 'Please select a category'),
   image_url: z
     .string()
-    .url("Please enter a valid URL")
+    .url('Please enter a valid URL')
     .optional()
-    .or(z.literal("")),
-  regions: z.array(z.string()).min(1, "Please select at least one region"),
-  features: z.array(z.string()).min(1, "Please add at least one feature"),
-  pricing_model: z.string().min(1, "Please select a pricing model"),
+    .or(z.literal('')),
+  regions: z.array(z.string()).min(1, 'Please select at least one region'),
+  features: z.array(z.string()).min(1, 'Please add at least one feature'),
+  pricing_model: z.string().min(1, 'Please select a pricing model'),
   pricing_details: z.string().optional(),
 });
 
 type SolutionFormValues = z.infer<typeof solutionFormSchema>;
 
 const regions = [
-  { label: "North America", value: "north_america" },
-  { label: "South America", value: "south_america" },
-  { label: "Europe", value: "europe" },
-  { label: "Asia", value: "asia" },
-  { label: "Africa", value: "africa" },
-  { label: "Australia/Oceania", value: "oceania" },
-  { label: "Global", value: "global" },
+  { label: 'North America', value: 'north_america' },
+  { label: 'South America', value: 'south_america' },
+  { label: 'Europe', value: 'europe' },
+  { label: 'Asia', value: 'asia' },
+  { label: 'Africa', value: 'africa' },
+  { label: 'Australia/Oceania', value: 'oceania' },
+  { label: 'Global', value: 'global' },
 ];
 
 const pricingModels = [
-  { label: "Subscription", value: "subscription" },
-  { label: "One-time Purchase", value: "one_time" },
-  { label: "Free Trial", value: "free_trial" },
-  { label: "Freemium", value: "freemium" },
-  { label: "Custom Quote", value: "custom" },
+  { label: 'Subscription', value: 'subscription' },
+  { label: 'One-time Purchase', value: 'one_time' },
+  { label: 'Free Trial', value: 'free_trial' },
+  { label: 'Freemium', value: 'freemium' },
+  { label: 'Custom Quote', value: 'custom' },
 ];
 
 interface AddSolutionFormProps {
@@ -68,19 +68,19 @@ interface AddSolutionFormProps {
 export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [features, setFeatures] = useState<string[]>([]);
-  const [featureInput, setFeatureInput] = useState("");
+  const [featureInput, setFeatureInput] = useState('');
   const { toast } = useToast();
 
   // Default values for the form
   const defaultValues: Partial<SolutionFormValues> = {
-    title: "",
-    description: "",
-    category: "",
-    image_url: "",
+    title: '',
+    description: '',
+    category: '',
+    image_url: '',
     regions: [],
     features: [],
-    pricing_model: "",
-    pricing_details: "",
+    pricing_model: '',
+    pricing_details: '',
   };
 
   const form = useForm<SolutionFormValues>({
@@ -92,15 +92,15 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
     if (featureInput.trim()) {
       const updatedFeatures = [...features, featureInput.trim()];
       setFeatures(updatedFeatures);
-      form.setValue("features", updatedFeatures);
-      setFeatureInput("");
+      form.setValue('features', updatedFeatures);
+      setFeatureInput('');
     }
   };
 
   const removeFeature = (index: number) => {
     const updatedFeatures = features.filter((_, i) => i !== index);
     setFeatures(updatedFeatures);
-    form.setValue("features", updatedFeatures);
+    form.setValue('features', updatedFeatures);
   };
 
   async function onSubmit(data: SolutionFormValues) {
@@ -113,9 +113,9 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       toast({
-        title: "Solution added",
+        title: 'Solution added',
         description:
-          "Your solution has been added successfully and is pending approval.",
+          'Your solution has been added successfully and is pending approval.',
       });
 
       if (onSuccess) {
@@ -124,9 +124,9 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
     } catch (error) {
       console.error(error);
       toast({
-        title: "Error",
+        title: 'Error',
         description:
-          "There was an error adding your solution. Please try again.",
+          'There was an error adding your solution. Please try again.',
         //variant: "destructive",
       });
     } finally {
@@ -310,7 +310,7 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
                     value={featureInput}
                     onChange={(e) => setFeatureInput(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (e.key === 'Enter') {
                         e.preventDefault();
                         addFeature();
                       }
@@ -359,7 +359,7 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Adding..." : "Add Solution"}
+            {isLoading ? 'Adding...' : 'Add Solution'}
           </Button>
         </div>
       </form>

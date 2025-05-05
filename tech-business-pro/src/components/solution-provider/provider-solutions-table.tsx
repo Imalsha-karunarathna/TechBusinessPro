@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -16,59 +16,59 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Edit, Eye, Plus, Trash } from "lucide-react";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Edit, Eye, Plus, Trash } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { AddSolutionForm } from "./add-solution-form";
+} from '@/components/ui/dialog';
+import { AddSolutionForm } from './add-solution-form';
 
 // Mock data for solutions
 const mockSolutions = [
   {
     id: 1,
-    title: "Cloud Migration Platform",
-    category: "cloud_computing",
-    status: "active",
+    title: 'Cloud Migration Platform',
+    category: 'cloud_computing',
+    status: 'active',
     views: 245,
     inquiries: 12,
-    created_at: "2023-09-15",
+    created_at: '2023-09-15',
   },
   {
     id: 2,
-    title: "AI-Powered Customer Service",
-    category: "artificial_intelligence",
-    status: "active",
+    title: 'AI-Powered Customer Service',
+    category: 'artificial_intelligence',
+    status: 'active',
     views: 189,
     inquiries: 8,
-    created_at: "2023-10-02",
+    created_at: '2023-10-02',
   },
   {
     id: 3,
-    title: "Secure Payment Gateway",
-    category: "cybersecurity",
-    status: "pending",
+    title: 'Secure Payment Gateway',
+    category: 'cybersecurity',
+    status: 'pending',
     views: 0,
     inquiries: 0,
-    created_at: "2023-10-20",
+    created_at: '2023-10-20',
   },
 ];
 
 // Category mapping
 const categoryMap: Record<string, string> = {
-  cloud_computing: "Cloud Computing",
-  artificial_intelligence: "Artificial Intelligence",
-  cybersecurity: "Cybersecurity",
-  data_analytics: "Data Analytics",
-  iot: "Internet of Things",
-  blockchain: "Blockchain",
-  erp: "ERP Systems",
-  crm: "CRM Solutions",
+  cloud_computing: 'Cloud Computing',
+  artificial_intelligence: 'Artificial Intelligence',
+  cybersecurity: 'Cybersecurity',
+  data_analytics: 'Data Analytics',
+  iot: 'Internet of Things',
+  blockchain: 'Blockchain',
+  erp: 'ERP Systems',
+  crm: 'CRM Solutions',
 };
 
 export function ProviderSolutionsTable() {
@@ -132,15 +132,15 @@ export function ProviderSolutionsTable() {
                   <TableCell>
                     <Badge
                       variant={
-                        solution.status === "active" ? "default" : "secondary"
+                        solution.status === 'active' ? 'default' : 'secondary'
                       }
                       className={
-                        solution.status === "active"
-                          ? "bg-green-100 text-green-800 hover:bg-green-100"
-                          : "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+                        solution.status === 'active'
+                          ? 'bg-green-100 text-green-800 hover:bg-green-100'
+                          : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100'
                       }
                     >
-                      {solution.status === "active" ? "Active" : "Pending"}
+                      {solution.status === 'active' ? 'Active' : 'Pending'}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">{solution.views}</TableCell>

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/lib/auth";
-import { cn } from "@/lib/utils";
-import { LogOut, PlusCircle, Settings, User } from "lucide-react";
-import { Button } from "../ui/button";
+import { useAuth } from '@/lib/auth';
+import { cn } from '@/lib/utils';
+import { LogOut, PlusCircle, Settings, User } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface ProviderSidebarProps {
   activeTab: string;
@@ -23,9 +23,9 @@ export function ProviderSidebar({
     //   value: "dashboard",
     // },
     {
-      name: "My Solutions",
+      name: 'My Solutions',
       icon: PlusCircle,
-      value: "solutions",
+      value: 'solutions',
     },
     // {
     //   name: "Analytics",
@@ -33,14 +33,14 @@ export function ProviderSidebar({
     //   value: "analytics",
     // },
     {
-      name: "Profile",
+      name: 'Profile',
       icon: User,
-      value: "profile",
+      value: 'profile',
     },
     {
-      name: "Settings",
+      name: 'Settings',
       icon: Settings,
-      value: "settings",
+      value: 'settings',
     },
   ];
   const { logoutMutation } = useAuth();
@@ -48,7 +48,7 @@ export function ProviderSidebar({
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        window.location.href = "/";
+        window.location.href = '/';
         // router.push("/");
       },
     });
@@ -67,10 +67,10 @@ export function ProviderSidebar({
             key={item.value}
             onClick={() => setActiveTab(item.value)}
             className={cn(
-              "flex items-center w-full px-4 py-3 text-sm rounded-md transition-colors",
+              'flex items-center w-full px-4 py-3 text-sm rounded-md transition-colors',
               activeTab === item.value
-                ? "bg-gray-800 text-white"
-                : "text-gray-300 hover:text-white hover:bg-gray-800"
+                ? 'bg-gray-800 text-white'
+                : 'text-gray-300 hover:text-white hover:bg-gray-800',
             )}
           >
             <item.icon className="h-5 w-5 mr-3" />
@@ -88,7 +88,7 @@ export function ProviderSidebar({
           disabled={logoutMutation.isPending}
         >
           <LogOut className="h-4 w-4 mr-1" />
-          {logoutMutation.isPending ? "Logging out..." : "Log out"}
+          {logoutMutation.isPending ? 'Logging out...' : 'Log out'}
         </Button>
       </div>
     </div>

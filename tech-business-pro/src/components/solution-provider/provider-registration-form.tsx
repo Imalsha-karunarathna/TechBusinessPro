@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Link from "next/link";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import Link from 'next/link';
 import {
   Form,
   FormControl,
@@ -14,10 +14,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -25,40 +25,40 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/lib/auth";
-import { Select } from "../ui/select";
+} from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/lib/auth';
+import { Select } from '../ui/select';
 
 const providerRegistrationSchema = z
   .object({
     // User account details
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    username: z.string().min(3, "Username must be at least 3 characters"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    username: z.string().min(3, 'Username must be at least 3 characters'),
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string(),
 
     // Provider details
     companyName: z
       .string()
-      .min(2, "Company name must be at least 2 characters"),
+      .min(2, 'Company name must be at least 2 characters'),
     description: z
       .string()
-      .min(20, "Description must be at least 20 characters"),
+      .min(20, 'Description must be at least 20 characters'),
     website: z
       .string()
-      .url("Please enter a valid URL")
+      .url('Please enter a valid URL')
       .optional()
-      .or(z.literal("")),
+      .or(z.literal('')),
     phone: z.string().optional(),
     regions_served: z
       .array(z.string())
-      .min(1, "Please select at least one region"),
+      .min(1, 'Please select at least one region'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
   });
 
 type ProviderRegistrationValues = z.infer<typeof providerRegistrationSchema>;
@@ -82,15 +82,15 @@ export default function ProviderRegistrationForm() {
   const form = useForm<ProviderRegistrationValues>({
     resolver: zodResolver(providerRegistrationSchema),
     defaultValues: {
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      companyName: "",
-      description: "",
-      website: "",
-      phone: "",
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      companyName: '',
+      description: '',
+      website: '',
+      phone: '',
       regions_served: [],
     },
   });
@@ -108,10 +108,10 @@ export default function ProviderRegistrationForm() {
       });
 
       // Then create the provider profile
-      const providerResponse = await fetch("/api/solution-providers", {
-        method: "POST",
+      const providerResponse = await fetch('/api/solution-providers', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: data.companyName,
@@ -124,22 +124,22 @@ export default function ProviderRegistrationForm() {
       });
 
       if (!providerResponse.ok) {
-        throw new Error("Failed to create provider profile");
+        throw new Error('Failed to create provider profile');
       }
 
       toast({
-        title: "Registration successful",
+        title: 'Registration successful',
         description:
-          "Your provider account has been created and is pending verification.",
+          'Your provider account has been created and is pending verification.',
       });
 
-      router.push("/auth-page?registered=true");
+      router.push('/auth-page?registered=true');
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error('Registration error:', error);
       toast({
-        title: "Registration failed",
+        title: 'Registration failed',
         description:
-          "There was an error creating your provider account. Please try again.",
+          'There was an error creating your provider account. Please try again.',
         // variant: "destructive",
       });
     } finally {
@@ -359,12 +359,12 @@ export default function ProviderRegistrationForm() {
                   <Button
                     variant="outline"
                     type="button"
-                    onClick={() => router.push("/")}
+                    onClick={() => router.push('/')}
                   >
                     Cancel
                   </Button>
                   <Button type="submit" disabled={isLoading}>
-                    {isLoading ? "Submitting..." : "Register as Provider"}
+                    {isLoading ? 'Submitting...' : 'Register as Provider'}
                   </Button>
                 </CardFooter>
               </form>
@@ -374,7 +374,7 @@ export default function ProviderRegistrationForm() {
 
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link
               href="/auth-page"
               className="text-primary-600 hover:underline"

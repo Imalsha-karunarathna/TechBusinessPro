@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,39 +12,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { insertSolutionProviderSchema } from "@/lib/db/schema";
+} from '@/components/ui/card';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { insertSolutionProviderSchema } from '@/lib/db/schema';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { createOrUpdateProvider } from "@/app/actions/provider-actions";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/select';
+import { createOrUpdateProvider } from '@/app/actions/provider-actions';
+import { useRouter } from 'next/navigation';
 
 type ProfileFormValues = z.infer<typeof insertSolutionProviderSchema>;
 
 const regions = [
-  { label: "North America", value: "north_america" },
-  { label: "South America", value: "south_america" },
-  { label: "Europe", value: "europe" },
-  { label: "Asia", value: "asia" },
-  { label: "Africa", value: "africa" },
-  { label: "Australia/Oceania", value: "oceania" },
-  { label: "Global", value: "global" },
+  { label: 'North America', value: 'north_america' },
+  { label: 'South America', value: 'south_america' },
+  { label: 'Europe', value: 'europe' },
+  { label: 'Asia', value: 'asia' },
+  { label: 'Africa', value: 'africa' },
+  { label: 'Australia/Oceania', value: 'oceania' },
+  { label: 'Global', value: 'global' },
 ];
 
 export function ProviderProfileForm() {
@@ -55,53 +55,53 @@ export function ProviderProfileForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(insertSolutionProviderSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      description: "",
-      website: "",
-      phone: "",
-      logo_url: "",
+      name: '',
+      email: '',
+      description: '',
+      website: '',
+      phone: '',
+      logo_url: '',
       regions_served: [],
     },
   });
 
   async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true);
-    console.log("Form data submitted:", data);
+    console.log('Form data submitted:', data);
 
     try {
       // Make sure regions_served is an array
-      if (typeof data.regions_served === "string") {
+      if (typeof data.regions_served === 'string') {
         data.regions_served = [data.regions_served];
       }
 
       const result = await createOrUpdateProvider(data);
-      console.log("Server action result:", result);
+      console.log('Server action result:', result);
 
       if (result.success) {
         toast({
-          title: "Profile updated",
-          description: "Your provider profile has been updated successfully.",
+          title: 'Profile updated',
+          description: 'Your provider profile has been updated successfully.',
         });
 
         // Refresh the page to show updated data
         router.refresh();
-        router.push("/solutionProvider");
+        router.push('/solutionProvider');
         // Optionally redirect to the provider profile page
         if (result.data?.id) {
           // router.push(`/providers/${result.data.id}`);
 
-          router.push("/solutionProvider");
+          router.push('/solutionProvider');
         }
       } else {
-        throw new Error(result.error || "Unknown error occurred");
+        throw new Error(result.error || 'Unknown error occurred');
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
       toast({
-        title: "Error",
+        title: 'Error',
         description:
-          "There was an error updating your profile. Please try again.",
+          'There was an error updating your profile. Please try again.',
         //  variant: "destructive",
       });
     } finally {
@@ -160,7 +160,7 @@ export function ProviderProfileForm() {
                       <Input
                         placeholder="https://example.com"
                         {...field}
-                        value={field.value || ""}
+                        value={field.value || ''}
                       />
                     </FormControl>
                     <FormMessage />
@@ -178,7 +178,7 @@ export function ProviderProfileForm() {
                       <Input
                         placeholder="+1 (555) 123-4567"
                         {...field}
-                        value={field.value || ""}
+                        value={field.value || ''}
                       />
                     </FormControl>
                     <FormMessage />
@@ -196,7 +196,7 @@ export function ProviderProfileForm() {
                       <Input
                         placeholder="https://example.com/logo.png"
                         {...field}
-                        value={field.value || ""}
+                        value={field.value || ''}
                       />
                     </FormControl>
                     <FormDescription>
@@ -216,7 +216,7 @@ export function ProviderProfileForm() {
                     <FormLabel>Region Served</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange([value])}
-                      value={field.value?.[0] || ""}
+                      value={field.value?.[0] || ''}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -268,7 +268,7 @@ export function ProviderProfileForm() {
                 disabled={isLoading}
                 className="cursor-pointer"
               >
-                {isLoading ? "Saving..." : "Save Profile"}
+                {isLoading ? 'Saving...' : 'Save Profile'}
               </Button>
             </div>
           </form>

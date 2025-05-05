@@ -1,9 +1,9 @@
-import { getPartnerApplicationById } from "@/app/actions/partner-applications";
-import { PartnerApplicationDetail } from "@/components/admin/partner-application-detail";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { getPartnerApplicationById } from '@/app/actions/partner-applications';
+import { PartnerApplicationDetail } from '@/components/admin/partner-application-detail';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default async function PartnerApplicationDetailPage({
   params,

@@ -1,35 +1,35 @@
-import { hash } from "bcrypt";
-import { db } from "@/db";
-import { users } from "@/lib/db/tables/users";
+import { hash } from 'bcrypt';
+import { db } from '@/db';
+import { users } from '@/lib/db/tables/users';
 
 async function seedAdmin() {
   try {
     // Check if admin already exists
     const existingAdmin = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.username, "admin"),
+      where: (users, { eq }) => eq(users.username, 'admin'),
     });
 
     if (existingAdmin) {
-      console.log("Admin user already exists");
+      console.log('Admin user already exists');
       return;
     }
 
     // Create admin user
-    const hashedPassword = await hash("admin123", 10);
+    const hashedPassword = await hash('admin123', 10);
 
     await db.insert(users).values({
-      username: "admin",
+      username: 'admin',
       password: hashedPassword,
-      name: "System Administrator",
-      email: "admin@techmista.com",
-      role: "admin",
+      name: 'System Administrator',
+      email: 'admin@techmista.com',
+      role: 'admin',
       created_at: new Date(),
       is_active: true,
     });
 
-    console.log("Admin user created successfully");
+    console.log('Admin user created successfully');
   } catch (error) {
-    console.error("Error seeding admin user:", error);
+    console.error('Error seeding admin user:', error);
   } finally {
     process.exit(0);
   }

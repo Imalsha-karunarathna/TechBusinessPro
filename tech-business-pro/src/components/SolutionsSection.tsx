@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   ExternalLink,
   Star,
@@ -11,27 +11,27 @@ import {
   Mail,
   MapPin,
   Verified,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { SOLUTION_CATEGORIES, CATEGORY_COLORS } from "@/lib/constants";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { SOLUTION_CATEGORIES, CATEGORY_COLORS } from '@/lib/constants';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { getAllProviders } from "@/app/actions/provider-actions";
-import type { SolutionProvider } from "@/lib/db/schema";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/tooltip';
+import { getAllProviders } from '@/app/actions/provider-actions';
+import type { SolutionProvider } from '@/lib/db/schema';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Type for solution with provider
 interface Solution {
@@ -58,10 +58,10 @@ interface Solution {
 }
 
 const SolutionsSection = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [providers, setProviders] = useState<SolutionProvider[]>([]);
-  const [activeTab, setActiveTab] = useState<"solutions" | "providers">(
-    "solutions"
+  const [activeTab, setActiveTab] = useState<'solutions' | 'providers'>(
+    'solutions',
   );
 
   // Fetch providers
@@ -71,10 +71,10 @@ const SolutionsSection = () => {
         const result = await getAllProviders();
         if (result.success && result.data) {
           setProviders(result.data);
-          console.log("Fetched providers:", result.data);
+          console.log('Fetched providers:', result.data);
         }
       } catch (error) {
-        console.error("Error fetching providers:", error);
+        console.error('Error fetching providers:', error);
       }
     };
 
@@ -84,19 +84,19 @@ const SolutionsSection = () => {
   // Fetch solutions with category filter
   const { data: solutions, isLoading } = useQuery({
     queryKey: [
-      selectedCategory === "all"
-        ? "solutions"
+      selectedCategory === 'all'
+        ? 'solutions'
         : `solutions-${selectedCategory}`,
     ],
     queryFn: async () => {
       const url =
-        selectedCategory === "all"
-          ? "/api/solutions"
+        selectedCategory === 'all'
+          ? '/api/solutions'
           : `/api/solutions?category=${selectedCategory}`;
 
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error("Failed to fetch solutions");
+        throw new Error('Failed to fetch solutions');
       }
       return response.json() as Promise<Solution[]>;
     },
@@ -108,13 +108,13 @@ const SolutionsSection = () => {
 
   const getCategoryLabel = (category: string) => {
     return (
-      SOLUTION_CATEGORIES.find((c) => c.value === category)?.label || "Other"
+      SOLUTION_CATEGORIES.find((c) => c.value === category)?.label || 'Other'
     );
   };
 
   const getCategoryColor = (category: string) => {
     const colorName =
-      CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || "gray";
+      CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || 'gray';
     return {
       bg: `bg-${colorName}-100`,
       text: `text-${colorName}-800`,
@@ -123,13 +123,13 @@ const SolutionsSection = () => {
 
   const getRegionLabel = (regionValue: string) => {
     const regions = [
-      { label: "North America", value: "north_america" },
-      { label: "South America", value: "south_america" },
-      { label: "Europe", value: "europe" },
-      { label: "Asia", value: "asia" },
-      { label: "Africa", value: "africa" },
-      { label: "Australia/Oceania", value: "oceania" },
-      { label: "Global", value: "global" },
+      { label: 'North America', value: 'north_america' },
+      { label: 'South America', value: 'south_america' },
+      { label: 'Europe', value: 'europe' },
+      { label: 'Asia', value: 'asia' },
+      { label: 'Africa', value: 'africa' },
+      { label: 'Australia/Oceania', value: 'oceania' },
+      { label: 'Global', value: 'global' },
     ];
 
     return regions.find((r) => r.value === regionValue)?.label || regionValue;
@@ -156,7 +156,7 @@ const SolutionsSection = () => {
             defaultValue="solutions"
             value={activeTab}
             onValueChange={(value) =>
-              setActiveTab(value as "solutions" | "providers")
+              setActiveTab(value as 'solutions' | 'providers')
             }
             className="w-full"
           >
@@ -172,11 +172,11 @@ const SolutionsSection = () => {
                 <button
                   key="all"
                   className={`px-4 py-2 rounded-full font-medium text-sm ${
-                    selectedCategory === "all"
-                      ? "bg-primary-100 text-primary-800"
-                      : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    selectedCategory === 'all'
+                      ? 'bg-primary-100 text-primary-800'
+                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                   } transition-colors`}
-                  onClick={() => handleCategoryChange("all")}
+                  onClick={() => handleCategoryChange('all')}
                 >
                   All Categories
                 </button>
@@ -185,8 +185,8 @@ const SolutionsSection = () => {
                     key={category.value}
                     className={`px-4 py-2 rounded-full font-medium text-sm ${
                       selectedCategory === category.value
-                        ? "bg-primary-100 text-primary-800"
-                        : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                        ? 'bg-primary-100 text-primary-800'
+                        : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     } transition-colors`}
                     onClick={() => handleCategoryChange(category.value)}
                   >
@@ -242,7 +242,7 @@ const SolutionsSection = () => {
                           className="w-full h-full object-cover transition-transform hover:scale-105"
                           src={
                             solution.image_url ||
-                            "/placeholder.svg?height=200&width=400"
+                            '/placeholder.svg?height=200&width=400'
                           }
                           alt={solution.title}
                         />
@@ -260,7 +260,7 @@ const SolutionsSection = () => {
                             {getCategoryLabel(solution.category)}
                           </Badge>
                           <span className="text-sm text-gray-500">
-                            {solution.regions?.join(" & ") || "Global"}
+                            {solution.regions?.join(' & ') || 'Global'}
                           </span>
                         </div>
                         <h3 className="text-xl font-bold text-gray-900 line-clamp-1">
@@ -318,7 +318,7 @@ const SolutionsSection = () => {
                                 <img
                                   src={
                                     solution.provider.logo_url ||
-                                    "/placeholder.svg"
+                                    '/placeholder.svg'
                                   }
                                   alt={solution.provider.name}
                                   className="h-8 w-8 rounded-full object-cover"
@@ -344,8 +344,8 @@ const SolutionsSection = () => {
                                         key={i}
                                         className={`h-3 w-3 ${
                                           i < (solution.provider?.rating || 0)
-                                            ? "text-yellow-400 fill-yellow-400"
-                                            : "text-gray-300"
+                                            ? 'text-yellow-400 fill-yellow-400'
+                                            : 'text-gray-300'
                                         }`}
                                       />
                                     ))}
@@ -423,7 +423,7 @@ const SolutionsSection = () => {
                           <div className="flex items-center gap-4">
                             {provider.logo_url ? (
                               <img
-                                src={provider.logo_url || "/placeholder.svg"}
+                                src={provider.logo_url || '/placeholder.svg'}
                                 alt={provider.name}
                                 className="h-16 w-16 rounded-md object-cover border"
                               />
@@ -438,7 +438,7 @@ const SolutionsSection = () => {
                               <h3 className="text-xl font-bold text-gray-900">
                                 {provider.name}
                               </h3>
-                              {provider.verification_status === "approved" && (
+                              {provider.verification_status === 'approved' && (
                                 <div className="flex items-center text-sm text-emerald-600">
                                   <Verified className="h-4 w-4 mr-1" />
                                   <span>Verified Provider</span>
@@ -469,7 +469,7 @@ const SolutionsSection = () => {
                                   rel="noopener noreferrer"
                                   className="text-primary-600 hover:underline"
                                 >
-                                  {provider.website.replace(/^https?:\/\//, "")}
+                                  {provider.website.replace(/^https?:\/\//, '')}
                                 </a>
                               </div>
                             )}
@@ -488,7 +488,7 @@ const SolutionsSection = () => {
                                         >
                                           {getRegionLabel(region)}
                                         </Badge>
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </div>
@@ -498,7 +498,7 @@ const SolutionsSection = () => {
                         <CardFooter className="border-t pt-4 flex justify-between items-center">
                           <div className="text-sm text-gray-500">
                             <Building2 className="h-4 w-4 inline mr-1" />
-                            Member since{" "}
+                            Member since{' '}
                             {new Date(provider.created_at).toLocaleDateString()}
                           </div>
                           <Link href={`/providers/${provider.id}`}>
@@ -517,11 +517,11 @@ const SolutionsSection = () => {
           <div className="mt-12 text-center">
             <Link
               href={
-                activeTab === "solutions" ? "/all-solutions" : "/all-providers"
+                activeTab === 'solutions' ? '/all-solutions' : '/all-providers'
               }
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 transition-colors"
             >
-              View All {activeTab === "solutions" ? "Solutions" : "Providers"}
+              View All {activeTab === 'solutions' ? 'Solutions' : 'Providers'}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="ml-2 h-5 w-5"

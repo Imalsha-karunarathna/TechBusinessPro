@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Users, Briefcase, Settings, LogOutIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { useAuth } from "@/lib/auth";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Users, Briefcase, Settings, LogOutIcon } from 'lucide-react';
+import { Button } from '../ui/button';
+import { useAuth } from '@/lib/auth';
 
 export function AdminSidebar() {
   const pathname = usePathname();
 
   const navItems = [
     {
-      name: "Partner Applications",
-      href: "/admin/partner-application",
+      name: 'Partner Applications',
+      href: '/admin/partner-application',
       icon: Briefcase,
     },
     {
-      name: "Users",
-      href: "/admin/users",
+      name: 'Users',
+      href: '/admin/users',
       icon: Users,
     },
     {
-      name: "Settings",
-      href: "/admin/settings",
+      name: 'Settings',
+      href: '/admin/settings',
       icon: Settings,
     },
   ];
@@ -32,7 +32,7 @@ export function AdminSidebar() {
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        window.location.href = "/";
+        window.location.href = '/';
         // router.push("/");
       },
     });
@@ -50,10 +50,10 @@ export function AdminSidebar() {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex items-center px-4 py-3 text-sm rounded-md transition-colors",
+              'flex items-center px-4 py-3 text-sm rounded-md transition-colors',
               pathname === item.href || pathname.startsWith(`${item.href}/`)
-                ? "bg-gray-800 text-white"
-                : "text-gray-300 hover:text-white hover:bg-gray-800"
+                ? 'bg-gray-800 text-white'
+                : 'text-gray-300 hover:text-white hover:bg-gray-800',
             )}
           >
             <item.icon className="h-5 w-5 mr-3" />
@@ -72,7 +72,7 @@ export function AdminSidebar() {
         >
           <LogOutIcon className="h-4 w-4 mr-1" />
 
-          {logoutMutation.isPending ? "Logging out..." : "Log out"}
+          {logoutMutation.isPending ? 'Logging out...' : 'Log out'}
         </Button>
       </div>
     </div>

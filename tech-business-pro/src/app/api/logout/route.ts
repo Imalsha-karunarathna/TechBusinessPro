@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 export async function POST() {
   // Clear the session cookie
   (await cookies()).set({
-    name: "session",
-    value: "",
+    name: 'session',
+    value: '',
     httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
     maxAge: 0, // Expire immediately
   });
 

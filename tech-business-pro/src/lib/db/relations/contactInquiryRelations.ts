@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm";
-import { contactInquiries, users } from "../schema";
+import { relations } from 'drizzle-orm';
+import { contactInquiries, users } from '../schema';
 
 export const contactInquiryRelations = relations(
   contactInquiries,
@@ -7,7 +7,7 @@ export const contactInquiryRelations = relations(
     resolver: one(users, {
       fields: [contactInquiries.resolved_by],
       references: [users.id],
-      relationName: "inquiry_resolver",
+      relationName: 'inquiry_resolver',
     }),
-  })
+  }),
 );

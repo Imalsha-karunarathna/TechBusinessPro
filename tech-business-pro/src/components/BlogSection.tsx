@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { BlogPost } from "@/lib/types";
-import { format } from "date-fns";
-import { Skeleton } from "@/components/ui/skeleton";
-import { BLOG_CATEGORY_COLORS } from "@/lib/constants";
-import Link from "next/link";
+import { BlogPost } from '@/lib/types';
+import { format } from 'date-fns';
+import { Skeleton } from '@/components/ui/skeleton';
+import { BLOG_CATEGORY_COLORS } from '@/lib/constants';
+import Link from 'next/link';
 
 const BlogSection = () => {
   const isLoading = true;
@@ -13,7 +13,7 @@ const BlogSection = () => {
   const getCategoryColor = (category: string) => {
     const colorName =
       BLOG_CATEGORY_COLORS[category as keyof typeof BLOG_CATEGORY_COLORS] ||
-      "gray";
+      'gray';
     return colorName;
   };
 
@@ -79,14 +79,14 @@ const BlogSection = () => {
                     <div className="flex-shrink-0">
                       <span
                         className={`inline-block h-5 w-5 rounded-full bg-${getCategoryColor(
-                          post.category
+                          post.category,
                         )}-500`}
                       ></span>
                     </div>
                     <div className="ml-2">
                       <p
                         className={`text-sm font-medium text-${getCategoryColor(
-                          post.category
+                          post.category,
                         )}-600`}
                       >
                         {post.category}
@@ -121,7 +121,7 @@ const BlogSection = () => {
                       </p>
                       <div className="flex space-x-1 text-sm text-gray-500">
                         <time dateTime={post.published_at}>
-                          {format(new Date(post.published_at), "MMM d, yyyy")}
+                          {format(new Date(post.published_at), 'MMM d, yyyy')}
                         </time>
                         <span aria-hidden="true">&middot;</span>
                         <span>{post.reading_time} min read</span>

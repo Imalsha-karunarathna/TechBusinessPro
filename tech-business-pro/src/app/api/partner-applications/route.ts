@@ -1,7 +1,7 @@
-import { partnerApplications } from "@/lib/db/tables/partnerApplications";
-import { insertPartnerApplicationSchema } from "@/lib/db/schemas/partnerApplicationSchema";
-import { NextResponse } from "next/server";
-import { db } from "@/db";
+import { partnerApplications } from '@/lib/db/tables/partnerApplications';
+import { insertPartnerApplicationSchema } from '@/lib/db/schemas/partnerApplicationSchema';
+import { NextResponse } from 'next/server';
+import { db } from '@/db';
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       .insert(partnerApplications)
       .values({
         ...validatedData,
-        application_status: "pending",
+        application_status: 'pending',
         created_at: new Date(),
       })
       .returning();
@@ -25,14 +25,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Application submitted successfully",
+      message: 'Application submitted successfully',
       application: result[0],
     });
   } catch (error) {
-    console.error("Error submitting partner application:", error);
+    console.error('Error submitting partner application:', error);
     return NextResponse.json(
-      { success: false, message: "Failed to submit application" },
-      { status: 500 }
+      { success: false, message: 'Failed to submit application' },
+      { status: 500 },
     );
   }
 }

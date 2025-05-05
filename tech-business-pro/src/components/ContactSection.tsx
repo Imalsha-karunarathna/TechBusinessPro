@@ -1,14 +1,14 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { ContactInquiry } from "@/lib/types";
+'use client';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { ContactInquiry } from '@/lib/types';
 import {
   INQUIRY_TYPES,
   SOLUTION_TYPES,
   CONTACT_METHODS,
-} from "@/lib/constants";
+} from '@/lib/constants';
 import {
   Form,
   FormControl,
@@ -16,36 +16,36 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { CheckIcon } from "lucide-react";
-import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { toast } from "@/hooks/use-toast";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { CheckIcon } from 'lucide-react';
+import Link from 'next/link';
+import { useMutation } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { toast } from '@/hooks/use-toast';
 
 const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
   phone: z.string().optional(),
   inquiry_type: z
     .string()
-    .min(1, { message: "Please select an inquiry type." }),
+    .min(1, { message: 'Please select an inquiry type.' }),
   subject: z
     .string()
-    .min(3, { message: "Subject must be at least 3 characters." }),
+    .min(3, { message: 'Subject must be at least 3 characters.' }),
   message: z
     .string()
-    .min(10, { message: "Message must be at least 10 characters." }),
+    .min(10, { message: 'Message must be at least 10 characters.' }),
   solution_type: z.string().optional(),
   preferred_contact: z.string().optional(),
 });
@@ -57,34 +57,34 @@ const ContactSection = () => {
   const form = useForm<ContactInquiry>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      inquiry_type: "",
-      subject: "",
-      message: "",
-      solution_type: "",
-      preferred_contact: "",
+      name: '',
+      email: '',
+      phone: '',
+      inquiry_type: '',
+      subject: '',
+      message: '',
+      solution_type: '',
+      preferred_contact: '',
     },
   });
 
-  const inquiryType = form.watch("inquiry_type");
+  const inquiryType = form.watch('inquiry_type');
 
   useEffect(() => {
     // Reset solution_type when inquiry_type changes
-    if (inquiryType !== "Solution Request") {
-      form.setValue("solution_type", "");
+    if (inquiryType !== 'Solution Request') {
+      form.setValue('solution_type', '');
     }
   }, [inquiryType, form]);
 
   useMutation({
     mutationFn: async (data: ContactInquiry) => {
-      const response = await apiRequest("POST", "/api/contact-inquiries", data);
+      const response = await apiRequest('POST', '/api/contact-inquiries', data);
       return response.json();
     },
     onSuccess: (data) => {
       toast({
-        title: "Inquiry Submitted",
+        title: 'Inquiry Submitted',
         description: "We've received your message and will respond shortly.",
       });
       setIsSubmitted(true);
@@ -94,8 +94,8 @@ const ContactSection = () => {
     },
     onError: (error) => {
       toast({
-        title: "Submission Failed",
-        description: error.message || "Please try again later.",
+        title: 'Submission Failed',
+        description: error.message || 'Please try again later.',
         //variant: "destructive",
       });
     },
@@ -261,7 +261,7 @@ const ContactSection = () => {
                       )}
                     />
 
-                    {inquiryType === "Solution Request" && (
+                    {inquiryType === 'Solution Request' && (
                       <FormField
                         control={form.control}
                         name="solution_type"

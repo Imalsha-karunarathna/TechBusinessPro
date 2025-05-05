@@ -25,7 +25,7 @@ export interface SolutionProvider {
   phone?: string;
   logo_url?: string;
   regions_served?: string[];
-  verification_status: "pending" | "approved" | "rejected";
+  verification_status: 'pending' | 'approved' | 'rejected';
   approved_date?: string;
   created_at: string;
   rating?: number; // Added for UI display

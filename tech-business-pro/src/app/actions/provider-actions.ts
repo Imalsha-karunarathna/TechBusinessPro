@@ -1,23 +1,23 @@
-"use server";
+'use server';
 
-import { db } from "@/db";
+import { db } from '@/db';
 import {
   solutionProviders,
   insertSolutionProviderSchema,
   type NewSolutionProvider,
-} from "@/lib/db/schema";
-import { revalidatePath } from "next/cache";
+} from '@/lib/db/schema';
+import { revalidatePath } from 'next/cache';
 
 export async function createOrUpdateProvider(data: NewSolutionProvider) {
   try {
-    console.log("Server action received data:", data);
+    console.log('Server action received data:', data);
 
     // Validate the data
     const validatedData = insertSolutionProviderSchema.parse(data);
-    console.log("Validated data:", validatedData);
+    console.log('Validated data:', validatedData);
 
     // If regions_served is a string, convert it to an array
-    if (typeof validatedData.regions_served === "string") {
+    if (typeof validatedData.regions_served === 'string') {
       validatedData.regions_served = [validatedData.regions_served];
     }
 
@@ -26,20 +26,20 @@ export async function createOrUpdateProvider(data: NewSolutionProvider) {
       .insert(solutionProviders)
       .values(validatedData)
       .returning();
-    console.log("Database insert result:", result);
+    console.log('Database insert result:', result);
 
     // Revalidate the providers page
-    revalidatePath("/providers");
-    revalidatePath("/solutions");
-    revalidatePath("/");
+    revalidatePath('/providers');
+    revalidatePath('/solutions');
+    revalidatePath('/');
 
     return { success: true, data: result[0] };
   } catch (error) {
-    console.error("Error creating provider:", error);
+    console.error('Error creating provider:', error);
     return {
       success: false,
       error:
-        error instanceof Error ? error.message : "Failed to create provider",
+        error instanceof Error ? error.message : 'Failed to create provider',
     };
   }
 }
@@ -52,8 +52,8 @@ export async function getProviderById(id: number) {
 
     return { success: true, data: provider };
   } catch (error) {
-    console.error("Error fetching provider:", error);
-    return { success: false, error: "Failed to fetch provider" };
+    console.error('Error fetching provider:', error);
+    return { success: false, error: 'Failed to fetch provider' };
   }
 }
 
@@ -62,7 +62,7 @@ export async function getAllProviders() {
     const providers = await db.query.solutionProviders.findMany();
     return { success: true, data: providers };
   } catch (error) {
-    console.error("Error fetching providers:", error);
-    return { success: false, error: "Failed to fetch providers" };
+    console.error('Error fetching providers:', error);
+    return { success: false, error: 'Failed to fetch providers' };
   }
 }

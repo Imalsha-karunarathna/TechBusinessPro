@@ -1,8 +1,8 @@
-import { getPartnerApplications } from "@/app/actions/partner-applications";
-import { PartnerApplicationsTable } from "@/components/admin/partner-applications-table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
-import { Suspense } from "react";
+import { getPartnerApplications } from '@/app/actions/partner-applications';
+import { PartnerApplicationsTable } from '@/components/admin/partner-applications-table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Link from 'next/link';
+import { Suspense } from 'react';
 
 // Async data fetching component
 async function FetchApplications({ status }: { status: string }) {
@@ -16,7 +16,7 @@ export default function PartnerApplicationsPage({
   searchParams: { status?: string };
 }) {
   // Normalize the status parameter
-  const status = searchParams.status?.trim().toLowerCase() || "all";
+  const status = searchParams.status?.trim().toLowerCase() || 'all';
 
   return (
     <div className="container mx-auto py-10">

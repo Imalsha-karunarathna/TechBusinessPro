@@ -1,9 +1,9 @@
-import { createInsertSchema } from "drizzle-zod";
-import { solutionProviders } from "../schema";
-import { z } from "zod";
+import { createInsertSchema } from 'drizzle-zod';
+import { solutionProviders } from '../schema';
+import { z } from 'zod';
 
 export const insertSolutionProviderSchema = createInsertSchema(
-  solutionProviders
+  solutionProviders,
 ).pick({
   name: true,
   description: true,
