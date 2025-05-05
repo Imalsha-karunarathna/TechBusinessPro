@@ -48,13 +48,13 @@ export async function POST(request: NextRequest) {
         maxAge: 60 * 60 * 24 * 7, // 1 week
       });
 
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const { password: _, ...userWithoutPassword } = user;
 
       return NextResponse.json(userWithoutPassword);
-      /* eslint-disable no-unused-expressions */
-    } catch (error: any) {
-      if (error.message === "Username or email already exists") {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === "Username or email already exists") {
         return NextResponse.json({ error: error.message }, { status: 409 });
       }
       throw error;

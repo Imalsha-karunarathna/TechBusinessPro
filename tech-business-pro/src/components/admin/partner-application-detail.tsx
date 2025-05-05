@@ -25,6 +25,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface PartnerApplicationDetailProps {
+  /*eslint-disable @typescript-eslint/no-explicit-any */
   application: any;
 }
 

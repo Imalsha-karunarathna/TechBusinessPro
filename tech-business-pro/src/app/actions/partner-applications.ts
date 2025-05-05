@@ -36,7 +36,7 @@ export async function getPartnerApplications(status?: string) {
       // Use a direct query with explicit casting to ensure proper filtering
       const filteredApplications = await db.query.partnerApplications.findMany({
         where: (partnerApplications, { eq }) =>
-          /* eslint-disable no-explicit-any*/
+          /*eslint-disable @typescript-eslint/no-explicit-any */
           eq(partnerApplications.application_status, normalizedStatus as any),
         with: {
           reviewer: true,

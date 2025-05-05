@@ -122,6 +122,7 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
         onSuccess();
       }
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
         description:

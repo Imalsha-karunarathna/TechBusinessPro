@@ -77,7 +77,7 @@ const ContactSection = () => {
     }
   }, [inquiryType, form]);
 
-  const mutation = useMutation({
+  useMutation({
     mutationFn: async (data: ContactInquiry) => {
       const response = await apiRequest("POST", "/api/contact-inquiries", data);
       return response.json();

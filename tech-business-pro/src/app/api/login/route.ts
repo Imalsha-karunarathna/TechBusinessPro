@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    /* eslint-disable no-unused-expressions */
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const { password: _, ...userWithoutPassword } = user;
 
     // Set session cookie

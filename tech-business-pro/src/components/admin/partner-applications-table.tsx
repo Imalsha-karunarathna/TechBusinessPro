@@ -14,6 +14,7 @@ import Link from "next/link";
 import { Eye } from "lucide-react";
 
 interface PartnerApplicationsTableProps {
+  /*eslint-disable @typescript-eslint/no-explicit-any */
   applications: any[];
 }
 

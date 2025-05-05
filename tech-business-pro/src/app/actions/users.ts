@@ -16,7 +16,7 @@ export async function getAllUsers() {
 
     // Remove password from user objects
     return allUsers.map((user) => {
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword;
     });

@@ -31,6 +31,7 @@ import {
 import { useState } from "react";
 
 interface UsersTableProps {
+  /*eslint-disable @typescript-eslint/no-explicit-any */
   users: any[];
 }
 

@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getUserById } from "@/lib/db/users/read";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get session cookie
     const cookieStore = cookies(); // no await here
@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Return user data (excluding password)
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json(userWithoutPassword);

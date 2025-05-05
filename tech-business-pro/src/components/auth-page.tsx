@@ -81,6 +81,7 @@ export default function AuthPage() {
 
   const onRegisterSubmit = (data: RegisterFormValues) => {
     // Omit confirmPassword as it's not needed for the API
+    /*eslint-disable @typescript-eslint/no-unused-vars */
     const { confirmPassword, ...registerData } = data;
     registerMutation.mutate(registerData);
   };

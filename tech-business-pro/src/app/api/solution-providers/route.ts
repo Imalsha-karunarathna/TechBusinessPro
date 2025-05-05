@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert the provider
-    const result = await db.insert(solutionProviders).values({
+    await db.insert(solutionProviders).values({
       name: data.name,
       description: data.description,
       email: data.email,
