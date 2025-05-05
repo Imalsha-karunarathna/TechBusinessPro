@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { User } from '@/lib/db/schemas/userSchema';
 
 import { db } from '@/db';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 
 export async function getUserById(id: number): Promise<User | null> {
   try {

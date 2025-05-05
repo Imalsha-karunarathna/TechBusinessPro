@@ -1,6 +1,6 @@
 import { users } from '@/lib/db/tables/users';
 import type { InsertUser, User } from '@/lib/db/schemas/userSchema';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
 
