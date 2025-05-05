@@ -10,13 +10,17 @@ async function FetchApplications({ status }: { status: string }) {
   return <PartnerApplicationsTable applications={applications} />;
 }
 
-export default function PartnerApplicationsPage({
-  searchParams,
-}: {
-  searchParams: { status?: string };
-}) {
+type PartnerApplicationsPageProps = {
+  searchParams?: Promise<{ [key: string]: string | undefined }>;
+};
+
+export default async function PartnerApplicationsPage(
+  props: PartnerApplicationsPageProps,
+) {
+  const searchParams = await props.searchParams;
   // Normalize the status parameter
-  const status = searchParams.status?.trim().toLowerCase() || 'all';
+  const statusParam = searchParams?.['status']?.trim().toLowerCase() || 'all';
+  const status = statusParam;
 
   return (
     <div className="container mx-auto py-10">
