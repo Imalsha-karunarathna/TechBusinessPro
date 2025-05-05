@@ -5,12 +5,15 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export default async function PartnerApplicationDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const applicationId = Number.parseInt(params.id, 10);
+type PartnerApplicationDetailPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function PartnerApplicationDetailPage(
+  props: PartnerApplicationDetailPageProps,
+) {
+  const { id } = await props.params;
+  const applicationId = Number.parseInt(id, 10);
 
   if (isNaN(applicationId)) {
     notFound();
