@@ -10,6 +10,7 @@ import {
   Settings,
   User,
 } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface ProviderSidebarProps {
   activeTab: string;
@@ -49,6 +50,16 @@ export function ProviderSidebar({
       value: "settings",
     },
   ];
+  const { user, logoutMutation } = useAuth();
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        window.location.href = "/";
+        // router.push("/");
+      },
+    });
+  };
 
   return (
     <div className="w-64 bg-gray-900 text-white min-h-screen p-4 hidden md:block">
@@ -76,13 +87,16 @@ export function ProviderSidebar({
       </nav>
 
       <div className="absolute bottom-4 w-52">
-        <button
-          //  onClick={logout}
-          className="flex items-center px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors w-full"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center text-gray-500"
+          onClick={handleLogout}
+          disabled={logoutMutation.isPending}
         >
-          <LogOut className="h-5 w-5 mr-3" />
-          Sign Out
-        </button>
+          <LogOut className="h-4 w-4 mr-1" />
+          {logoutMutation.isPending ? "Logging out..." : "Log out"}
+        </Button>
       </div>
     </div>
   );

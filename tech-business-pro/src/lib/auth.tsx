@@ -62,6 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Immediate redirect based on user role
       if (user.role === "admin") {
         router.push("/admin/partner-application");
+      } else if (user.role === "solution_provider") {
+        router.push("/solutionProvider");
       } else {
         router.push("/");
       }

@@ -92,6 +92,8 @@ export default function AuthPage() {
     if (!isLoading && user) {
       if (user.role === "admin") {
         router.push("/admin/partner-applications");
+      } else if (user.role === "solution_provider") {
+        router.push("/solutionProvider");
       } else {
         router.push("/");
       }
@@ -397,7 +399,7 @@ export default function AuthPage() {
                 {activeTab === "login" ? "Register" : "Log in"}
               </button>
             </p>
-            <p className="mt-2">
+            {/* <p className="mt-2">
               Are you a solution provider?{" "}
               <Link
                 href="/provider-registration"
@@ -405,7 +407,7 @@ export default function AuthPage() {
               >
                 Register as a provider
               </Link>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
