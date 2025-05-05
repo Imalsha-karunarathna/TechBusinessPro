@@ -187,8 +187,8 @@ export default function AuthPage() {
                 {error === 'unauthorized'
                   ? 'You need to be logged in to access that page.'
                   : error === 'admin_required'
-                    ? 'You need administrator privileges to access that page.'
-                    : 'An error occurred. Please try again.'}
+                  ? 'You need administrator privileges to access that page.'
+                  : 'An error occurred. Please try again.'}
               </AlertDescription>
             </Alert>
           )}
