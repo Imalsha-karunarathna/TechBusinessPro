@@ -1,10 +1,10 @@
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema } from 'drizzle-zod';
 
-import { z } from "zod";
-import { partnerApplications } from "../tables/partnerApplications";
+import { z } from 'zod';
+import { partnerApplications } from '../tables/partnerApplications';
 
 export const insertPartnerApplicationSchema = createInsertSchema(
-  partnerApplications
+  partnerApplications,
 ).pick({
   partner_name: true,
   organization_name: true,

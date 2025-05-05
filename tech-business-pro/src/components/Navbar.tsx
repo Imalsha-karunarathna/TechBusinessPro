@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import { Search, LogIn, LogOut, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth";
+import { Search, LogIn, LogOut, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/auth';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logoutMutation } = useAuth();
-  const router = useRouter();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -22,14 +21,14 @@ const Navbar = () => {
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        window.location.href = "/";
+        window.location.href = '/';
         // router.push("/");
       },
     });
   };
 
   return (
-    <nav className="bg-white shadow fixed w-full z-10">
+    <nav className="fixed top-0 bg-white shadow w-full z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -51,9 +50,9 @@ const Navbar = () => {
               <Link href="/">
                 <span
                   className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                    isActive("/")
-                      ? "border-primary-500 text-gray-900"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    isActive('/')
+                      ? 'border-primary-500 text-gray-900'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
                   Home
@@ -117,7 +116,7 @@ const Navbar = () => {
                   disabled={logoutMutation.isPending}
                 >
                   <LogOut className="h-4 w-4 mr-1" />
-                  {logoutMutation.isPending ? "Logging out..." : "Log out"}
+                  {logoutMutation.isPending ? 'Logging out...' : 'Log out'}
                 </Button>
               </div>
             ) : (
@@ -167,9 +166,9 @@ const Navbar = () => {
             <Link href="/">
               <span
                 className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive("/")
-                    ? "bg-primary-50 border-primary-500 text-primary-700"
-                    : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
+                  isActive('/')
+                    ? 'bg-primary-50 border-primary-500 text-primary-700'
+                    : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800'
                 }`}
               >
                 Home
@@ -228,7 +227,7 @@ const Navbar = () => {
                   disabled={logoutMutation.isPending}
                 >
                   <LogOut className="h-4 w-4 mr-2" />
-                  {logoutMutation.isPending ? "Logging out..." : "Log out"}
+                  {logoutMutation.isPending ? 'Logging out...' : 'Log out'}
                 </button>
               </div>
             ) : (

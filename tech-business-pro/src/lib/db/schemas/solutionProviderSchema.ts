@@ -1,9 +1,9 @@
-import { createInsertSchema } from "drizzle-zod";
-import { solutionProviders } from "../schema";
-import { z } from "zod";
+import { createInsertSchema } from 'drizzle-zod';
+import { solutionProviders } from '../schema';
+import { z } from 'zod';
 
 export const insertSolutionProviderSchema = createInsertSchema(
-  solutionProviders
+  solutionProviders,
 ).pick({
   name: true,
   description: true,
@@ -19,3 +19,4 @@ export type InsertSolutionProvider = z.infer<
   typeof insertSolutionProviderSchema
 >;
 export type SolutionProvider = typeof solutionProviders.$inferSelect;
+export type NewSolutionProvider = z.infer<typeof insertSolutionProviderSchema>;

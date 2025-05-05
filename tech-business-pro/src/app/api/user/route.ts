@@ -1,12 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { getUserById } from "@/lib/db/users/read";
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { getUserById } from '@/lib/db/users/read';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get session cookie
-    const cookieStore = cookies();
-    const sessionCookie = (await cookieStore).get("session");
+    const cookieStore = cookies(); // no await here
+    const sessionCookie = (await cookieStore).get('session'); // no await here
 
     if (!sessionCookie?.value) {
       return NextResponse.json(null, { status: 401 });
@@ -26,14 +26,15 @@ export async function GET(request: NextRequest) {
     }
 
     // Return user data (excluding password)
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json(userWithoutPassword);
   } catch (error) {
-    console.error("Get user error:", error);
+    console.error('Get user error:', error);
     return NextResponse.json(
-      { error: "An error occurred while fetching user data" },
-      { status: 500 }
+      { error: 'An error occurred while fetching user data' },
+      { status: 500 },
     );
   }
 }

@@ -1,10 +1,10 @@
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema } from 'drizzle-zod';
 
-import { z } from "zod";
-import { contactInquiries } from "../tables/contactInquiries";
+import { z } from 'zod';
+import { contactInquiries } from '../tables/contactInquiries';
 
 export const insertContactInquirySchema = createInsertSchema(
-  contactInquiries
+  contactInquiries,
 ).pick({
   name: true,
   email: true,

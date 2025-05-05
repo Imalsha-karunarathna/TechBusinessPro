@@ -1,4 +1,4 @@
-"use client";
+'use client';
 const HowItWorksSection = () => {
   return (
     <div className="py-16 bg-gray-50">

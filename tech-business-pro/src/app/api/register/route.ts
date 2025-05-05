@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
-import { z } from "zod";
-import { createUser } from "@/lib/db/users/write";
+import { z } from 'zod';
+import { createUser } from '@/lib/db/users/write';
 
 const registerSchema = z.object({
   username: z.string().min(3),
@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     const result = registerSchema.safeParse(body);
     if (!result.success) {
       return NextResponse.json(
-        { error: "Invalid request data", details: result.error.format() },
-        { status: 400 }
+        { error: 'Invalid request data', details: result.error.format() },
+        { status: 400 },
       );
     }
 
@@ -32,37 +32,41 @@ export async function POST(request: NextRequest) {
 
       if (!user) {
         return NextResponse.json(
-          { error: "Failed to create user" },
-          { status: 500 }
+          { error: 'Failed to create user' },
+          { status: 500 },
         );
       }
 
       // Set session cookie
       const cookieStore = cookies();
       (await cookieStore).set({
-        name: "session",
+        name: 'session',
         value: String(user.id),
         httpOnly: true,
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24 * 7, // 1 week
       });
 
-      // Return user data (excluding password)
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const { password: _, ...userWithoutPassword } = user;
 
       return NextResponse.json(userWithoutPassword);
-    } catch (error: any) {
-      if (error.message === "Username or email already exists") {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        error.message === 'Username or email already exists'
+      ) {
         return NextResponse.json({ error: error.message }, { status: 409 });
       }
       throw error;
     }
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error('Registration error:', error);
     return NextResponse.json(
-      { error: "An error occurred during registration" },
-      { status: 500 }
+      { error: 'An error occurred during registration' },
+      { status: 500 },
     );
   }
 }

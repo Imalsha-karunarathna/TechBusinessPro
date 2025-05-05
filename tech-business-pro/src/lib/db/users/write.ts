@@ -1,11 +1,11 @@
-import { users } from "@/lib/db/tables/users";
-import type { InsertUser, User } from "@/lib/db/schemas/userSchema";
-import { hash } from "bcrypt";
-import { db } from "@/db";
-import { eq } from "drizzle-orm";
+import { users } from '@/lib/db/tables/users';
+import type { InsertUser, User } from '@/lib/db/schemas/userSchema';
+import { hash } from 'bcrypt';
+import { db } from '@/db';
+import { eq } from 'drizzle-orm';
 
 export async function createUser(
-  userData: Omit<InsertUser, "password"> & { password: string }
+  userData: Omit<InsertUser, 'password'> & { password: string },
 ): Promise<User | null> {
   try {
     // Check if username or email already exists
@@ -16,7 +16,7 @@ export async function createUser(
       .limit(1);
 
     if (existingUser.length > 0) {
-      throw new Error("Username or email already exists");
+      throw new Error('Username or email already exists');
     }
 
     // Hash the password
@@ -34,7 +34,7 @@ export async function createUser(
 
     return result[0] || null;
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error('Error creating user:', error);
     throw error;
   }
 }

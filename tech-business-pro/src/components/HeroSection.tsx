@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
@@ -35,6 +35,8 @@ const HeroSection = () => {
                 className="h-96 w-full object-cover rounded-lg shadow-xl"
                 src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                 alt="Global business connections"
+                width={800}
+                height={600}
               />
             </div>
           </div>

@@ -1,7 +1,7 @@
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema } from 'drizzle-zod';
 
-import { z } from "zod";
-import { messages } from "../tables/messages";
+import { z } from 'zod';
+import { messages } from '../tables/messages';
 
 export const insertMessageSchema = createInsertSchema(messages).pick({
   conversation_id: true,

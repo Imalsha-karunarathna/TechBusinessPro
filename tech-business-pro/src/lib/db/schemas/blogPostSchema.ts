@@ -1,7 +1,7 @@
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema } from 'drizzle-zod';
 
-import { z } from "zod";
-import { blogPosts } from "../tables/blogPosts";
+import { z } from 'zod';
+import { blogPosts } from '../tables/blogPosts';
 
 export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
   title: true,

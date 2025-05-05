@@ -1,5 +1,5 @@
-import { Facebook, Twitter, Linkedin } from "lucide-react";
-import Link from "next/link";
+import { Facebook, Twitter, Linkedin } from 'lucide-react';
+import Link from 'next/link';
 
 const Footer = () => {
   return (

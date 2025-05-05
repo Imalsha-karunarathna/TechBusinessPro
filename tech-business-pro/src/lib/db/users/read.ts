@@ -1,9 +1,9 @@
-import { users } from "@/lib/db/tables/users";
-import { eq } from "drizzle-orm";
-import { User } from "@/lib/db/schemas/userSchema";
+import { users } from '@/lib/db/tables/users';
+import { eq } from 'drizzle-orm';
+import { User } from '@/lib/db/schemas/userSchema';
 
-import { db } from "@/db";
-import { compare } from "bcrypt";
+import { db } from '@/db';
+import { compare } from 'bcrypt';
 
 export async function getUserById(id: number): Promise<User | null> {
   try {
@@ -14,13 +14,13 @@ export async function getUserById(id: number): Promise<User | null> {
       .limit(1);
     return result[0] || null;
   } catch (error) {
-    console.error("Error fetching user by ID:", error);
+    console.error('Error fetching user by ID:', error);
     return null;
   }
 }
 
 export async function getUserByUsername(
-  username: string
+  username: string,
 ): Promise<User | null> {
   try {
     const result = await db
@@ -30,7 +30,7 @@ export async function getUserByUsername(
       .limit(1);
     return result[0] || null;
   } catch (error) {
-    console.error("Error fetching user by username:", error);
+    console.error('Error fetching user by username:', error);
     return null;
   }
 }
@@ -44,14 +44,14 @@ export async function getUserByEmail(email: string): Promise<User | null> {
       .limit(1);
     return result[0] || null;
   } catch (error) {
-    console.error("Error fetching user by email:", error);
+    console.error('Error fetching user by email:', error);
     return null;
   }
 }
 
 export async function validateUserCredentials(
   username: string,
-  password: string
+  password: string,
 ): Promise<User | null> {
   try {
     const user = await getUserByUsername(username);
@@ -66,7 +66,6 @@ export async function validateUserCredentials(
       return null;
     }
 
-    // Update last login time
     await db
       .update(users)
       .set({ last_login: new Date() })
@@ -74,7 +73,7 @@ export async function validateUserCredentials(
 
     return user;
   } catch (error) {
-    console.error("Error validating user credentials:", error);
+    console.error('Error validating user credentials:', error);
     return null;
   }
 }

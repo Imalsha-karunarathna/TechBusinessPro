@@ -1,8 +1,8 @@
-"use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
+'use client';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 import {
   Form,
@@ -12,41 +12,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Briefcase, Users, Globe } from "lucide-react";
-import type { PartnerApplication } from "@/lib/types";
-import { useState } from "react";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Briefcase, Users, Globe } from 'lucide-react';
+import type { PartnerApplication } from '@/lib/types';
+import { useState } from 'react';
 
 const partnerFormSchema = z.object({
   partner_name: z
     .string()
-    .min(2, { message: "Partner name must be at least 2 characters." }),
+    .min(2, { message: 'Partner name must be at least 2 characters.' }),
   organization_name: z
     .string()
-    .min(2, { message: "Organization name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+    .min(2, { message: 'Organization name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
   phone: z.string().optional(),
-  website: z.string().url({ message: "Please enter a valid URL." }).optional(),
+  website: z.string().url({ message: 'Please enter a valid URL.' }).optional(),
   expertise: z
     .string()
-    .min(1, { message: "Please select an area of expertise." }),
+    .min(1, { message: 'Please select an area of expertise.' }),
   collaboration: z.string().min(10, {
-    message: "Please provide details about your proposed collaboration.",
+    message: 'Please provide details about your proposed collaboration.',
   }),
   experience_years: z.number().int().positive().optional(),
   reason: z
     .string()
-    .max(100, { message: "Response should be 100 words or less." })
+    .max(100, { message: 'Response should be 100 words or less.' })
     .optional(),
   additional_notes: z.string().optional(),
 });
@@ -54,23 +54,58 @@ const partnerFormSchema = z.object({
 const PartnerSection = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<PartnerApplication>({
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
-      partner_name: "",
-      organization_name: "",
-      email: "",
-      phone: "",
-      website: "",
-      expertise: "",
-      collaboration: "",
+      partner_name: '',
+      organization_name: '',
+      email: '',
+      phone: '',
+      website: '',
+      expertise: '',
+      collaboration: '',
       experience_years: undefined,
-      reason: "",
-      additional_notes: "",
+      reason: '',
+      additional_notes: '',
     },
   });
 
+  async function onSubmit(data: PartnerApplication) {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/partner-applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSubmitted(true);
+        toast({
+          title: 'Application Submitted',
+          description:
+            'Your partner application has been submitted successfully.',
+        });
+      } else {
+        throw new Error(result.message || 'Failed to submit application');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: 'Submission Failed',
+        description:
+          'There was an error submitting your application. Please try again.',
+        //variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
   return (
     <div id="partner" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -168,8 +203,8 @@ const PartnerSection = () => {
                   Thank You for Your Interest!
                 </h4>
                 <p className="text-gray-600 mb-4">
-                  Your expression of interest has been received. We'll review
-                  your application and get back to you soon.
+                  Your expression of interest has been received. We &apos;ll
+                  review your application and get back to you soon.
                 </p>
                 <p className="text-gray-500 text-sm">
                   A confirmation email has been sent to your provided email
@@ -178,7 +213,10 @@ const PartnerSection = () => {
               </div>
             ) : (
               <Form {...form}>
-                <form className="space-y-4">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <FormField
                       control={form.control}
@@ -271,7 +309,7 @@ const PartnerSection = () => {
                               />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="z-[100] overflow-y-auto max-h-[200px]">
+                          <SelectContent className=" max-h-[600px] bg-white">
                             <SelectItem
                               value="IT Security"
                               className="hover:bg-blue-500 cursor-pointer"
@@ -342,7 +380,7 @@ const PartnerSection = () => {
                               field.onChange(
                                 e.target.value
                                   ? Number.parseInt(e.target.value)
-                                  : undefined
+                                  : undefined,
                               )
                             }
                           />
@@ -374,8 +412,9 @@ const PartnerSection = () => {
                   <Button
                     type="submit"
                     className="w-full bg-blue-500 text-white"
+                    disabled={isSubmitting}
                   >
-                    Submit Application
+                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
                   </Button>
                 </form>
               </Form>
