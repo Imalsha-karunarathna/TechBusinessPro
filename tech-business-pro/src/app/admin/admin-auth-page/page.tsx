@@ -1,5 +1,5 @@
-import AdminAuthPage from "@/components/admin-auth-page";
+import AuthPage from "@/components/auth-page";
 
 export default function Page() {
-  return <AdminAuthPage />;
+  return <AuthPage />;
 }

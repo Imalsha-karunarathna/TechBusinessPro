@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
+import { Select } from "../ui/select";
 
 const providerRegistrationSchema = z
   .object({
@@ -62,15 +63,15 @@ const providerRegistrationSchema = z
 
 type ProviderRegistrationValues = z.infer<typeof providerRegistrationSchema>;
 
-const regions = [
-  { label: "North America", value: "north_america" },
-  { label: "South America", value: "south_america" },
-  { label: "Europe", value: "europe" },
-  { label: "Asia", value: "asia" },
-  { label: "Africa", value: "africa" },
-  { label: "Australia/Oceania", value: "oceania" },
-  { label: "Global", value: "global" },
-];
+// const regions = [
+//   { label: "North America", value: "north_america" },
+//   { label: "South America", value: "south_america" },
+//   { label: "Europe", value: "europe" },
+//   { label: "Asia", value: "asia" },
+//   { label: "Africa", value: "africa" },
+//   { label: "Australia/Oceania", value: "oceania" },
+//   { label: "Global", value: "global" },
+// ];
 
 export default function ProviderRegistrationForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -319,12 +320,7 @@ export default function ProviderRegistrationForm() {
                         <FormItem className="col-span-full">
                           <FormLabel>Regions Served</FormLabel>
                           <FormControl>
-                            {/* <MultiSelect
-                              options={regions}
-                              selected={field.value}
-                              onChange={field.onChange}
-                              placeholder="Select regions"
-                            /> */}
+                            <Select onValueChange={field.onChange} />
                           </FormControl>
                           <FormDescription>
                             Select all regions where your solutions are

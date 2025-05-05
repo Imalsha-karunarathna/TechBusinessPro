@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  Users,
-  Briefcase,
-  Settings,
-  LogOut,
-  LogOutIcon,
-} from "lucide-react";
+import { Users, Briefcase, Settings, LogOutIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/lib/auth";
 
@@ -34,7 +27,7 @@ export function AdminSidebar() {
       icon: Settings,
     },
   ];
-  const { user, logoutMutation } = useAuth();
+  const { logoutMutation } = useAuth();
 
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {

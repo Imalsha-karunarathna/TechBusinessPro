@@ -313,6 +313,9 @@ export function AddSolutionForm({ onSuccess }: AddSolutionFormProps) {
                         e.preventDefault();
                         addFeature();
                       }
+                      {
+                        field.onChange(e);
+                      }
                     }}
                   />
                   <Button type="button" onClick={addFeature}>

@@ -48,10 +48,11 @@ export async function POST(request: NextRequest) {
         maxAge: 60 * 60 * 24 * 7, // 1 week
       });
 
-      // Return user data (excluding password)
+      /* eslint-disable no-unused-expressions */
       const { password: _, ...userWithoutPassword } = user;
 
       return NextResponse.json(userWithoutPassword);
+      /* eslint-disable no-unused-expressions */
     } catch (error: any) {
       if (error.message === "Username or email already exists") {
         return NextResponse.json({ error: error.message }, { status: 409 });

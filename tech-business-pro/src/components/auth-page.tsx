@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { Lock, Mail, User } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import Link from "next/link";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -47,7 +46,6 @@ export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<string>("login");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const error = searchParams.get("error");
   const registered = searchParams.get("registered");
 

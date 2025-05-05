@@ -2,7 +2,6 @@ import type React from "react";
 
 import "./globals.css";
 import { Providers } from "./providers";
-import Navbar from "@/components/Navbar";
 
 export default function RootLayout({
   children,

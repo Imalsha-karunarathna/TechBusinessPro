@@ -1,8 +1,6 @@
 "use client";
-
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { useRouter } from "next/navigation";
 import { ProviderProfileForm } from "./provider-profile-form";
 import { ProviderSidebar } from "./provider-sidebar";
 import { ProviderHeader } from "./provider-header";
@@ -10,8 +8,7 @@ import { ProviderSolutionsTable } from "./provider-solutions-table";
 
 export function ProviderDashboard() {
   const [activeTab, setActiveTab] = useState<string>("solutions");
-  const { user, isLoading } = useAuth();
-  const router = useRouter();
+  const { isLoading } = useAuth();
 
   //Redirect if not logged in or not a provider
   //   if (!isLoading && (!user || user.role !== "solution_provider")) {

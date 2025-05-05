@@ -2,14 +2,7 @@
 
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import {
-  BarChart3,
-  Home,
-  LogOut,
-  PlusCircle,
-  Settings,
-  User,
-} from "lucide-react";
+import { LogOut, PlusCircle, Settings, User } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface ProviderSidebarProps {
@@ -50,7 +43,7 @@ export function ProviderSidebar({
       value: "settings",
     },
   ];
-  const { user, logoutMutation } = useAuth();
+  const { logoutMutation } = useAuth();
 
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {

@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         created_at: new Date(),
       })
       .returning();
-
+    /* eslint-disable no-unused-vars */
     const { password: _, ...userWithoutPassword } = result[0];
 
     return NextResponse.json({

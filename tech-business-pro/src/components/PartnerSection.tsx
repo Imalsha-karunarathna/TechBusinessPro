@@ -203,8 +203,8 @@ const PartnerSection = () => {
                   Thank You for Your Interest!
                 </h4>
                 <p className="text-gray-600 mb-4">
-                  Your expression of interest has been received. We'll review
-                  your application and get back to you soon.
+                  Your expression of interest has been received. We &apos;ll
+                  review your application and get back to you soon.
                 </p>
                 <p className="text-gray-500 text-sm">
                   A confirmation email has been sent to your provided email

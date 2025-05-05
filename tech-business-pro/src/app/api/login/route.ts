@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Return user data (excluding password)
+    /* eslint-disable no-unused-expressions */
     const { password: _, ...userWithoutPassword } = user;
 
     // Set session cookie

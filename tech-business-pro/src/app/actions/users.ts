@@ -16,6 +16,7 @@ export async function getAllUsers() {
 
     // Remove password from user objects
     return allUsers.map((user) => {
+      /* eslint-disable no-unused-expressions */
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword;
     });
@@ -53,7 +54,7 @@ export async function updateUserRole(userId: number, role: string) {
 
     await db
       .update(users)
-      .set({ role: role as any })
+      .set({ role: role as "admin" | "solution_provider" | "solution_seeker" })
       .where(eq(users.id, userId));
 
     revalidatePath("/admin/users");

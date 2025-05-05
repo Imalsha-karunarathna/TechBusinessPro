@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 import { ContactInquiry } from "@/lib/types";
 import {
   INQUIRY_TYPES,
@@ -32,6 +29,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { toast } from "@/hooks/use-toast";
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -51,7 +51,6 @@ const contactFormSchema = z.object({
 });
 
 const ContactSection = () => {
-  const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
 
@@ -78,33 +77,33 @@ const ContactSection = () => {
     }
   }, [inquiryType, form]);
 
-  //   const mutation = useMutation({
-  //     mutationFn: async (data: ContactInquiry) => {
-  //       const response = await apiRequest("POST", "/api/contact-inquiries", data);
-  //       return response.json();
-  //     },
-  //     onSuccess: (data) => {
-  //       toast({
-  //         title: "Inquiry Submitted",
-  //         description: "We've received your message and will respond shortly.",
-  //       });
-  //       setIsSubmitted(true);
-  //       if (data.inquiry && data.inquiry.ai_response) {
-  //         setAiResponse(data.inquiry.ai_response);
-  //       }
-  //     },
-  //     onError: (error) => {
-  //       toast({
-  //         title: "Submission Failed",
-  //         description: error.message || "Please try again later.",
-  //         //variant: "destructive",
-  //       });
-  //     },
-  //   });
+  const mutation = useMutation({
+    mutationFn: async (data: ContactInquiry) => {
+      const response = await apiRequest("POST", "/api/contact-inquiries", data);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Inquiry Submitted",
+        description: "We've received your message and will respond shortly.",
+      });
+      setIsSubmitted(true);
+      if (data.inquiry && data.inquiry.ai_response) {
+        setAiResponse(data.inquiry.ai_response);
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Please try again later.",
+        //variant: "destructive",
+      });
+    },
+  });
 
-  //   const onSubmit = (data: ContactInquiry) => {
-  //     mutation.mutate(data);
-  //   };
+  // const onSubmit = (data: ContactInquiry) => {
+  //   mutation.mutate(data);
+  // };
 
   return (
     <div id="contact" className="py-16 bg-white">
@@ -134,8 +133,8 @@ const ContactSection = () => {
                     Thank You for Contacting Us!
                   </h4>
                   <p className="text-gray-600 mb-6">
-                    Your inquiry has been received and we'll get back to you
-                    shortly.
+                    Your inquiry has been received and we &apos;ll get back to
+                    you shortly.
                   </p>
 
                   {aiResponse && (
@@ -353,11 +352,11 @@ const ContactSection = () => {
                 <div className="bg-white bg-opacity-10 rounded-lg p-6 mb-8">
                   <h4 className="font-bold mb-2">Example Response:</h4>
                   <p className="italic text-sm">
-                    "Thank you for reaching out to Tech Mista! Based on your
+                    Thank you for reaching out to Tech Mista! Based on your
                     request for IT Security Assessment, we recommend exploring
                     our tailored packages, including comprehensive vulnerability
                     scanning and penetration testing. A detailed overview has
-                    been sent to your email for review."
+                    been sent to your email for review.
                   </p>
                 </div>
 
