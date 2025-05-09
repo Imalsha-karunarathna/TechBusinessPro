@@ -282,6 +282,7 @@ const ContactSection = () => {
                                   <SelectItem
                                     key={type.value}
                                     value={type.value}
+                                    className="bg-white"
                                   >
                                     {type.label}
                                   </SelectItem>
@@ -314,6 +315,7 @@ const ContactSection = () => {
                                 <SelectItem
                                   key={method.value}
                                   value={method.value}
+                                  className="bg-white"
                                 >
                                   {method.label}
                                 </SelectItem>

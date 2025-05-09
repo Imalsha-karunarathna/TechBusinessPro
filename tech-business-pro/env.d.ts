@@ -8,5 +8,6 @@ namespace NodeJS {
     NEON_DATABASE_URL: string;
     SESSION_SECRET: string;
     PORT?: string;
+    RESEND_API_KEY: string;
   }
 }

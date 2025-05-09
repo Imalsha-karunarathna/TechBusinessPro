@@ -187,8 +187,8 @@ export default function AuthPage() {
                 {error === 'unauthorized'
                   ? 'You need to be logged in to access that page.'
                   : error === 'admin_required'
-                  ? 'You need administrator privileges to access that page.'
-                  : 'An error occurred. Please try again.'}
+                    ? 'You need administrator privileges to access that page.'
+                    : 'An error occurred. Please try again.'}
               </AlertDescription>
             </Alert>
           )}
@@ -207,11 +207,17 @@ export default function AuthPage() {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="login" className="cursor-pointer">
+            <TabsList className="grid w-full grid-cols-2 mb-8 gap-3">
+              <TabsTrigger
+                value="login"
+                className="cursor-pointer bg-gray-300 border-transparent hover:bg-gray-00"
+              >
                 Login
               </TabsTrigger>
-              <TabsTrigger value="register" className="cursor-pointer">
+              <TabsTrigger
+                value="register"
+                className="cursor-pointer bg-gray-300 border-transparent hover:bg-gray-00"
+              >
                 Register
               </TabsTrigger>
             </TabsList>
@@ -261,7 +267,7 @@ export default function AuthPage() {
 
                   <Button
                     type="submit"
-                    className="w-full mt-6 bg-blue-500 text-white"
+                    className="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                     disabled={loginMutation.isPending}
                   >
                     {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
@@ -371,7 +377,7 @@ export default function AuthPage() {
 
                   <Button
                     type="submit"
-                    className="w-full mt-6 bg-blue-500 text-white"
+                    className="w-full mt-6 bg-blue-500 hover:bg-blue-600 cursor-pointer text-white"
                     disabled={registerMutation.isPending}
                   >
                     {registerMutation.isPending
