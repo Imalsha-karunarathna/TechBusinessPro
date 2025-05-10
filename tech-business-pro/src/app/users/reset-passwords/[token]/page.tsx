@@ -10,10 +10,7 @@ import {
 import { redirect } from 'next/navigation';
 import { Shield } from 'lucide-react';
 
-interface Props {
-  params: { token: string };
-}
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: { params: { token: string } }) {
   const { token } = params;
   const tokenVerification = await verifyResetToken(token);
 
