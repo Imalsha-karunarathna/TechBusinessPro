@@ -179,8 +179,13 @@ export function UsersTable({ users }: UsersTableProps) {
                         <span className="sr-only">Open menu</span>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuContent
+                      align="end"
+                      className="bg-gray-900 text-white"
+                    >
+                      <DropdownMenuLabel className="text-l">
+                        Actions
+                      </DropdownMenuLabel>
                       <DropdownMenuSeparator />
 
                       {/* Status actions */}

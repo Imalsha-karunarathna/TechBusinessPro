@@ -13,20 +13,20 @@ const HeroSection = () => {
                 Building Global Partnerships
               </h1>
               <p className="mt-3 max-w-md mx-auto lg:mx-0 text-xl text-white text-opacity-90 sm:text-2xl">
-                Connecting Ambition to Achievement in the Tech World
+                Transforming Vision into Business Success
               </p>
               <div className="mt-8 flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-3">
                 <Link
                   href="#solutions"
                   className="px-8 py-3 border border-white text-base font-medium rounded-md text-white bg-primary-800 bg-opacity-60 hover:bg-opacity-70 shadow-md"
                 >
-                  Find Solutions
+                  Find Solutions for your business
                 </Link>
                 <Link
                   href="#partner"
                   className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-800 bg-opacity-60 hover:bg-opacity-70 shadow-md"
                 >
-                  Become a Partner
+                  Become a Partner to reach global opportunities
                 </Link>
               </div>
             </div>

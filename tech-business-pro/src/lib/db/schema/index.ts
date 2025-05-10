@@ -10,6 +10,7 @@ export * from '../tables/partnerApplications';
 export * from '../tables/statistics';
 export * from '../tables/solutions';
 export * from '../tables/visitorChats';
+export * from '../tables/passwordResetTokens';
 
 // Export relations files
 export * from '../relations/userRelations';

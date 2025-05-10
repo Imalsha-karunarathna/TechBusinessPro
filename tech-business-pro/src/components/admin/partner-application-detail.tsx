@@ -262,12 +262,12 @@ export function PartnerApplicationDetail({
       )}
 
       <Dialog open={isReviewDialogOpen} onOpenChange={setIsReviewDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-gray-800">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-white">
               {selectedStatus === 'approved' ? 'Approve' : 'Reject'} Application
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-gray-400">
               {selectedStatus === 'approved'
                 ? 'The applicant will be notified that their application has been approved.'
                 : 'Please provide a reason for rejecting this application.'}
@@ -277,7 +277,7 @@ export function PartnerApplicationDetail({
           <div className="py-4">
             <label
               htmlFor="review-notes"
-              className="text-sm font-medium mb-2 block"
+              className="text-sm font-medium mb-2 block text-gray-200"
             >
               Review Notes {selectedStatus === 'rejected' && '(Required)'}
             </label>
@@ -287,6 +287,7 @@ export function PartnerApplicationDetail({
               onChange={(e) => setReviewNotes(e.target.value)}
               placeholder="Enter your review notes here..."
               rows={4}
+              className="text-gray-400"
             />
           </div>
 
@@ -305,8 +306,8 @@ export function PartnerApplicationDetail({
               }
               className={
                 selectedStatus === 'approved'
-                  ? 'bg-green-600 hover:bg-green-700'
-                  : 'bg-red-600 hover:bg-red-700'
+                  ? 'bg-green-600 hover:bg-green-700 cursor-pointer'
+                  : 'bg-red-600 hover:bg-red-700 cursor-pointer'
               }
             >
               {isUpdating

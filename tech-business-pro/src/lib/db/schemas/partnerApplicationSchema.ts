@@ -1,5 +1,4 @@
 import { createInsertSchema } from 'drizzle-zod';
-
 import { z } from 'zod';
 import { partnerApplications } from '../tables/partnerApplications';
 

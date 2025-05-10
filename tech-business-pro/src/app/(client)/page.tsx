@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import Navbar from '@/components/Navbar';
-import PartnerSection from '@/components/PartnerSection';
+import { PartnerSection } from '@/components/PartnerSection';
 import SolutionsSection from '@/components/SolutionsSection';
 import TrustedBySection from '@/components/TrustedBySection';
 

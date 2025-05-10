@@ -2,10 +2,10 @@
 
 import { partnerApplications } from '@/lib/db/tables/partnerApplications';
 import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
-import { requireAdmin } from '@/lib/server-auth';
+import { auth, requireAdmin } from '@/lib/server-auth';
 import { db } from '@/db';
 import { unstable_noStore as noStore } from 'next/cache';
+import { createUserWithResetToken } from './reset-token';
 
 export async function getPartnerApplications(status?: string) {
   // Prevent caching to ensure fresh data every time
@@ -31,7 +31,6 @@ export async function getPartnerApplications(status?: string) {
       return allApplications;
     }
 
-    // Otherwise filter by specific status
     if (['pending', 'approved', 'rejected'].includes(normalizedStatus)) {
       // Use a direct query with explicit casting to ensure proper filtering
       const filteredApplications = await db.query.partnerApplications.findMany({
@@ -59,36 +58,82 @@ export async function getPartnerApplications(status?: string) {
 
 export async function updateApplicationStatus(
   applicationId: number,
-  status: 'pending' | 'approved' | 'rejected',
-  reviewNotes?: string,
+  status: 'approved' | 'rejected',
+  reviewNotes: string,
 ) {
   try {
-    const session = await requireAdmin();
+    const session = await auth();
 
+    if (!session?.user) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    const reviewerId = session.user.id;
+
+    // First, get the application details if status is approved
+    // We need this to create the user
+    let applicationData;
+    if (status === 'approved') {
+      applicationData = await db.query.partnerApplications.findFirst({
+        where: eq(partnerApplications.id, applicationId),
+      });
+
+      if (!applicationData) {
+        return { success: false, error: 'Application not found' };
+      }
+    }
+
+    // Update the application status
     await db
       .update(partnerApplications)
       .set({
         application_status: status,
-        reviewer_id: session.user.id,
-        review_notes: reviewNotes || null,
+        reviewer_id: reviewerId,
+        review_notes: reviewNotes,
         reviewed_at: new Date(),
       })
       .where(eq(partnerApplications.id, applicationId));
 
-    // Revalidate all paths to ensure fresh data
-    revalidatePath('/admin/partner-application');
-    revalidatePath(`/admin/partner-application/${applicationId}`);
+    // If approved, create a user account with reset token
+    if (status === 'approved' && applicationData) {
+      const userResult = await createUserWithResetToken(
+        applicationData.email,
+        applicationData.partner_name,
+        applicationData.organization_name,
+      );
 
-    // Force revalidation of all status tabs
-    revalidatePath('/admin/partner-application?status=pending');
-    revalidatePath('/admin/partner-application?status=approved');
-    revalidatePath('/admin/partner-application?status=rejected');
-    revalidatePath('/admin/partner-application?status=all');
+      if (!userResult.success) {
+        return {
+          success: false,
+          error: `Application approved but failed to create user: ${userResult.error}`,
+        };
+      }
+
+      // If user was created successfully, set up the provider profile
+      if (userResult.userId) {
+        // Import the setupProviderFromApplication function
+        const { setupProviderFromApplication } = await import(
+          '../actions/provider-profile-setup'
+        );
+
+        // Set up the provider profile
+        await setupProviderFromApplication(userResult.userId, applicationId);
+      }
+
+      // Return success with reset URL
+      return {
+        success: true,
+        resetUrl: userResult.resetUrl,
+      };
+    }
 
     return { success: true };
   } catch (error) {
     console.error('Error updating application status:', error);
-    return { success: false, error: 'Failed to update application status' };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
+    };
   }
 }
 

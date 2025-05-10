@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     // Validate the request body
     const validatedData = insertPartnerApplicationSchema.parse(body);
-
+    // Replace with actual user ID
     // Insert the application into the database
     const result = await db
       .insert(partnerApplications)

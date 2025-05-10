@@ -143,11 +143,10 @@ const SolutionsSection = () => {
             Solution Marketplace
           </h2>
           <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            Find the Perfect Tech Solution
+            Find Solutions to Accelerate Your Business
           </p>
           <p className="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
-            Browse our curated collection of technology solutions and providers
-            designed to address your business challenges.
+            Explore customised strategies designed to elevate your success
           </p>
         </div>
 
@@ -169,7 +168,7 @@ const SolutionsSection = () => {
 
             <TabsContent value="solutions">
               <div className="flex flex-wrap justify-center mb-8 gap-2">
-                <button
+                {/* <button
                   key="all"
                   className={`px-4 py-2 rounded-full font-medium text-sm ${
                     selectedCategory === 'all'
@@ -179,7 +178,7 @@ const SolutionsSection = () => {
                   onClick={() => handleCategoryChange('all')}
                 >
                   All Categories
-                </button>
+                </button> */}
                 {SOLUTION_CATEGORIES.map((category) => (
                   <button
                     key={category.value}
