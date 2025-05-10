@@ -10,8 +10,13 @@ import {
 import { redirect } from 'next/navigation';
 import { Shield } from 'lucide-react';
 
-export default async function Page({ params }: { params: { token: string } }) {
-  const { token } = params;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}) {
+  const resolvedParams = await params;
+  const { token } = resolvedParams;
   const tokenVerification = await verifyResetToken(token);
 
   if (!tokenVerification.valid) {
