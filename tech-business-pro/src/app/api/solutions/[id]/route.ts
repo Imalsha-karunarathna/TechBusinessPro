@@ -4,12 +4,10 @@ import { solutions } from '@/lib/db/tables/solutions';
 import { solutionProviders } from '@/lib/db/tables/solutionProviders';
 import { eq } from 'drizzle-orm';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(request: NextRequest) {
   try {
-    const id = Number.parseInt(params.id);
+    // Extracting the dynamic parameter directly from request.nextUrl
+    const id = Number.parseInt(request.nextUrl.pathname.split('/').pop() || '');
 
     if (isNaN(id)) {
       return NextResponse.json(
