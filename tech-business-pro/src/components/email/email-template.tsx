@@ -21,37 +21,40 @@ interface PasswordResetEmailProps {
 export const PasswordResetEmail = ({
   resetLink,
   userName = 'there',
-  companyName = 'Our Platform',
 }: PasswordResetEmailProps) => {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  // const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
   return (
     <Html>
       <Head />
-      <Preview>Reset your password for TechMista</Preview>
+      <Preview>You&apos;re now part of TechMista - Set up your account</Preview>
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="bg-white p-8 rounded-lg shadow-sm my-8 mx-auto">
             <Heading className="text-2xl font-bold text-gray-800 mb-2">
-              Password Reset
+              Welcome to TechMista!
             </Heading>
             <Text className="text-gray-600 mb-4">Hi {userName},</Text>
             <Text className="text-gray-600 mb-4">
-              We received a request to reset your password for your account at{' '}
-              TechMista. Use the button below to set up a new password. This
-              link is valid for the next 24 hours.
+              Congratulations! You&apos;ve been selected as a solution provider
+              on TechMista. We have created a profile for you on our platform.
+            </Text>
+            <Text className="text-gray-600 mb-4">
+              To get started, please use the button below to set your username
+              and password. This will allow you to log in and complete your
+              profile.
             </Text>
             <Section className="text-center mb-8">
               <Button
                 className="bg-blue-500 px-6 py-3 rounded-md text-white font-medium"
                 href={resetLink}
               >
-                Reset Your Password
+                Set Up Your Account
               </Button>
             </Section>
             <Text className="text-gray-600 mb-4">
-              If you didn't request this password reset, you can safely ignore
-              this email.
+              If you didn&apos;t request this password reset, you can safely
+              ignore this email.
             </Text>
             <Text className="text-gray-600 mb-4">
               For security reasons, this link will expire in 24 hours. If you

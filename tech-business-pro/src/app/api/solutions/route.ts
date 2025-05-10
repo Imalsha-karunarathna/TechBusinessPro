@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const categoryParam = searchParams.get('category');
 
     const enumCategories = solutionCategoryEnum.enumValues;
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const category = enumCategories.includes(categoryParam as any)
       ? (categoryParam as (typeof enumCategories)[number])
       : null;

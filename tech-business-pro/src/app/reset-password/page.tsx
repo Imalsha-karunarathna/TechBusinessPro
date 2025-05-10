@@ -76,6 +76,7 @@ export default function ResetPasswordPage() {
           setError(result.error || 'Invalid or expired token');
         }
       } catch (err) {
+        console.error('Error validating token:', err);
         setError('An error occurred while validating your token');
       } finally {
         setIsValidating(false);
@@ -104,6 +105,7 @@ export default function ResetPasswordPage() {
         setError(result.error || 'Failed to reset password');
       }
     } catch (err) {
+      console.error('Error resetting password:', err);
       setError('An error occurred while resetting your password');
     } finally {
       setIsSubmitting(false);

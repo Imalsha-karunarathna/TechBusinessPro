@@ -8,14 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserCredentials } from '@/app/actions/reset-token';
-import {
-  AtSign,
-  User,
-  Lock,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-} from 'lucide-react';
+import { User, Lock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ResetPasswordFormProps {
@@ -24,11 +17,7 @@ interface ResetPasswordFormProps {
   email: string;
 }
 
-export function ResetPasswordForm({
-  token,
-  userId,
-  email,
-}: ResetPasswordFormProps) {
+export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

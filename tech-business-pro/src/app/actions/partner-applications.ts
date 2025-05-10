@@ -2,7 +2,6 @@
 
 import { partnerApplications } from '@/lib/db/tables/partnerApplications';
 import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
 import { auth, requireAdmin } from '@/lib/server-auth';
 import { db } from '@/db';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -108,6 +107,17 @@ export async function updateApplicationStatus(
           success: false,
           error: `Application approved but failed to create user: ${userResult.error}`,
         };
+      }
+
+      // If user was created successfully, set up the provider profile
+      if (userResult.userId) {
+        // Import the setupProviderFromApplication function
+        const { setupProviderFromApplication } = await import(
+          '../actions/provider-profile-setup'
+        );
+
+        // Set up the provider profile
+        await setupProviderFromApplication(userResult.userId, applicationId);
       }
 
       // Return success with reset URL

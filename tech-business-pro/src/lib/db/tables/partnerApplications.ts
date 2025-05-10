@@ -8,7 +8,7 @@ export const partnerApplications = pgTable('partner_applications', {
   email: text('email').notNull(),
   phone: text('phone'),
   website: text('website'),
-  expertise: text('expertise').notNull(),
+  expertise: text('expertise').array().notNull(),
   collaboration: text('collaboration').notNull(),
   experience_years: integer('experience_years'),
   reason: text('reason'),

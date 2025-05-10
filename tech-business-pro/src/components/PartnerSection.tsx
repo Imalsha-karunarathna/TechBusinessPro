@@ -1,9 +1,10 @@
 'use client';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useToast } from '@/hooks/use-toast';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -21,11 +23,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Briefcase, Users, Globe } from 'lucide-react';
-import type { PartnerApplication } from '@/lib/types';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { Briefcase, Globe, Users } from 'lucide-react';
 
 const partnerFormSchema = z.object({
   partner_name: z
@@ -37,9 +38,14 @@ const partnerFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
   phone: z.string().optional(),
   website: z.string().url({ message: 'Please enter a valid URL.' }).optional(),
-  expertise: z
-    .string()
-    .min(1, { message: 'Please select an area of expertise.' }),
+  expertise: z.union([
+    z
+      .string()
+      .min(1, { message: 'Please select at least one area of expertise.' }),
+    z
+      .array(z.string())
+      .min(1, { message: 'Please select at least one area of expertise.' }),
+  ]),
   collaboration: z.string().min(10, {
     message: 'Please provide details about your proposed collaboration.',
   }),
@@ -51,11 +57,13 @@ const partnerFormSchema = z.object({
   additional_notes: z.string().optional(),
 });
 
-const PartnerSection = () => {
+type PartnerFormValues = z.infer<typeof partnerFormSchema>;
+
+export function PartnerSection() {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const form = useForm<PartnerApplication>({
+  const form = useForm<PartnerFormValues>({
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
       partner_name: '',
@@ -63,15 +71,15 @@ const PartnerSection = () => {
       email: '',
       phone: '',
       website: '',
-      expertise: '',
+      expertise: [],
       collaboration: '',
-      experience_years: undefined,
+      experience_years: 0,
       reason: '',
       additional_notes: '',
     },
   });
 
-  async function onSubmit(data: PartnerApplication) {
+  async function onSubmit(data: PartnerFormValues) {
     setIsSubmitting(true);
     try {
       const response = await fetch('/api/partner-applications', {
@@ -295,57 +303,124 @@ const PartnerSection = () => {
                     name="expertise"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Area of Expertise</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="text-gray-400">
-                              <SelectValue
-                                className="placeholder:text-muted-foreground"
-                                placeholder="Select expertise area"
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className=" max-h-[600px] bg-white">
-                            <SelectItem
-                              value="IT Security"
-                              className="hover:bg-blue-500 cursor-pointer"
-                            >
-                              IT Security
-                            </SelectItem>
-                            <SelectItem
-                              value="CRM Implementation"
-                              className="hover:bg-blue-500 cursor-pointer"
-                            >
-                              CRM Implementation
-                            </SelectItem>
-                            <SelectItem
-                              value="Web Development"
-                              className="hover:bg-blue-500 cursor-pointer"
-                            >
-                              Web Development
-                            </SelectItem>
-                            <SelectItem
-                              value="Business Applications"
-                              className="hover:bg-blue-500 cursor-pointer"
-                            >
-                              Business Applications
-                            </SelectItem>
-                            <SelectItem
-                              value="Other"
-                              className="hover:bg-blue-500 cursor-pointer"
-                            >
-                              Other
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>Areas of Expertise</FormLabel>
+                        <div className="relative">
+                          <Select
+                            onValueChange={(value) => {
+                              // Convert single selection to array if it's the first selection
+                              const currentValues = Array.isArray(field.value)
+                                ? field.value
+                                : field.value
+                                  ? [field.value]
+                                  : [];
+
+                              // If value is already selected, remove it, otherwise add it
+                              const newValues = currentValues.includes(value)
+                                ? currentValues.filter((v) => v !== value)
+                                : [...currentValues, value];
+
+                              field.onChange(newValues);
+                            }}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="text-gray-400">
+                                <SelectValue
+                                  className="placeholder:text-muted-foreground"
+                                  placeholder={
+                                    Array.isArray(field.value) &&
+                                    field.value.length > 0
+                                      ? `${field.value.length} area${field.value.length > 1 ? 's' : ''} selected`
+                                      : 'Select expertise areas'
+                                  }
+                                />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-h-[600px] bg-white">
+                              <SelectItem
+                                value="IT Security"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                IT Security
+                              </SelectItem>
+                              <SelectItem
+                                value="CRM Implementation"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                CRM Implementation
+                              </SelectItem>
+                              <SelectItem
+                                value="Web Development"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                Web Development
+                              </SelectItem>
+                              <SelectItem
+                                value="Business Applications"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                Business Applications
+                              </SelectItem>
+                              <SelectItem
+                                value="Cloud Computing"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                Cloud Computing
+                              </SelectItem>
+                              <SelectItem
+                                value="Data Analytics"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                Data Analytics
+                              </SelectItem>
+                              <SelectItem
+                                value="Artificial Intelligence"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                Artificial Intelligence
+                              </SelectItem>
+                              <SelectItem
+                                value="Other"
+                                className="hover:bg-blue-500 cursor-pointer"
+                              >
+                                Other
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        {Array.isArray(field.value) &&
+                          field.value.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {field.value.map((item) => (
+                                <Badge
+                                  key={item}
+                                  variant="secondary"
+                                  className="px-2 py-1 bg-blue-100 text-blue-800"
+                                >
+                                  {item}
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-blue-600 hover:text-blue-800"
+                                    onClick={() => {
+                                      if (Array.isArray(field.value)) {
+                                        field.onChange(
+                                          field.value.filter((v) => v !== item),
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        <FormDescription>
+                          Select all areas that apply to your expertise
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="collaboration"
@@ -423,6 +498,4 @@ const PartnerSection = () => {
       </div>
     </div>
   );
-};
-
-export default PartnerSection;
+}

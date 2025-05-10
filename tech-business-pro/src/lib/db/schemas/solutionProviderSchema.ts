@@ -5,6 +5,7 @@ import { z } from 'zod';
 export const insertSolutionProviderSchema = createInsertSchema(
   solutionProviders,
 ).pick({
+  id: true,
   name: true,
   description: true,
   email: true,
@@ -13,6 +14,7 @@ export const insertSolutionProviderSchema = createInsertSchema(
   logo_url: true,
   regions_served: true,
   verification_status: true,
+  user_id: true,
 });
 
 export type InsertSolutionProvider = z.infer<

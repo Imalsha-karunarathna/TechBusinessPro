@@ -57,8 +57,9 @@ export async function POST(request: NextRequest) {
       phone: data.phone,
       logo_url: data.logo_url,
       regions_served: data.regions_served,
-      verification_status: 'pending', // New providers start as pending
+      verification_status: 'pending',
       created_at: new Date(),
+      user_id: data.user_id,
     });
 
     return NextResponse.json({
