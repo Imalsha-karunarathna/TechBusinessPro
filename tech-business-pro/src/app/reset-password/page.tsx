@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -40,7 +40,24 @@ const passwordResetSchema = z
 
 type PasswordResetFormValues = z.infer<typeof passwordResetSchema>;
 
-export default function ResetPasswordPage() {
+// Loading fallback component
+function ResetPasswordLoading() {
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle>Loading</CardTitle>
+          <CardDescription>
+            Please wait while we load the page...
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    </div>
+  );
+}
+
+// The actual component that uses useSearchParams
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -218,5 +235,14 @@ export default function ResetPasswordPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordLoading />}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
