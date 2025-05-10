@@ -14,7 +14,7 @@ interface Props {
   params: { token: string };
 }
 export default async function ResetPasswordPage({ params }: Props) {
-  const { token } = await params;
+  const { token } = params;
   const tokenVerification = await verifyResetToken(token);
 
   if (!tokenVerification.valid) {
