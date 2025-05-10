@@ -13,7 +13,7 @@ import { Shield } from 'lucide-react';
 interface Props {
   params: { token: string };
 }
-export default async function ResetPasswordPage({ params }: Props) {
+export default async function Page({ params }: Props) {
   const { token } = params;
   const tokenVerification = await verifyResetToken(token);
 
