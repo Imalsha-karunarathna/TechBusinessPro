@@ -19,7 +19,7 @@ const HowItWorksSection = () => {
         <div className="mt-16">
           <div className="lg:grid lg:grid-cols-3 lg:gap-8">
             <div className="relative">
-              <div className="h-12 w-12 rounded-full bg-primary-500 text-white font-bold flex items-center justify-center text-xl mx-auto">
+              <div className="h-12 w-12 rounded-full bg-primary-500 text-black font-bold flex items-center justify-center text-xl mx-auto">
                 1
               </div>
               <h3 className="mt-6 text-xl font-bold text-gray-900 text-center">
@@ -35,7 +35,7 @@ const HowItWorksSection = () => {
             </div>
 
             <div className="mt-10 lg:mt-0 relative">
-              <div className="h-12 w-12 rounded-full bg-primary-500 text-white font-bold flex items-center justify-center text-xl mx-auto">
+              <div className="h-12 w-12 rounded-full bg-primary-500 text-black font-bold flex items-center justify-center text-xl mx-auto">
                 2
               </div>
               <h3 className="mt-6 text-xl font-bold text-gray-900 text-center">
@@ -51,7 +51,7 @@ const HowItWorksSection = () => {
             </div>
 
             <div className="mt-10 lg:mt-0">
-              <div className="h-12 w-12 rounded-full bg-primary-500 text-white font-bold flex items-center justify-center text-xl mx-auto">
+              <div className="h-12 w-12 rounded-full bg-primary-500 text-black font-bold flex items-center justify-center text-xl mx-auto">
                 3
               </div>
               <h3 className="mt-6 text-xl font-bold text-gray-900 text-center">

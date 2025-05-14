@@ -31,6 +31,7 @@
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
     "drizzle-zod": "^0.7.1",
+    "jose": "^6.0.11",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",

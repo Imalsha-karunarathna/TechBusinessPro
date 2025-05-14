@@ -22,7 +22,7 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{
+  const [errors] = useState<{
     username?: string;
     password?: string;
     confirmPassword?: string;
@@ -55,7 +55,6 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
-    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 

@@ -46,8 +46,8 @@ const partnerFormSchema = z.object({
       .array(z.string())
       .min(1, { message: 'Please select at least one area of expertise.' }),
   ]),
-  collaboration: z.string().min(10, {
-    message: 'Please provide details about your proposed collaboration.',
+  designation: z.string().min(3, {
+    message: 'Please provide your Job Title.',
   }),
   experience_years: z.number().int().positive().optional(),
   reason: z
@@ -55,6 +55,9 @@ const partnerFormSchema = z.object({
     .max(100, { message: 'Response should be 100 words or less.' })
     .optional(),
   additional_notes: z.string().optional(),
+  accept_privacy: z.boolean().refine((val) => val === true, {
+    message: 'You must accept the policy.',
+  }),
 });
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
@@ -72,10 +75,11 @@ export function PartnerSection() {
       phone: '',
       website: '',
       expertise: [],
-      collaboration: '',
+      designation: '',
       experience_years: 0,
       reason: '',
       additional_notes: '',
+      accept_privacy: false,
     },
   });
 
@@ -234,7 +238,7 @@ export function PartnerSection() {
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-red-500" />
                         </FormItem>
                       )}
                     />
@@ -248,7 +252,7 @@ export function PartnerSection() {
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-red-500" />
                         </FormItem>
                       )}
                     />
@@ -264,7 +268,7 @@ export function PartnerSection() {
                           <FormControl>
                             <Input type="email" {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-red-500" />
                         </FormItem>
                       )}
                     />
@@ -278,7 +282,7 @@ export function PartnerSection() {
                           <FormControl>
                             <Input type="tel" {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-red-500" />
                         </FormItem>
                       )}
                     />
@@ -293,7 +297,7 @@ export function PartnerSection() {
                         <FormControl>
                           <Input type="url" {...field} />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -417,24 +421,24 @@ export function PartnerSection() {
                         <FormDescription>
                           Select all areas that apply to your expertise
                         </FormDescription>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
-                    name="collaboration"
+                    name="designation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Proposed Collaboration</FormLabel>
+                        <FormLabel>Designation</FormLabel>
                         <FormControl>
                           <Textarea
                             rows={3}
                             {...field}
-                            placeholder="Describe how you'd like to collaborate with Tech Mista"
+                            placeholder="Enter your job title"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -459,7 +463,7 @@ export function PartnerSection() {
                             }
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -478,14 +482,45 @@ export function PartnerSection() {
                         <FormDescription>
                           Briefly explain why you want to partner with us
                         </FormDescription>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="accept_privacy"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-start space-x-2">
+                          <input
+                            type="checkbox"
+                            checked={field.value ?? false}
+                            onChange={field.onChange}
+                            id="accept_privacy"
+                            className="mt-1"
+                          />
+                          <FormLabel
+                            htmlFor="accept_privacy"
+                            className="text-sm text-gray-700"
+                          >
+                            I accept the{' '}
+                            <a
+                              href="/privacy-policy"
+                              target="_blank"
+                              className="text-blue-600 underline"
+                            >
+                              Privacy Policy
+                            </a>
+                          </FormLabel>
+                        </div>
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
 
                   <Button
                     type="submit"
-                    className="w-full bg-blue-500 text-white"
+                    className="w-full bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit Application'}

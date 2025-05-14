@@ -9,7 +9,7 @@ export const partnerApplications = pgTable('partner_applications', {
   phone: text('phone'),
   website: text('website'),
   expertise: text('expertise').array().notNull(),
-  collaboration: text('collaboration').notNull(),
+  designation: text('designation').notNull(),
   experience_years: integer('experience_years'),
   reason: text('reason'),
   additional_notes: text('additional_notes'),

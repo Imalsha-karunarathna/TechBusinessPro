@@ -32,6 +32,9 @@ const registerSchema = loginSchema
     confirmPassword: z
       .string()
       .min(6, 'Password must be at least 6 characters'),
+    acceptPolicy: z.boolean().refine((val) => val === true, {
+      message: 'You must accept the policy.',
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -72,6 +75,7 @@ export default function AuthPage() {
       email: '',
       password: '',
       confirmPassword: '',
+      acceptPolicy: false,
     },
   });
 
@@ -115,7 +119,7 @@ export default function AuthPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-primary-600 to-primary-700 flex-col justify-center p-16 text-white">
+      <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-primary-600 to-primary-700 flex-col justify-center p-16 text-black">
         <h1 className="text-4xl font-bold mb-6">Welcome to Tech Mista</h1>
         <p className="text-xl mb-8">
           Your gateway to finding the perfect tech solutions for your business
@@ -128,7 +132,7 @@ export default function AuthPage() {
             </div>
             <div>
               <h3 className="font-semibold text-lg">Find Solutions</h3>
-              <p className="text-white text-opacity-80">
+              <p className="text-black text-opacity-80">
                 Browse our curated collection of technology solutions to address
                 your business challenges.
               </p>
@@ -140,7 +144,7 @@ export default function AuthPage() {
             </div>
             <div>
               <h3 className="font-semibold text-lg">Connect with Providers</h3>
-              <p className="text-white text-opacity-80">
+              <p className="text-black text-opacity-80">
                 Directly connect with solution providers who specialize in your
                 specific needs.
               </p>
@@ -152,7 +156,7 @@ export default function AuthPage() {
             </div>
             <div>
               <h3 className="font-semibold text-lg">Secure and Trusted</h3>
-              <p className="text-white text-opacity-80">
+              <p className="text-black text-opacity-80">
                 All solution providers are vetted and verified to ensure quality
                 and reliability.
               </p>
@@ -165,7 +169,7 @@ export default function AuthPage() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center mb-4">
               <div className="h-10 w-10 bg-primary-500 rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-xl">TM</span>
+                <span className="text-black font-bold text-xl">TM</span>
               </div>
               <span className="ml-3 text-2xl font-bold">Tech Mista</span>
             </div>
@@ -371,6 +375,35 @@ export default function AuthPage() {
                           />
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="acceptPolicy"
+                    render={({ field }) => (
+                      <FormItem className="flex items-start space-x-2">
+                        <FormControl>
+                          <input
+                            type="checkbox"
+                            className="mt-1"
+                            checked={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="text-sm">
+                          <FormLabel className="!mt-0">
+                            I agree to the{' '}
+                            <a
+                              href="/privacy-policy"
+                              target="_blank"
+                              className="text-blue-600 underline"
+                            >
+                              Privacy Policy
+                            </a>
+                          </FormLabel>
+                          <FormMessage className="text-red-500" />
+                        </div>
                       </FormItem>
                     )}
                   />
