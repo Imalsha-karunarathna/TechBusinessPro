@@ -521,7 +521,7 @@ const SolutionsSection = () => {
           </Tabs>
 
           <div className="mt-12 text-center">
-            <Link
+            {/* <Link
               href={
                 activeTab === 'solutions' ? '/all-solutions' : '/all-providers'
               }
@@ -540,7 +540,7 @@ const SolutionsSection = () => {
                   clipRule="evenodd"
                 />
               </svg>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
