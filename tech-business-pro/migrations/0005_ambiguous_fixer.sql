@@ -1,0 +1,1 @@
+ALTER TABLE "partner_applications" RENAME COLUMN "collaboration" TO "designation";

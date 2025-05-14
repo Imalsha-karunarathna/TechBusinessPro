@@ -17,24 +17,24 @@ const HeroSection = () => {
               </p>
 
               {/* Buttons */}
-              <div className="mt-8 flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-4 flex-wrap">
+              <div className="mt-8 flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-8 flex-wrap">
                 <Link
                   href="#solutions"
-                  className="w-full sm:w-auto px-6 py-3 text-center text-base font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
+                  className="w-full sm:w-auto px-6 py-3 text-center text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
                 >
-                  Find Solutions for your business
+                  Find Solutions
                 </Link>
                 <Link
                   href="#partner"
-                  className="w-full sm:w-auto px-6 py-3 text-center text-base font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
+                  className="w-full sm:w-auto px-6 py-3 text-center text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
                 >
-                  Become a Partner to reach global opportunities
+                  Be a Partner
                 </Link>
                 <Link
                   href="/agent/register-agent"
-                  className="w-full sm:w-auto px-6 py-3 text-center text-base font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
+                  className="w-full sm:w-auto px-6 py-3 text-center text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
                 >
-                  Become an Agent
+                  Be an Agent
                 </Link>
               </div>
             </div>

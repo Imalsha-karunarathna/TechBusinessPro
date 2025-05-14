@@ -114,7 +114,7 @@ export async function setupProviderFromApplication(
       .insert(solutionProviders)
       .values({
         name: application.organization_name,
-        description: application.collaboration || '',
+        description: application.designation || '',
         email: application.email,
         website: application.website || '',
         phone: application.phone || '',
@@ -128,7 +128,7 @@ export async function setupProviderFromApplication(
         target: solutionProviders.id,
         set: {
           name: application.organization_name,
-          description: application.collaboration || '',
+          description: application.designation || '',
           email: application.email,
           website: application.website || '',
           phone: application.phone || '',
