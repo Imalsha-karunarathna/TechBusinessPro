@@ -11,7 +11,7 @@ export * from '../tables/statistics';
 export * from '../tables/solutions';
 export * from '../tables/visitorChats';
 export * from '../tables/passwordResetTokens';
-
+export * from '../tables/agents';
 // Export relations files
 export * from '../relations/userRelations';
 export * from '../relations/solutionProviderRelations';

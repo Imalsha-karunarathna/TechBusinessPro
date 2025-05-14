@@ -421,7 +421,7 @@ export function PartnerSection() {
                       </FormItem>
                     )}
                   />
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="collaboration"
                     render={({ field }) => (
@@ -437,7 +437,7 @@ export function PartnerSection() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
                   <FormField
                     control={form.control}

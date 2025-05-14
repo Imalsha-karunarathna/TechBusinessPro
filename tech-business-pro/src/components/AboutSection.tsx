@@ -13,23 +13,26 @@ const AboutSection = () => {
             Our Vision & Mission
           </p>
           <p className="mt-4 max-w-4xl text-xl text-gray-500 lg:mx-auto">
-            Tech Mista aims to empower system developers, solution providers,
-            and businesses to collaborate and innovate. Tech Mista empowers
-            developers and solution providers to connect globally while helping
-            businesses discover innovative solutions to elevate their growth.
-            Additionally, it creates earning opportunities for agents through
-            strategic partnerships.
+            Tech Mista is transforming global collaboration by connecting
+            registered and verified system developers, solution providers, and
+            businesses in a world-class partnership platform. We empower
+            innovation, helping businesses discover breakthrough solutions while
+            driving growth. Whether you&apos;re a developer creating
+            cutting-edge technology, a company seeking game-changing solutions,
+            or an agent looking for strategic earning opportunities, Tech Mista
+            is your gateway to success. Join us and be part of a dynamic
+            ecosystem where innovation meets opportunity.
           </p>
         </div>
 
         <div className="mt-16">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div className="relative bg-white p-6 rounded-lg shadow">
-              <div className="absolute -top-4 -left-4 h-16 w-16 bg-primary-500 rounded-lg flex items-center justify-center shadow-lg">
-                <Zap className="h-8 w-8 text-white" />
+            <div className="bg-white p-6 rounded-lg shadow flex items-start gap-4">
+              <div className="h-16 w-16 bg-secondary-500 rounded-lg flex items-center justify-center shadow-lg">
+                <Zap className="h-8 w-8 text-black" />
               </div>
-              <div className="ml-6">
-                <h3 className="text-xl font-medium text-gray-900">Vision</h3>
+              <div>
+                <h3 className="text-xl font-medium text-gray-900 ">Vision</h3>
                 <p className="mt-2 text-gray-600">
                   To be the leading global platform that empowers system
                   developers, solution providers, and businesses to collaborate
@@ -39,11 +42,11 @@ const AboutSection = () => {
               </div>
             </div>
 
-            <div className="relative bg-white p-6 rounded-lg shadow">
-              <div className="absolute -top-4 -left-4 h-16 w-16 bg-secondary-500 rounded-lg flex items-center justify-center shadow-lg">
-                <Building className="h-8 w-8 text-white" />
+            <div className="bg-white p-6 rounded-lg shadow flex items-start gap-4">
+              <div className="h-16 w-16 bg-secondary-500 rounded-lg flex items-center justify-center shadow-lg">
+                <Building className="h-8 w-8 text-black" />
               </div>
-              <div className="ml-6">
+              <div>
                 <h3 className="text-xl font-medium text-gray-900">Mission</h3>
                 <p className="mt-2 text-gray-600">
                   Tech Mista provides a seamless ecosystem where system

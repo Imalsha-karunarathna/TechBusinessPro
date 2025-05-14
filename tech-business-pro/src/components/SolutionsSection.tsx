@@ -11,6 +11,7 @@ import {
   Mail,
   MapPin,
   Verified,
+  LogIn,
 } from 'lucide-react';
 
 import { SOLUTION_CATEGORIES, CATEGORY_COLORS } from '@/lib/constants';
@@ -160,9 +161,9 @@ const SolutionsSection = () => {
             className="w-full"
           >
             <div className="flex justify-center mb-8">
-              <TabsList className="grid w-[400px] grid-cols-2">
+              <TabsList className="grid w-[400px] grid-cols-1">
                 <TabsTrigger value="solutions">Solutions</TabsTrigger>
-                <TabsTrigger value="providers">Solution Providers</TabsTrigger>
+                {/* <TabsTrigger value="providers">Solution Providers</TabsTrigger> */}
               </TabsList>
             </div>
 
@@ -372,9 +373,15 @@ const SolutionsSection = () => {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-10">
-                    <p className="text-gray-500">
-                      No solutions found for this category.
+                    <p className="text-gray-500 mb-4">
+                      Please Login in to view solutions.
                     </p>
+                    <Link href="/auth-page">
+                      <span className="inline-flex items-center rounded-lg justify-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-colors">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Log in / Register
+                      </span>
+                    </Link>
                   </div>
                 )}
               </div>

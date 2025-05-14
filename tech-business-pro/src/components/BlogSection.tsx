@@ -40,7 +40,7 @@ const BlogSection = () => {
               .map((_, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                  className="bg-gray-800 rounded-lg shadow-md overflow-hidden"
                 >
                   <Skeleton className="h-48 w-full" />
                   <div className="p-6">

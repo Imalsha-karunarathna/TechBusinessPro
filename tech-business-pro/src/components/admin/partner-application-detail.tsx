@@ -163,12 +163,12 @@ export function PartnerApplicationDetail({
             <p>{application.expertise}</p>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="text-sm font-medium text-muted-foreground mb-1">
               Proposed Collaboration
             </h3>
             <p className="whitespace-pre-line">{application.collaboration}</p>
-          </div>
+          </div> */}
 
           {application.reason && (
             <div>

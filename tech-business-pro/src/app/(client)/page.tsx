@@ -1,5 +1,4 @@
 import AboutSection from '@/components/AboutSection';
-import BlogSection from '@/components/BlogSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
@@ -19,7 +18,7 @@ export default function Home() {
       <HowItWorksSection />
       <SolutionsSection />
       <PartnerSection />
-      <BlogSection />
+      {/* <BlogSection /> */}
       <ContactSection />
       <Footer />
     </>

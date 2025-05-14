@@ -341,7 +341,7 @@ const ContactSection = () => {
             </div>
 
             <div>
-              <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg p-8 h-full">
+              <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-black rounded-lg p-8 h-full">
                 <h3 className="text-xl font-bold mb-4">
                   AI-Powered Initial Response
                 </h3>
@@ -365,30 +365,30 @@ const ContactSection = () => {
                 <div className="space-y-4">
                   <div className="flex">
                     <div className="flex-shrink-0">
-                      <CheckIcon className="h-6 w-6 text-white" />
+                      <CheckIcon className="h-6 w-6 text-black" />
                     </div>
                     <div className="ml-3">
-                      <p className="text-white">
+                      <p className="text-black">
                         Instant acknowledgment of your request
                       </p>
                     </div>
                   </div>
                   <div className="flex">
                     <div className="flex-shrink-0">
-                      <CheckIcon className="h-6 w-6 text-white" />
+                      <CheckIcon className="h-6 w-6 text-black" />
                     </div>
                     <div className="ml-3">
-                      <p className="text-white">
+                      <p className="text-black">
                         AI-suggested solutions based on your needs
                       </p>
                     </div>
                   </div>
                   <div className="flex">
                     <div className="flex-shrink-0">
-                      <CheckIcon className="h-6 w-6 text-white" />
+                      <CheckIcon className="h-6 w-6 text-black" />
                     </div>
                     <div className="ml-3">
-                      <p className="text-white">
+                      <p className="text-black">
                         Relevant resources and next steps
                       </p>
                     </div>
