@@ -501,9 +501,10 @@ export function PartnerSection() {
                           />
                           <FormLabel
                             htmlFor="accept_privacy"
-                            className="text-sm text-gray-700"
+                            className="text-sm text-gray-700 flex flex-wrap gap-1"
                           >
-                            I accept the{' '}
+                            I confirm that I have read, understood and accept
+                            the terms and conditions in the&nbsp;
                             <a
                               href="/privacy-policy"
                               target="_blank"
@@ -511,6 +512,7 @@ export function PartnerSection() {
                             >
                               Privacy Policy
                             </a>
+                            &nbsp;of Tech Mista
                           </FormLabel>
                         </div>
                         <FormMessage className="text-red-500" />

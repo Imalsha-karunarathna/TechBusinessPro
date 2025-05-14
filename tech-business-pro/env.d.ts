@@ -9,5 +9,6 @@ namespace NodeJS {
     SESSION_SECRET: string;
     PORT?: string;
     RESEND_API_KEY: string;
+    NEXT_PUBLIC_APP_URL: string;
   }
 }
