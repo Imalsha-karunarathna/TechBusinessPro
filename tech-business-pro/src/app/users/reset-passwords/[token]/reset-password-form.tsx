@@ -28,7 +28,8 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
     confirmPassword?: string;
   }>({});
   const [passwordStrength, setPasswordStrength] = useState(0);
-
+  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
+  const [privacyError, setPrivacyError] = useState('');
   const router = useRouter();
   const { toast } = useToast();
 
@@ -56,7 +57,13 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!acceptPrivacy) {
+      setPrivacyError('You must accept the Privacy Policy to continue');
+    } else {
+      setPrivacyError('');
+    }
+
+    return Object.keys(newErrors).length === 0 && acceptPrivacy;
   };
 
   const checkPasswordStrength = (password: string) => {
@@ -259,6 +266,34 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
           </p>
         )}
       </div>
+      <div className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          id="accept-privacy"
+          checked={acceptPrivacy}
+          onChange={(e) => setAcceptPrivacy(e.target.checked)}
+          className="mt-1"
+        />
+        <label
+          htmlFor="accept-privacy"
+          className="text-sm text-muted-foreground"
+        >
+          I agree to the{' '}
+          <a
+            href="/privacy-policy"
+            target="_blank"
+            className="text-blue-600 underline"
+          >
+            Privacy Policy
+          </a>
+        </label>
+      </div>
+      {privacyError && (
+        <p className="text-xs text-red-500 flex items-center gap-1 mt-1">
+          <AlertCircle className="h-3 w-3" />
+          {privacyError}
+        </p>
+      )}
 
       <Button
         type="submit"

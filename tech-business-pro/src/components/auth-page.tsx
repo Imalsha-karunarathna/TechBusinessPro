@@ -32,6 +32,9 @@ const registerSchema = loginSchema
     confirmPassword: z
       .string()
       .min(6, 'Password must be at least 6 characters'),
+    acceptPolicy: z.boolean().refine((val) => val === true, {
+      message: 'You must accept the policy.',
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -72,6 +75,7 @@ export default function AuthPage() {
       email: '',
       password: '',
       confirmPassword: '',
+      acceptPolicy: false,
     },
   });
 
@@ -371,6 +375,35 @@ export default function AuthPage() {
                           />
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="acceptPolicy"
+                    render={({ field }) => (
+                      <FormItem className="flex items-start space-x-2">
+                        <FormControl>
+                          <input
+                            type="checkbox"
+                            className="mt-1"
+                            checked={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="text-sm">
+                          <FormLabel className="!mt-0">
+                            I agree to the{' '}
+                            <a
+                              href="/privacy-policy"
+                              target="_blank"
+                              className="text-blue-600 underline"
+                            >
+                              Privacy Policy
+                            </a>
+                          </FormLabel>
+                          <FormMessage className="text-red-500" />
+                        </div>
                       </FormItem>
                     )}
                   />
