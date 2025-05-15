@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Table,
   TableBody,
@@ -56,7 +57,25 @@ export function PartnerApplicationsTable({
                     {application.email}
                   </div>
                 </TableCell>
-                <TableCell>{application.expertise}</TableCell>
+                <TableCell>
+                  {Array.isArray(application.expertise) ? (
+                    <div className="flex flex-wrap gap-1">
+                      {application.expertise.map(
+                        (exp: string, index: number) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="bg-blue-50 text-blue-700 border-blue-200"
+                          >
+                            {exp}
+                          </Badge>
+                        ),
+                      )}
+                    </div>
+                  ) : (
+                    application.expertise
+                  )}
+                </TableCell>
                 <TableCell>
                   <StatusBadge status={application.application_status} />
                 </TableCell>

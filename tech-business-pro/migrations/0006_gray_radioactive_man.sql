@@ -1,0 +1,1 @@
+ALTER TABLE "solution_providers" ADD COLUMN "expertise" text[] NOT NULL;

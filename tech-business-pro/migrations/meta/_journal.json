@@ -43,6 +43,13 @@
       "when": 1747218241632,
       "tag": "0005_ambiguous_fixer",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747226381380,
+      "tag": "0006_gray_radioactive_man",
+      "breakpoints": true
     }
   ]
 }

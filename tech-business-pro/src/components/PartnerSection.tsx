@@ -137,7 +137,7 @@ export function PartnerSection() {
             <div className="mt-8 space-y-4">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-white">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-black">
                     <Briefcase className="h-6 w-6" />
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export function PartnerSection() {
 
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-white">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-black">
                     <Users className="h-6 w-6" />
                   </div>
                 </div>
@@ -171,7 +171,7 @@ export function PartnerSection() {
 
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-white">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-black">
                     <Globe className="h-6 w-6" />
                   </div>
                 </div>

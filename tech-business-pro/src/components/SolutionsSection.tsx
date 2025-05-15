@@ -1,125 +1,124 @@
 'use client';
-
-import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  ExternalLink,
-  Star,
   Building2,
   Globe,
   Mail,
   MapPin,
-  Verified,
+  CheckCircle,
+  Briefcase,
   LogIn,
 } from 'lucide-react';
 
-import { SOLUTION_CATEGORIES, CATEGORY_COLORS } from '@/lib/constants';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { getAllProviders } from '@/app/actions/provider-actions';
+  getAllProviders,
+  getProvidersByExpertiseRaw,
+} from '@/app/actions/provider-actions';
 import type { SolutionProvider } from '@/lib/db/schema';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getAllExpertiseCategories } from '@/app/actions/expertise-actions';
+import { useAuth } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 
-// Type for solution with provider
-interface Solution {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  provider_id: number;
-  image_url?: string;
-  regions?: string[];
-  features?: string[];
-  provider?: {
-    id: number;
-    name: string;
-    description: string;
-    email: string;
-    verification_status: string;
-    created_at: string;
-    logo_url?: string;
-    regions_served?: string[];
-    rating?: number;
-    reviews?: number;
-  } | null;
-}
+// Helper type to ensure expertise is available
+type ProviderWithExpertise = SolutionProvider & {
+  expertise: string[];
+};
 
 const SolutionsSection = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [providers, setProviders] = useState<SolutionProvider[]>([]);
-  const [activeTab, setActiveTab] = useState<'solutions' | 'providers'>(
-    'solutions',
+  const { user } = useAuth();
+  const router = useRouter();
+  const [, setProviders] = useState<SolutionProvider[]>([]);
+  const [expertiseCategories, setExpertiseCategories] = useState<string[]>([]);
+  const [selectedExpertise, setSelectedExpertise] = useState<string | null>(
+    null,
   );
+  const [expertiseProviders, setExpertiseProviders] = useState<
+    SolutionProvider[]
+  >([]);
+  const [activeTab, setActiveTab] = useState<'providers'>('providers');
+  const [loadingProviders, setLoadingProviders] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
-  // Fetch providers
+  // Check if user is a solution seeker
+  const isSolutionSeeker = user && user.role === 'solution_seeker';
+
+  // Fetch all expertise categories
+  useEffect(() => {
+    const fetchExpertiseCategories = async () => {
+      setLoadingCategories(true);
+      try {
+        const result = await getAllExpertiseCategories();
+        if (result.success && result.data) {
+          setExpertiseCategories(result.data);
+          if (result.data.length > 0) {
+            setSelectedExpertise(result.data[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching expertise categories:', error);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchExpertiseCategories();
+  }, []); // <-- run only once, not based on selectedExpertise
+
+  // Fetch all providers
   useEffect(() => {
     const fetchProviders = async () => {
       try {
         const result = await getAllProviders();
         if (result.success && result.data) {
           setProviders(result.data);
-          console.log('Fetched providers:', result.data);
         }
       } catch (error) {
         console.error('Error fetching providers:', error);
       }
     };
 
-    fetchProviders();
-  }, []);
+    if (isSolutionSeeker) {
+      fetchProviders();
+    }
+  }, [isSolutionSeeker]);
 
-  // Fetch solutions with category filter
-  const { data: solutions, isLoading } = useQuery({
-    queryKey: [
-      selectedCategory === 'all'
-        ? 'solutions'
-        : `solutions-${selectedCategory}`,
-    ],
-    queryFn: async () => {
-      const url =
-        selectedCategory === 'all'
-          ? '/api/solutions'
-          : `/api/solutions?category=${selectedCategory}`;
+  // Fetch providers by expertise when selected expertise changes
+  useEffect(() => {
+    const fetchProvidersByExpertise = async () => {
+      if (!selectedExpertise || !isSolutionSeeker) return;
 
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Failed to fetch solutions');
+      setLoadingProviders(true);
+      try {
+        // Try the raw SQL version for debugging
+        const result = await getProvidersByExpertiseRaw(selectedExpertise);
+        console.log('Fetched expertise providers:', result);
+        if (result.success && result.data) {
+          setExpertiseProviders(result.data);
+        } else {
+          setExpertiseProviders([]);
+        }
+      } catch (error) {
+        console.error('Error fetching providers by expertise:', error);
+        setExpertiseProviders([]);
+      } finally {
+        setLoadingProviders(false);
       }
-      return response.json() as Promise<Solution[]>;
-    },
-  });
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-  };
-
-  const getCategoryLabel = (category: string) => {
-    return (
-      SOLUTION_CATEGORIES.find((c) => c.value === category)?.label || 'Other'
-    );
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colorName =
-      CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || 'gray';
-    return {
-      bg: `bg-${colorName}-100`,
-      text: `text-${colorName}-800`,
     };
+
+    fetchProvidersByExpertise();
+  }, [selectedExpertise, isSolutionSeeker]);
+
+  const handleExpertiseChange = (expertise: string) => {
+    setSelectedExpertise(expertise);
+  };
+
+  const handleLogin = () => {
+    router.push('/auth-page');
   };
 
   const getRegionLabel = (regionValue: string) => {
@@ -136,6 +135,17 @@ const SolutionsSection = () => {
     return regions.find((r) => r.value === regionValue)?.label || regionValue;
   };
 
+  // Helper function to safely check for expertise
+  const hasExpertise = (
+    provider: SolutionProvider,
+  ): provider is ProviderWithExpertise => {
+    return (
+      'expertise' in provider &&
+      Array.isArray(provider.expertise) &&
+      provider.expertise.length > 0
+    );
+  };
+
   return (
     <div id="solutions" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -149,400 +159,276 @@ const SolutionsSection = () => {
           <p className="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
             Explore customised strategies designed to elevate your success
           </p>
-        </div>
 
-        <div className="mt-10">
-          <Tabs
-            defaultValue="solutions"
-            value={activeTab}
-            onValueChange={(value) =>
-              setActiveTab(value as 'solutions' | 'providers')
-            }
-            className="w-full"
-          >
-            <div className="flex justify-center mb-8">
-              <TabsList className="grid w-[400px] grid-cols-1">
-                <TabsTrigger value="solutions">Solutions</TabsTrigger>
-                {/* <TabsTrigger value="providers">Solution Providers</TabsTrigger> */}
-              </TabsList>
+          {/* Show message if user is logged in but not a solution seeker */}
+          {user && !isSolutionSeeker && (
+            <div className="mt-6">
+              <div className="inline-block bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-left">
+                <p className="text-yellow-800">
+                  You need a solution seeker account to view providers. Please
+                  contact support if you need assistance.
+                </p>
+              </div>
             </div>
-
-            <TabsContent value="solutions">
-              <div className="flex flex-wrap justify-center mb-8 gap-2">
-                {/* <button
-                  key="all"
-                  className={`px-4 py-2 rounded-full font-medium text-sm ${
-                    selectedCategory === 'all'
-                      ? 'bg-primary-100 text-primary-800'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  } transition-colors`}
-                  onClick={() => handleCategoryChange('all')}
-                >
-                  All Categories
-                </button> */}
-                {SOLUTION_CATEGORIES.map((category) => (
-                  <button
-                    key={category.value}
-                    className={`px-4 py-2 rounded-full font-medium text-sm ${
-                      selectedCategory === category.value
-                        ? 'bg-primary-100 text-primary-800'
-                        : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                    } transition-colors`}
-                    onClick={() => handleCategoryChange(category.value)}
-                  >
-                    {category.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-                {isLoading ? (
-                  // Skeleton loading state
-                  Array(3)
-                    .fill(0)
-                    .map((_, index) => (
-                      <Card
-                        key={index}
-                        className="overflow-hidden border-gray-200 h-full"
-                      >
-                        <div className="aspect-video w-full bg-gray-100">
-                          <Skeleton className="h-full w-full" />
-                        </div>
-                        <CardHeader className="pb-2">
-                          <div className="flex justify-between items-center mb-2">
-                            <Skeleton className="h-5 w-24" />
-                            <Skeleton className="h-5 w-32" />
-                          </div>
-                          <Skeleton className="h-7 w-full mb-2" />
-                        </CardHeader>
-                        <CardContent className="pb-4">
-                          <Skeleton className="h-20 w-full mb-4" />
-                          <div className="flex gap-2 mt-4">
-                            <Skeleton className="h-6 w-20" />
-                            <Skeleton className="h-6 w-20" />
-                          </div>
-                        </CardContent>
-                        <CardFooter className="border-t pt-4 flex justify-between">
-                          <div className="flex items-center">
-                            <Skeleton className="h-8 w-8 rounded-full" />
-                            <Skeleton className="h-5 w-28 ml-2" />
-                          </div>
-                          <Skeleton className="h-9 w-32" />
-                        </CardFooter>
-                      </Card>
-                    ))
-                ) : solutions && solutions.length > 0 ? (
-                  solutions.map((solution) => (
-                    <Card
-                      key={solution.id}
-                      className="overflow-hidden border-gray-200 h-full flex flex-col hover:shadow-md transition-shadow"
-                    >
-                      <div className="aspect-video w-full overflow-hidden bg-gray-100">
-                        <img
-                          className="w-full h-full object-cover transition-transform hover:scale-105"
-                          src={
-                            solution.image_url ||
-                            '/placeholder.svg?height=200&width=400'
-                          }
-                          alt={solution.title}
-                        />
-                      </div>
-                      <CardHeader className="pb-2">
-                        <div className="flex justify-between items-center mb-2">
-                          <Badge
-                            variant="outline"
-                            className={`${
-                              getCategoryColor(solution.category).bg
-                            } ${
-                              getCategoryColor(solution.category).text
-                            } border-0`}
-                          >
-                            {getCategoryLabel(solution.category)}
-                          </Badge>
-                          <span className="text-sm text-gray-500">
-                            {solution.regions?.join(' & ') || 'Global'}
-                          </span>
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 line-clamp-1">
-                          {solution.title}
-                        </h3>
-                      </CardHeader>
-                      <CardContent className="pb-4 flex-grow">
-                        <p className="text-gray-600 line-clamp-3 mb-4">
-                          {solution.description}
-                        </p>
-                        {solution.features && solution.features.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-4">
-                            {solution.features
-                              .slice(0, 3)
-                              .map((feature, index) => (
-                                <Badge
-                                  key={index}
-                                  variant="secondary"
-                                  className="bg-gray-100 text-gray-700"
-                                >
-                                  {feature}
-                                </Badge>
-                              ))}
-                            {solution.features.length > 3 && (
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Badge
-                                      variant="secondary"
-                                      className="bg-gray-100 text-gray-700 cursor-help"
-                                    >
-                                      +{solution.features.length - 3} more
-                                    </Badge>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <ul className="list-disc pl-4">
-                                      {solution.features
-                                        .slice(3)
-                                        .map((feature, index) => (
-                                          <li key={index}>{feature}</li>
-                                        ))}
-                                    </ul>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            )}
-                          </div>
-                        )}
-                      </CardContent>
-                      <CardFooter className="border-t pt-4 flex justify-between items-center">
-                        <div className="flex items-center">
-                          {solution.provider ? (
-                            <>
-                              {solution.provider.logo_url ? (
-                                <img
-                                  src={
-                                    solution.provider.logo_url ||
-                                    '/placeholder.svg'
-                                  }
-                                  alt={solution.provider.name}
-                                  className="h-8 w-8 rounded-full object-cover"
-                                />
-                              ) : (
-                                <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
-                                  <span className="text-xs font-medium text-primary-800">
-                                    {solution.provider.name.charAt(0)}
-                                  </span>
-                                </div>
-                              )}
-                              <div className="ml-2">
-                                <Link
-                                  href={`/providers/${solution.provider.id}`}
-                                  className="text-sm font-medium text-gray-700 block leading-tight hover:text-primary-600"
-                                >
-                                  {solution.provider.name}
-                                </Link>
-                                <div className="flex items-center">
-                                  <div className="flex">
-                                    {[...Array(5)].map((_, i) => (
-                                      <Star
-                                        key={i}
-                                        className={`h-3 w-3 ${
-                                          i < (solution.provider?.rating || 0)
-                                            ? 'text-yellow-400 fill-yellow-400'
-                                            : 'text-gray-300'
-                                        }`}
-                                      />
-                                    ))}
-                                  </div>
-                                  <span className="text-xs text-gray-500 ml-1">
-                                    ({solution.provider.reviews || 0})
-                                  </span>
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                              <span className="text-xs text-gray-600">SP</span>
-                            </div>
-                          )}
-                        </div>
-                        <Link href={`/solutions/${solution.id}`}>
-                          <Button size="sm" className="gap-1">
-                            View Details
-                            <ExternalLink className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-10">
-                    <p className="text-gray-500 mb-4">
-                      Please Login in to view solutions.
-                    </p>
-                    <Link href="/auth-page">
-                      <span className="inline-flex items-center rounded-lg justify-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 transition-colors">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Log in / Register
-                      </span>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="providers">
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-                {providers.length === 0
-                  ? // Skeleton loading state
-                    Array(3)
-                      .fill(0)
-                      .map((_, index) => (
-                        <Card
-                          key={index}
-                          className="overflow-hidden border-gray-200 h-full"
-                        >
-                          <CardHeader className="pb-2">
-                            <div className="flex items-center gap-4">
-                              <Skeleton className="h-16 w-16 rounded-md" />
-                              <div className="space-y-2">
-                                <Skeleton className="h-6 w-32" />
-                                <Skeleton className="h-4 w-24" />
-                              </div>
-                            </div>
-                          </CardHeader>
-                          <CardContent className="pb-4">
-                            <Skeleton className="h-20 w-full mb-4" />
-                            <div className="space-y-2">
-                              <Skeleton className="h-4 w-full" />
-                              <Skeleton className="h-4 w-3/4" />
-                            </div>
-                          </CardContent>
-                          <CardFooter className="border-t pt-4 flex justify-between">
-                            <Skeleton className="h-5 w-28" />
-                            <Skeleton className="h-9 w-32" />
-                          </CardFooter>
-                        </Card>
-                      ))
-                  : providers.map((provider) => (
-                      <Card
-                        key={provider.id}
-                        className="overflow-hidden border-gray-200 h-full flex flex-col hover:shadow-md transition-shadow"
-                      >
-                        <CardHeader className="pb-2">
-                          <div className="flex items-center gap-4">
-                            {provider.logo_url ? (
-                              <img
-                                src={provider.logo_url || '/placeholder.svg'}
-                                alt={provider.name}
-                                className="h-16 w-16 rounded-md object-cover border"
-                              />
-                            ) : (
-                              <div className="h-16 w-16 rounded-md bg-primary-100 flex items-center justify-center">
-                                <span className="text-2xl font-medium text-primary-800">
-                                  {provider.name.charAt(0)}
-                                </span>
-                              </div>
-                            )}
-                            <div>
-                              <h3 className="text-xl font-bold text-gray-900">
-                                {provider.name}
-                              </h3>
-                              {provider.verification_status === 'approved' && (
-                                <div className="flex items-center text-sm text-emerald-600">
-                                  <Verified className="h-4 w-4 mr-1" />
-                                  <span>Verified Provider</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pb-4 flex-grow">
-                          <p className="text-gray-600 line-clamp-3 mb-4">
-                            {provider.description}
-                          </p>
-
-                          <div className="space-y-2 mt-4">
-                            {provider.email && (
-                              <div className="flex items-center text-sm">
-                                <Mail className="h-4 w-4 text-gray-500 mr-2" />
-                                <span>{provider.email}</span>
-                              </div>
-                            )}
-
-                            {provider.website && (
-                              <div className="flex items-center text-sm">
-                                <Globe className="h-4 w-4 text-gray-500 mr-2" />
-                                <a
-                                  href={provider.website}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-primary-600 hover:underline"
-                                >
-                                  {provider.website.replace(/^https?:\/\//, '')}
-                                </a>
-                              </div>
-                            )}
-
-                            {provider.regions_served &&
-                              provider.regions_served.length > 0 && (
-                                <div className="flex items-center text-sm">
-                                  <MapPin className="h-4 w-4 text-gray-500 mr-2" />
-                                  <div className="flex flex-wrap gap-1">
-                                    {provider.regions_served.map(
-                                      (region, index) => (
-                                        <Badge
-                                          key={index}
-                                          variant="outline"
-                                          className="bg-gray-100 text-gray-700"
-                                        >
-                                          {getRegionLabel(region)}
-                                        </Badge>
-                                      ),
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </CardContent>
-                        <CardFooter className="border-t pt-4 flex justify-between items-center">
-                          <div className="text-sm text-gray-500">
-                            <Building2 className="h-4 w-4 inline mr-1" />
-                            Member since{' '}
-                            {new Date(provider.created_at).toLocaleDateString()}
-                          </div>
-                          <Link href={`/providers/${provider.id}`}>
-                            <Button size="sm" className="gap-1">
-                              View Profile
-                              <ExternalLink className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                        </CardFooter>
-                      </Card>
-                    ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          <div className="mt-12 text-center">
-            {/* <Link
-              href={
-                activeTab === 'solutions' ? '/all-solutions' : '/all-providers'
-              }
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-black bg-primary-600 hover:bg-primary-700 transition-colors"
-            >
-              View All {activeTab === 'solutions' ? 'Solutions' : 'Providers'}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="ml-2 h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </Link> */}
-          </div>
+          )}
         </div>
+
+        {isSolutionSeeker ? (
+          <div className="mt-10">
+            <Tabs
+              defaultValue="providers"
+              value={activeTab}
+              onValueChange={(value) => setActiveTab(value as 'providers')}
+              className="w-full"
+            >
+              <div className="flex justify-center mb-8">
+                <TabsList className="grid w-[400px] grid-cols-1">
+                  <TabsTrigger value="providers">
+                    Solution Providers
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="providers">
+                {/* Expertise Categories */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
+                    Browse by Expertise
+                  </h3>
+
+                  {loadingCategories ? (
+                    <div className="flex justify-center space-x-2 mb-6">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Skeleton key={i} className="h-10 w-32 rounded-full" />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap justify-center gap-2 mb-6">
+                      {expertiseCategories.map((expertise) => (
+                        <button
+                          key={expertise}
+                          className={`px-4 py-2 rounded-full font-medium text-sm transition-colors ${
+                            selectedExpertise === expertise
+                              ? 'bg-blue-100 text-black-800'
+                              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                          }`}
+                          onClick={() => handleExpertiseChange(expertise)}
+                        >
+                          {expertise}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Providers by Expertise */}
+                  {selectedExpertise && (
+                    <div className="mb-8">
+                      <div className="flex items-center mb-6">
+                        <div className="flex-grow h-px bg-gray-200"></div>
+                        <div className="px-4 flex items-center">
+                          <Briefcase className="h-5 w-5 text-blue-600 mr-2" />
+                          <h3 className="text-lg font-bold text-gray-900">
+                            {selectedExpertise} Specialists
+                          </h3>
+                        </div>
+                        <div className="flex-grow h-px bg-gray-200"></div>
+                      </div>
+
+                      {loadingProviders ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {[1, 2, 3].map((i) => (
+                            <div
+                              key={i}
+                              className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100"
+                            >
+                              <div className="flex items-center mb-4">
+                                <Skeleton className="h-16 w-16 rounded-lg" />
+                                <div className="ml-4 flex-1">
+                                  <Skeleton className="h-5 w-32 mb-2" />
+                                  <Skeleton className="h-4 w-24" />
+                                </div>
+                              </div>
+                              <Skeleton className="h-16 w-full mb-4" />
+                              <div className="mt-auto">
+                                <Skeleton className="h-4 w-full mb-2" />
+                                <Skeleton className="h-4 w-3/4" />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : expertiseProviders.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {expertiseProviders.map((provider, index) => (
+                            <Link
+                              href={`/providers/${provider.id}`}
+                              key={`${provider.id}-${index}`}
+                              className="block group"
+                            >
+                              <div className="bg-gradient-to-r from-blue-300 to-blue-200 rounded-xl p-6 border border-blue-100 hover:shadow-md transition-all duration-300 h-full flex flex-col relative overflow-hidden">
+                                {/* Verified badge */}
+                                {provider.verification_status ===
+                                  'approved' && (
+                                  <div className="absolute top-4 right-4">
+                                    <div className="bg-green-600 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
+                                      <CheckCircle className="h-3 w-3 mr-1 text-amber-300" />
+                                      Verified
+                                    </div>
+                                  </div>
+                                )}
+
+                                <div className="flex items-center mb-4">
+                                  {provider.logo_url ? (
+                                    <div className="h-16 w-16 rounded-lg overflow-hidden border-2 border-white shadow-sm">
+                                      <img
+                                        src={
+                                          provider.logo_url ||
+                                          '/placeholder.svg'
+                                        }
+                                        alt={provider.name}
+                                        className="h-full w-full object-cover"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="h-16 w-16 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-2xl font-bold border-2 border-white shadow-sm">
+                                      {provider.name?.charAt(0)}
+                                    </div>
+                                  )}
+                                  <div className="ml-4 flex-1">
+                                    <h4 className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+                                      {provider.name}
+                                    </h4>
+                                  </div>
+                                </div>
+
+                                <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                                  {provider.description}
+                                </p>
+
+                                <div className="mt-auto">
+                                  {/* Expertise areas - using type guard */}
+                                  {hasExpertise(provider) && (
+                                    <div className="mb-3">
+                                      <div className="text-xs font-medium text-gray-500 mb-1.5">
+                                        Expertise
+                                      </div>
+                                      <div className="flex flex-wrap gap-1.5">
+                                        {provider.expertise
+                                          .slice(0, 3)
+                                          .map((skill, index) => (
+                                            <Badge
+                                              key={index}
+                                              variant="outline"
+                                              className="bg-white/80 text-blue-800 border-blue-200 text-xs"
+                                            >
+                                              {skill}
+                                            </Badge>
+                                          ))}
+                                        {provider.expertise.length > 3 && (
+                                          <Badge
+                                            variant="outline"
+                                            className="bg-white/80 text-blue-800 border-blue-200 text-xs"
+                                          >
+                                            +{provider.expertise.length - 3}{' '}
+                                            more
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Regions */}
+                                  {provider.regions_served &&
+                                    provider.regions_served.length > 0 && (
+                                      <div className="flex items-center text-xs text-gray-600">
+                                        <MapPin className="h-3.5 w-3.5 text-black mr-1.5" />
+                                        <span>
+                                          {provider.regions_served
+                                            .map((region) =>
+                                              getRegionLabel(region),
+                                            )
+                                            .join(', ')}
+                                        </span>
+                                      </div>
+                                    )}
+                                </div>
+                                <div className="space-y-2 mt-4">
+                                  {provider.email && (
+                                    <div className="flex items-center text-sm">
+                                      <Mail className="h-4 w-4 text-gray-500 mr-2" />
+                                      <span>{provider.email}</span>
+                                    </div>
+                                  )}
+
+                                  {provider.website && (
+                                    <div className="flex items-center text-sm">
+                                      <Globe className="h-4 w-4 text-gray-500 mr-2" />
+                                      <Link
+                                        href={provider.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary-600 hover:underline"
+                                      >
+                                        {provider.website.replace(
+                                          /^https?:\/\//,
+                                          '',
+                                        )}
+                                      </Link>
+                                    </div>
+                                  )}
+                                  <div className="text-sm text-gray-500">
+                                    <Building2 className="h-4 w-4 inline mr-1" />
+                                    Member since{' '}
+                                    {new Date(
+                                      provider.created_at,
+                                    ).toLocaleDateString()}
+                                  </div>
+                                </div>
+                                {/* Hover effect overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-indigo-600/0 group-hover:from-blue-600/5 group-hover:to-indigo-600/10 transition-all duration-300"></div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-100">
+                          <p className="text-gray-500">
+                            No providers found with {selectedExpertise}{' '}
+                            expertise.
+                          </p>
+                          <p className="text-sm text-gray-400 mt-1">
+                            Providers with expertise in {selectedExpertise} will
+                            appear here when available.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* All Providers Section */}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        ) : (
+          <div className="mt-16 text-center">
+            <div className="bg-blue-50 p-8 rounded-lg border border-blue-100 max-w-2xl mx-auto">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Login Required
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Please log in as a solution seeker to view our solution
+                providers and their expertise.
+              </p>
+              <Button
+                onClick={handleLogin}
+                className="gap-2 text-white bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 cursor-pointer"
+              >
+                <LogIn className="h-4 w-4" />
+                Log in to view solutions
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
