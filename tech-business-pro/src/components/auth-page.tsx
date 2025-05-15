@@ -245,7 +245,7 @@ export default function AuthPage() {
                             disabled={loginMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -264,7 +264,7 @@ export default function AuthPage() {
                             disabled={loginMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -299,7 +299,7 @@ export default function AuthPage() {
                             disabled={registerMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -317,7 +317,7 @@ export default function AuthPage() {
                             disabled={registerMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -336,7 +336,7 @@ export default function AuthPage() {
                             disabled={registerMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -355,7 +355,7 @@ export default function AuthPage() {
                             disabled={registerMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -374,7 +374,7 @@ export default function AuthPage() {
                             disabled={registerMutation.isPending}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -392,8 +392,9 @@ export default function AuthPage() {
                           />
                         </FormControl>
                         <div className="text-sm">
-                          <FormLabel className="!mt-0">
-                            I agree to the{' '}
+                          <FormLabel className="!mt-0 flex flex-wrap items-center whitespace-nowrap">
+                            I confirm that I have read, understood and accept
+                            the terms and conditions in the&nbsp;
                             <a
                               href="/privacy-policy"
                               target="_blank"
@@ -402,6 +403,7 @@ export default function AuthPage() {
                               Privacy Policy
                             </a>
                           </FormLabel>
+
                           <FormMessage className="text-red-500" />
                         </div>
                       </FormItem>

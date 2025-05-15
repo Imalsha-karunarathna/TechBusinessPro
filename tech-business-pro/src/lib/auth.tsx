@@ -53,21 +53,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: User) => {
-      queryClient.setQueryData(['/api/user'], user);
-      toast({
-        title: 'Login successful',
-        description: `Welcome back, ${user.username}!`,
-      });
-
-      // Immediate redirect based on user role
-      if (user.role === 'admin') {
-        router.push('/admin/partner-application');
-      } else if (user.role === 'solution_provider') {
-        router.push('/solutionProvider');
-      } else {
-        router.push('/');
-      }
+      const path =
+        user.role === 'admin'
+          ? '/admin/partner-application'
+          : user.role === 'solution_provider'
+            ? '/solutionProvider'
+            : '/';
+      window.location.href = path;
     },
+
     onError: (error: Error) => {
       toast({
         title: 'Login failed',

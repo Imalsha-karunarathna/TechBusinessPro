@@ -21,15 +21,19 @@ export interface SolutionProvider {
   name: string;
   description: string;
   email: string;
-  website?: string;
-  phone?: string;
-  logo_url?: string;
-  regions_served?: string[];
+  website?: string | null;
+  phone?: string | null;
+  logo_url?: string | null;
+  regions_served?: string[] | null;
   verification_status: 'pending' | 'approved' | 'rejected';
-  approved_date?: string;
-  created_at: string;
-  rating?: number; // Added for UI display
-  reviews?: number; // Added for UI display
+  approved_date?: Date | null;
+  created_at: Date;
+  user_id: number;
+  application_id?: number | null;
+  // Added fields that come from joined data
+  expertise?: string[];
+  rating?: number;
+  reviews?: number;
 }
 
 export interface SolutionWithProvider {
@@ -52,16 +56,22 @@ export interface BlogPost {
 }
 
 export interface PartnerApplication {
+  id: number;
   partner_name: string;
   organization_name: string;
   email: string;
-  phone?: string;
-  website?: string;
-  expertise: string;
-  collaboration: string;
-  experience_years?: number;
-  reason?: string;
-  additional_notes?: string;
+  phone?: string | null;
+  website?: string | null;
+  expertise: string[];
+  designation: string;
+  experience_years?: number | null;
+  reason?: string | null;
+  additional_notes?: string | null;
+  application_status: 'pending' | 'approved' | 'rejected';
+  reviewer_id?: number | null;
+  review_notes?: string | null;
+  reviewed_at?: Date | null;
+  created_at: Date;
 }
 
 export interface ContactInquiry {
