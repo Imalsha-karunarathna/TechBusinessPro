@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Users, Briefcase, Settings, LogOutIcon, Award } from 'lucide-react';
+import { Users, Briefcase, LogOutIcon, Award } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useAuth } from '@/lib/auth';
 
@@ -26,11 +26,11 @@ export function AdminSidebar() {
       href: '/admin/users',
       icon: Users,
     },
-    {
-      name: 'Settings',
-      href: '/admin/settings',
-      icon: Settings,
-    },
+    // {
+    //   name: 'Settings',
+    //   href: '/admin/settings',
+    //   icon: Settings,
+    // },
   ];
   const { logoutMutation } = useAuth();
 
