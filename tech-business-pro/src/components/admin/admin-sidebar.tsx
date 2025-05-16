@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Users, Briefcase, Settings, LogOutIcon } from 'lucide-react';
+import { Users, Briefcase, Settings, LogOutIcon, Award } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useAuth } from '@/lib/auth';
 
@@ -15,6 +15,11 @@ export function AdminSidebar() {
       name: 'Partner Applications',
       href: '/admin/partner-application',
       icon: Briefcase,
+    },
+    {
+      name: 'Expertise Requests',
+      href: '/admin/expertise-request',
+      icon: Award,
     },
     {
       name: 'Users',

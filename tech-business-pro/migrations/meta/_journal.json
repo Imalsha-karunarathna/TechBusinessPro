@@ -50,6 +50,13 @@
       "when": 1747226381380,
       "tag": "0006_gray_radioactive_man",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1747379150538,
+      "tag": "0007_yellow_johnny_storm",
+      "breakpoints": true
     }
   ]
 }
