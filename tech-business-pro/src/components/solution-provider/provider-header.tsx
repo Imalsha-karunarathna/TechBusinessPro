@@ -1,7 +1,8 @@
 'use client';
-import { Bell, Menu, Search } from 'lucide-react';
+
+import { useAuth } from '@/lib/auth';
+import { Bell, ChevronDown, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,80 +11,77 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState } from 'react';
-import { ProviderSidebar } from './provider-sidebar';
+import { Badge } from '@/components/ui/badge';
 
-export function ProviderHeader() {
-  // const { user, logout } = useAuth()
-  const [activeTab, setActiveTab] = useState<string>('solutions');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface ProviderHeaderProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  providerData?: any;
+}
+
+export function ProviderHeader({ providerData }: ProviderHeaderProps) {
+  const { user, logoutMutation } = useAuth();
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center md:w-64">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0">
-              <ProviderSidebar
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-            </SheetContent>
-          </Sheet>
-          <span className="text-lg font-semibold ml-2 md:hidden">
-            Provider Portal
-          </span>
-        </div>
+    <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
+      <div>
+        <h1 className="text-xl font-semibold text-gray-800">
+          Provider Dashboard
+        </h1>
+        {providerData && (
+          <p className="text-sm text-gray-500">
+            {providerData.name || 'Complete your profile'}
+          </p>
+        )}
+      </div>
 
-        <div className="flex-1 max-w-md mx-4 hidden md:block">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="pl-8 bg-gray-50 border-gray-200 focus:bg-white"
-            />
-          </div>
-        </div>
+      <div className="flex items-center space-x-4">
+        {providerData?.verification_status && (
+          <Badge
+            variant="outline"
+            className={
+              providerData.verification_status === 'approved'
+                ? 'bg-green-100 text-green-800 border-green-200'
+                : 'bg-yellow-100 text-yellow-800 border-yellow-200'
+            }
+          >
+            {providerData.verification_status === 'approved'
+              ? 'Verified Provider'
+              : 'Verification Pending'}
+          </Badge>
+        )}
 
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="text-gray-500">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
-          </Button>
+        <Button variant="ghost" size="icon" className="relative">
+          <Bell className="h-5 w-5 text-gray-500" />
+          <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+        </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="relative h-8 flex items-center gap-2 rounded-full"
-              >
-                <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-sm font-medium text-gray-600">
-                    {/* {user?.name?.charAt(0) || "P"} */}
-                  </span>
-                </div>
-                <span className="hidden md:inline-block text-sm font-medium">
-                  {/* {user?.name || "Provider"} */}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              {/* <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem> */}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="flex items-center gap-2">
+              <div className="bg-gray-100 p-1 rounded-full">
+                <User className="h-5 w-5 text-gray-600" />
+              </div>
+              <span className="text-sm font-medium">{user?.username}</span>
+              <ChevronDown className="h-4 w-4 text-gray-500" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Profile Settings</DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>Help & Support</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

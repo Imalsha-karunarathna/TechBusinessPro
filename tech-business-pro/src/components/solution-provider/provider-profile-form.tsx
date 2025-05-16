@@ -19,33 +19,35 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { createOrUpdateProvider } from '@/app/actions/provider-actions';
-import { Loader2, X } from 'lucide-react';
-import { insertSolutionProviderSchema } from '@/lib/db/schema';
+import { Loader2 } from 'lucide-react';
 
-type ProviderProfileFormValues = z.infer<typeof insertSolutionProviderSchema>;
+// Define the form schema
+const formSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  description: z.string().optional(),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  website: z
+    .string()
+    .url({ message: 'Please enter a valid URL' })
+    .optional()
+    .or(z.literal('')),
+  phone: z.string().optional(),
+  logo_url: z
+    .string()
+    .url({ message: 'Please enter a valid URL' })
+    .optional()
+    .or(z.literal('')),
+  regions_served: z
+    .array(z.string())
+    .min(1, { message: 'Please select at least one region' }),
+});
 
-// Available regions
-const regions = [
-  { label: 'North America', value: 'north_america' },
-  { label: 'South America', value: 'south_america' },
-  { label: 'Europe', value: 'europe' },
-  { label: 'Asia', value: 'asia' },
-  { label: 'Africa', value: 'africa' },
-  { label: 'Australia/Oceania', value: 'oceania' },
-  { label: 'Global', value: 'global' },
-];
+type ProviderProfileFormValues = z.infer<typeof formSchema>;
 
 interface ProviderProfileFormProps {
-  initialData?: Partial<ProviderProfileFormValues> & { id?: number };
+  /*eslint-disable @typescript-eslint/no-explicit-any */
+  initialData?: any; // Replace with a more specific type if possible
 }
 
 export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
@@ -53,9 +55,9 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
-  // Initialize form with default values or initial data
+  // Initialize form with default values
   const form = useForm<ProviderProfileFormValues>({
-    resolver: zodResolver(insertSolutionProviderSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       description: '',
@@ -70,6 +72,8 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
   // Update form values when initialData changes
   useEffect(() => {
     if (initialData) {
+      console.log('Setting form values with initialData:', initialData);
+
       // Ensure regions_served is an array
       let regionsServed = initialData.regions_served;
       if (!Array.isArray(regionsServed)) {
@@ -92,14 +96,27 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
   async function onSubmit(data: ProviderProfileFormValues) {
     setIsLoading(true);
     try {
+      console.log('initialData.id:', initialData?.id);
+      console.log('Submitting form with data:', data);
+      console.log('Initial data:', initialData);
+
       // Ensure regions_served is an array
       if (!Array.isArray(data.regions_served)) {
         data.regions_served = data.regions_served ? [data.regions_served] : [];
       }
 
       const result = await createOrUpdateProvider({
-        ...data,
-        id: initialData?.id,
+        id: initialData?.user_id, // Make sure to include the ID for updates
+
+        name: data.name,
+        email: data.email,
+        website: data.website,
+        phone: data.phone,
+        logo_url: data.logo_url,
+        description: data.description ?? '',
+        user_id: initialData.user_id,
+        verification_status: initialData.verification_status,
+        regions_served: data.regions_served,
       });
 
       if (result.success) {
@@ -109,7 +126,7 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
         });
         router.refresh();
       } else {
-        throw new Error(result.error || 'Failed to update profile');
+        throw new Error('Failed to update profile');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -124,39 +141,39 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
   }
 
   // Add a region to the regions_served array
-  const addRegion = (value: string) => {
-    const currentValues = form.getValues('regions_served');
-    const regionsArray = Array.isArray(currentValues)
-      ? currentValues
-      : currentValues
-        ? [currentValues]
-        : [];
+  // const addRegion = (value: string) => {
+  //   const currentValues = form.getValues('regions_served');
+  //   const regionsArray = Array.isArray(currentValues)
+  //     ? currentValues
+  //     : currentValues
+  //       ? [currentValues]
+  //       : [];
 
-    if (!regionsArray.includes(value)) {
-      form.setValue('regions_served', [...regionsArray, value]);
-    }
-  };
+  //   if (!regionsArray.includes(value)) {
+  //     form.setValue('regions_served', [...regionsArray, value]);
+  //   }
+  // };
 
-  // Remove a region from the regions_served array
-  const removeRegion = (value: string) => {
-    const currentValues = form.getValues('regions_served');
-    const regionsArray = Array.isArray(currentValues)
-      ? currentValues
-      : currentValues
-        ? [currentValues]
-        : [];
+  // // Remove a region from the regions_served array
+  // const removeRegion = (value: string) => {
+  //   const currentValues = form.getValues('regions_served');
+  //   const regionsArray = Array.isArray(currentValues)
+  //     ? currentValues
+  //     : currentValues
+  //       ? [currentValues]
+  //       : [];
 
-    form.setValue(
-      'regions_served',
-      regionsArray.filter((region) => region !== value),
-    );
-  };
+  //   form.setValue(
+  //     'regions_served',
+  //     regionsArray.filter((region) => region !== value),
+  //   );
+  // };
 
-  // Get the current regions as an array
-  const getRegionsArray = () => {
-    const regions = form.getValues('regions_served');
-    return Array.isArray(regions) ? regions : regions ? [regions] : [];
-  };
+  // // Get the current regions as an array
+  // const getRegionsArray = () => {
+  //   const regions = form.getValues('regions_served');
+  //   return Array.isArray(regions) ? regions : regions ? [regions] : [];
+  // };
 
   return (
     <div className="space-y-6">
@@ -259,57 +276,6 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="regions_served"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Regions Served</FormLabel>
-                  <Select onValueChange={(value) => addRegion(value)}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select regions" {...field} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {regions.map((region) => (
-                        <SelectItem key={region.value} value={region.value}>
-                          {region.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  {getRegionsArray().length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {getRegionsArray().map((region) => (
-                        <Badge
-                          key={region}
-                          variant="secondary"
-                          className="px-2 py-1 bg-blue-100 text-blue-800"
-                        >
-                          {regions.find((r) => r.value === region)?.label ||
-                            region}
-                          <button
-                            type="button"
-                            className="ml-1 text-blue-600 hover:text-blue-800"
-                            onClick={() => removeRegion(region)}
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-
-                  <FormDescription>
-                    Select all regions where your solutions are available
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           <FormField
@@ -323,6 +289,7 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
                     placeholder="Describe your company and the solutions you provide..."
                     className="min-h-32"
                     {...field}
+                    value={field.value || ''}
                   />
                 </FormControl>
                 <FormDescription>

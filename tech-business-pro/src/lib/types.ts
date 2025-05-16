@@ -84,3 +84,24 @@ export interface ContactInquiry {
   solution_type?: string;
   preferred_contact?: string;
 }
+export interface ExpertiseRequest {
+  id: number;
+  name: string;
+  created_at: string | Date;
+  provider: {
+    name: string;
+    email: string;
+  };
+}
+
+export interface Provider {
+  id: string;
+  name: string;
+  email: string;
+  applicationExpertise: {
+    id: string;
+    name: string;
+    status: 'pending' | 'approved' | 'rejected';
+    created_at: string;
+  }[];
+}

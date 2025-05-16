@@ -55,8 +55,8 @@ export function ProviderSidebar({
   };
 
   return (
-    <div className="w-64 bg-gray-900 text-white min-h-screen p-4 hidden md:block">
-      <div className="mb-8 px-4 py-3">
+    <div className="w-64 bg-gray-900 text-white min-h-screen p-4 hidden md:block ">
+      <div className="mb-8 px-4 py-3 ">
         <h1 className="text-xl font-bold">Provider Dashboard</h1>
         <p className="text-sm text-gray-400 mt-1">Manage your tech solutions</p>
       </div>

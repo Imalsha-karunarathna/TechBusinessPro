@@ -6,6 +6,8 @@ import { auth, requireAdmin } from '@/lib/server-auth';
 import { db } from '@/db';
 import { unstable_noStore as noStore } from 'next/cache';
 import { createUserWithResetToken } from './reset-token';
+import { setupProviderFromApplication } from './provider-profile-setup';
+import { revalidatePath } from 'next/cache';
 
 export async function getPartnerApplications(status?: string) {
   // Prevent caching to ensure fresh data every time
@@ -62,6 +64,8 @@ export async function updateApplicationStatus(
   reviewNotes: string,
 ) {
   try {
+    console.log(`Updating application ${applicationId} status to ${status}`);
+
     const session = await auth();
 
     if (!session?.user) {
@@ -70,18 +74,16 @@ export async function updateApplicationStatus(
 
     const reviewerId = session.user.id;
 
-    // First, get the application details if status is approved
-    // We need this to create the user
-    let applicationData;
-    if (status === 'approved') {
-      applicationData = await db.query.partnerApplications.findFirst({
-        where: eq(partnerApplications.id, applicationId),
-      });
+    // First, get the application details
+    const applicationData = await db.query.partnerApplications.findFirst({
+      where: eq(partnerApplications.id, applicationId),
+    });
 
-      if (!applicationData) {
-        return { success: false, error: 'Application not found' };
-      }
+    if (!applicationData) {
+      return { success: false, error: 'Application not found' };
     }
+
+    console.log(`Found application for ${applicationData.organization_name}`);
 
     // Update the application status
     await db
@@ -94,8 +96,12 @@ export async function updateApplicationStatus(
       })
       .where(eq(partnerApplications.id, applicationId));
 
+    console.log(`Updated application status to ${status}`);
+
     // If approved, create a user account with reset token
-    if (status === 'approved' && applicationData) {
+    if (status === 'approved') {
+      console.log(`Creating user account for ${applicationData.email}`);
+
       const userResult = await createUserWithResetToken(
         applicationData.email,
         applicationData.partner_name,
@@ -109,16 +115,39 @@ export async function updateApplicationStatus(
         };
       }
 
+      console.log(`Created user account with ID: ${userResult.userId}`);
+
       // If user was created successfully, set up the provider profile
       if (userResult.userId) {
-        // Import the setupProviderFromApplication function
-        const { setupProviderFromApplication } = await import(
-          '../actions/provider-profile-setup'
+        console.log(
+          `Setting up provider profile for user ${userResult.userId}`,
         );
 
         // Set up the provider profile
-        await setupProviderFromApplication(userResult.userId, applicationId);
+        const providerResult = await setupProviderFromApplication(
+          userResult.userId,
+          applicationId,
+        );
+
+        if (!providerResult.success) {
+          console.error(
+            `Failed to set up provider profile: ${providerResult.error}`,
+          );
+          return {
+            success: false,
+            error: `Application approved and user created, but failed to set up provider profile: ${providerResult.error}`,
+          };
+        }
+
+        // console.log(
+        //   `Provider profile set up successfully with ID: ${providerResult.data.id}`,
+        // );
       }
+
+      // Revalidate paths
+      revalidatePath('/admin/partner-application');
+      revalidatePath('/providers');
+      revalidatePath('/solutions');
 
       // Return success with reset URL
       return {
@@ -126,6 +155,9 @@ export async function updateApplicationStatus(
         resetUrl: userResult.resetUrl,
       };
     }
+
+    // Revalidate paths
+    revalidatePath('/admin/partner-application');
 
     return { success: true };
   } catch (error) {
