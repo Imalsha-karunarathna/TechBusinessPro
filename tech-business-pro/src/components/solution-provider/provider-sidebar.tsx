@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
-import { LogOut, PlusCircle, Settings, User } from 'lucide-react';
+import { LogOut, PlusCircle, User } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface ProviderSidebarProps {
@@ -23,7 +23,7 @@ export function ProviderSidebar({
     //   value: "dashboard",
     // },
     {
-      name: 'My Solutions',
+      name: 'My Expertise',
       icon: PlusCircle,
       value: 'solutions',
     },
@@ -37,11 +37,11 @@ export function ProviderSidebar({
       icon: User,
       value: 'profile',
     },
-    {
-      name: 'Settings',
-      icon: Settings,
-      value: 'settings',
-    },
+    // {
+    //   name: 'Settings',
+    //   icon: Settings,
+    //   value: 'settings',
+    // },
   ];
   const { logoutMutation } = useAuth();
 
