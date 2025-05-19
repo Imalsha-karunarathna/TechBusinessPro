@@ -107,7 +107,7 @@ export async function getOrCreateProviderProfileByEmail(email: string) {
       .insert(solutionProviders)
       .values({
         name: application.organization_name,
-        description: application.designation || '',
+        description: application.description || '',
         email: application.email,
         website: application.website || '',
         phone: application.phone || '',
@@ -249,7 +249,7 @@ export async function getOrCreateProviderProfile(userId: number) {
       .insert(solutionProviders)
       .values({
         name: application.organization_name,
-        description: application.designation || '',
+        description: application.description || '',
         email: application.email,
         website: application.website || '',
         phone: application.phone || '',
@@ -309,7 +309,7 @@ export async function setupProviderFromApplication(
       .insert(solutionProviders)
       .values({
         name: application.organization_name,
-        description: application.designation || '',
+        description: application.description || '',
         email: application.email,
         website: application.website || '',
         phone: application.phone || '',
@@ -324,7 +324,7 @@ export async function setupProviderFromApplication(
         target: solutionProviders.user_id,
         set: {
           name: application.organization_name,
-          description: application.designation || '',
+          description: application.description || '',
           email: application.email,
           website: application.website || '',
           phone: application.phone || '',

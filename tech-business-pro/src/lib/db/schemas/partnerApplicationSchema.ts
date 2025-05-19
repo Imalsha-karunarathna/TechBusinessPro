@@ -11,6 +11,7 @@ export const insertPartnerApplicationSchema = createInsertSchema(
   phone: true,
   website: true,
   expertise: true,
+  description: true,
   designation: true,
   experience_years: true,
   reason: true,

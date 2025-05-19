@@ -51,7 +51,7 @@ export async function setupProviderFromApplication(
         .update(solutionProviders)
         .set({
           name: application.organization_name,
-          description: application.designation || '',
+          description: application.description || '',
           email: application.email,
           website: application.website || '',
           phone: application.phone || '',
@@ -82,7 +82,7 @@ export async function setupProviderFromApplication(
       .insert(solutionProviders)
       .values({
         name: application.organization_name,
-        description: application.designation || '',
+        description: application.description || '',
         email: application.email,
         website: application.website || '',
         phone: application.phone || '',

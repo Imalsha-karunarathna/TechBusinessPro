@@ -46,9 +46,14 @@ const partnerFormSchema = z.object({
       .array(z.string())
       .min(1, { message: 'Please select at least one area of expertise.' }),
   ]),
+  description: z.string().min(3, {
+    message: 'Please provide your Company description',
+  }),
+
   designation: z.string().min(3, {
     message: 'Please provide your Job Title.',
   }),
+
   experience_years: z.number().int().positive().optional(),
   reason: z
     .string()
@@ -427,6 +432,23 @@ export function PartnerSection() {
                   />
                   <FormField
                     control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            rows={3}
+                            {...field}
+                            placeholder="Describe your company here"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-500" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="designation"
                     render={({ field }) => (
                       <FormItem>
@@ -435,14 +457,13 @@ export function PartnerSection() {
                           <Textarea
                             rows={3}
                             {...field}
-                            placeholder="Enter your job title"
+                            placeholder="Describe your job here"
                           />
                         </FormControl>
                         <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="experience_years"

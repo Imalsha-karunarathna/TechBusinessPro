@@ -1,9 +1,30 @@
-CREATE TYPE "public"."conversation_status" AS ENUM('active', 'closed', 'archived');--> statement-breakpoint
-CREATE TYPE "public"."deal_status" AS ENUM('proposed', 'negotiating', 'accepted', 'declined', 'completed');--> statement-breakpoint
-CREATE TYPE "public"."solution_category" AS ENUM('website_development', 'it_security', 'crm_systems', 'business_applications', 'other');--> statement-breakpoint
-CREATE TYPE "public"."status" AS ENUM('pending', 'approved', 'rejected');--> statement-breakpoint
-CREATE TYPE "public"."user_role" AS ENUM('admin', 'solution_provider', 'solution_seeker');--> statement-breakpoint
-CREATE TABLE "users" (
+DO $$ BEGIN
+  CREATE TYPE "conversation_status" AS ENUM ('pending', 'active', 'closed');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+  CREATE TYPE "deal_status" AS ENUM ('pending', 'accepted', 'rejected');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+  CREATE TYPE "solution_category" AS ENUM ('website_development', 'it_security', 'crm_systems', 'business_applications', 'other');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+  CREATE TYPE "status" AS ENUM ('pending', 'approved', 'rejected');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+  CREATE TYPE "user_role" AS ENUM ('admin', 'solution_provider', 'solution_seeker');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+
+CREATE TABLE IF NOT EXISTS "users" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"username" text NOT NULL,
 	"password" text NOT NULL,
@@ -18,7 +39,7 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_username_unique" UNIQUE("username")
 );
 --> statement-breakpoint
-CREATE TABLE "solution_providers" (
+CREATE TABLE IF NOT EXISTS "solution_providers"  (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"description" text NOT NULL,
@@ -32,7 +53,7 @@ CREATE TABLE "solution_providers" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "blog_posts" (
+CREATE TABLE IF NOT EXISTS "blog_posts" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
 	"content" text NOT NULL,
@@ -50,7 +71,8 @@ CREATE TABLE "blog_posts" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "contact_inquiries" (
+
+CREATE TABLE IF NOT EXISTS "contact_inquiries" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"email" text NOT NULL,
@@ -68,7 +90,7 @@ CREATE TABLE "contact_inquiries" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "conversations" (
+CREATE TABLE IF NOT EXISTS "conversations" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"solution_id" integer NOT NULL,
 	"seeker_id" integer NOT NULL,
@@ -79,7 +101,7 @@ CREATE TABLE "conversations" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "deals" (
+CREATE TABLE IF NOT EXISTS "deals" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"conversation_id" integer NOT NULL,
 	"seeker_id" integer NOT NULL,
@@ -98,7 +120,7 @@ CREATE TABLE "deals" (
 	"closed_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "messages" (
+CREATE TABLE IF NOT EXISTS "messages" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"conversation_id" integer NOT NULL,
 	"sender_id" integer NOT NULL,
@@ -108,7 +130,7 @@ CREATE TABLE "messages" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "partner_applications" (
+CREATE TABLE IF NOT EXISTS "partner_applications" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"partner_name" text NOT NULL,
 	"organization_name" text NOT NULL,
@@ -127,7 +149,7 @@ CREATE TABLE "partner_applications" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "statistics" (
+CREATE TABLE IF NOT EXISTS "statistics"(
 	"id" serial PRIMARY KEY NOT NULL,
 	"date" timestamp DEFAULT now() NOT NULL,
 	"visitors_count" integer DEFAULT 0 NOT NULL,
@@ -140,7 +162,7 @@ CREATE TABLE "statistics" (
 	"search_queries" jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "solutions" (
+CREATE TABLE IF NOT EXISTS "solutions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
 	"description" text NOT NULL,
@@ -157,7 +179,7 @@ CREATE TABLE "solutions" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "visitor_chats" (
+CREATE TABLE IF NOT EXISTS "visitor_chats" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"visitor_id" text NOT NULL,
 	"is_active" boolean DEFAULT true NOT NULL,
