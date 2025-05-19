@@ -12,6 +12,7 @@ export const insertPartnerApplicationSchema = createInsertSchema(
   website: true,
   expertise: true,
   description: true,
+  designation: true,
   experience_years: true,
   reason: true,
   additional_notes: true,

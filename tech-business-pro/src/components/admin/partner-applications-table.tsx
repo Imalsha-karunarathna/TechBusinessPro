@@ -30,6 +30,7 @@ export function PartnerApplicationsTable({
             <TableHead>Organization</TableHead>
             <TableHead>Contact</TableHead>
             <TableHead>Expertise</TableHead>
+            <TableHead>Designation</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Submitted</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -76,6 +77,7 @@ export function PartnerApplicationsTable({
                     application.expertise
                   )}
                 </TableCell>
+                <TableCell>{application.designation}</TableCell>
                 <TableCell>
                   <StatusBadge status={application.application_status} />
                 </TableCell>

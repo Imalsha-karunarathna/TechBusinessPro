@@ -10,6 +10,7 @@ export const partnerApplications = pgTable('partner_applications', {
   website: text('website'),
   expertise: text('expertise').array().notNull(),
   description: text('description').notNull(),
+  designation: text('designation').notNull(),
   experience_years: integer('experience_years'),
   reason: text('reason'),
   additional_notes: text('additional_notes'),
