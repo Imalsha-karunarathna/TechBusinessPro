@@ -430,12 +430,12 @@ export function PartnerSection() {
                     name="designation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Designation</FormLabel>
+                        <FormLabel>Company Description</FormLabel>
                         <FormControl>
                           <Textarea
                             rows={3}
                             {...field}
-                            placeholder="Enter your job title"
+                            placeholder="Describe your company here"
                           />
                         </FormControl>
                         <FormMessage className="text-red-500" />

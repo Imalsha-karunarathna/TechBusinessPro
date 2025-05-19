@@ -1,15 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  Building2,
-  Globe,
-  Mail,
-  MapPin,
-  CheckCircle,
-  Briefcase,
-  LogIn,
-} from 'lucide-react';
+import { Building2, MapPin, CheckCircle, Briefcase, LogIn } from 'lucide-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -123,12 +115,7 @@ const SolutionsSection = () => {
 
   const getRegionLabel = (regionValue: string) => {
     const regions = [
-      { label: 'North America', value: 'north_america' },
-      { label: 'South America', value: 'south_america' },
-      { label: 'Europe', value: 'europe' },
-      { label: 'Asia', value: 'asia' },
-      { label: 'Africa', value: 'africa' },
-      { label: 'Australia/Oceania', value: 'oceania' },
+      { label: 'Australia', value: 'australia' },
       { label: 'Global', value: 'global' },
     ];
 
@@ -323,12 +310,12 @@ const SolutionsSection = () => {
                                               {skill}
                                             </Badge>
                                           ))}
-                                        {provider.expertise.length > 3 && (
+                                        {provider.expertise.length > 5 && (
                                           <Badge
                                             variant="outline"
                                             className="bg-white/80 text-blue-800 border-blue-200 text-xs"
                                           >
-                                            +{provider.expertise.length - 3}{' '}
+                                            +{provider.expertise.length - 5}{' '}
                                             more
                                           </Badge>
                                         )}
@@ -352,14 +339,14 @@ const SolutionsSection = () => {
                                     )}
                                 </div>
                                 <div className="space-y-2 mt-4">
-                                  {provider.email && (
+                                  {/* {provider.email && (
                                     <div className="flex items-center text-sm">
                                       <Mail className="h-4 w-4 text-gray-500 mr-2" />
                                       <span>{provider.email}</span>
                                     </div>
-                                  )}
+                                  )} */}
 
-                                  {provider.website && (
+                                  {/* {provider.website && (
                                     <div className="flex items-center text-sm">
                                       <Globe className="h-4 w-4 text-gray-500 mr-2" />
                                       <Link
@@ -374,7 +361,7 @@ const SolutionsSection = () => {
                                         )}
                                       </Link>
                                     </div>
-                                  )}
+                                  )} */}
                                   <div className="text-sm text-gray-500">
                                     <Building2 className="h-4 w-4 inline mr-1" />
                                     Member since{' '}
