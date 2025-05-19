@@ -71,6 +71,27 @@
       "when": 1747632362763,
       "tag": "0009_spooky_absorbing_man",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1747648206774,
+      "tag": "0010_rapid_magik",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1747648622092,
+      "tag": "0011_careless_shinobi_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1747651391113,
+      "tag": "0012_clean_captain_america",
+      "breakpoints": true
     }
   ]
 }

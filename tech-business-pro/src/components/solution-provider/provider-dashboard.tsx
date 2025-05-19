@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { ProviderExpertiseTable } from './provider-expertise-table';
 import { getOrCreateProviderProfileByEmail } from '@/app/actions/provider-actions';
+import { ProviderContactRequests } from './provider-contact-requests';
 
 export function ProviderDashboard() {
   const [activeTab, setActiveTab] = useState<string>('solutions');
@@ -117,6 +118,9 @@ export function ProviderDashboard() {
               providerId={providerData?.id}
               applicationExpertise={applicationExpertise}
             />
+          )}
+          {activeTab === 'messages' && (
+            <ProviderContactRequests providerId={providerData?.id} />
           )}
           {activeTab === 'profile' && (
             <ProviderProfileForm initialData={providerData} />

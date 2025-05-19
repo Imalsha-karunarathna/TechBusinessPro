@@ -1,12 +1,28 @@
 'use client';
 
 import type React from 'react';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckCircle2,
+  User,
+  Mail,
+  Lock,
+  ArrowRight,
+} from 'lucide-react';
 import { registerAgent } from '@/app/actions/agent-auth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 export default function RegisterAgentPage() {
   const router = useRouter();
@@ -68,127 +84,146 @@ export default function RegisterAgentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-lg">
-        <div className="p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-md">
+        <Card className="border-none shadow-xl bg-white overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-xl">
+            <div className="flex justify-center mb-4">
+              <div className="h-16 w-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 text-gray-800" />
+              </div>
+            </div>
+            <CardTitle className="text-center text-2xl font-bold">
               Become an Agent
-            </h1>
-            <p className="mt-2 text-gray-600">
+            </CardTitle>
+            <CardDescription className="text-center text-white text-opacity-90">
               Join our global network of business agents
-            </p>
-          </div>
+            </CardDescription>
+          </CardHeader>
 
-          {success ? (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mr-2" />
-              <p className="text-green-700">
-                Registration successful! Redirecting to login...
-              </p>
-            </div>
-          ) : error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center">
-              <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-              <p className="text-red-700">{error}</p>
-            </div>
-          ) : null}
+          <CardContent className="p-6 pt-8">
+            {success ? (
+              <div className="bg-green-50 border border-green-100 rounded-lg p-4 flex items-center">
+                <CheckCircle2 className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                <p className="text-green-700">
+                  Registration successful! Redirecting to login...
+                </p>
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 border border-red-100 rounded-lg p-4 flex items-center">
+                <AlertCircle className="h-5 w-5 text-red-500 mr-3 flex-shrink-0" />
+                <p className="text-red-700">{error}</p>
+              </div>
+            ) : null}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                value={formData.username}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-5 mt-6">
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <User className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    placeholder="Username"
+                  />
+                </div>
+              </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Mail className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    placeholder="Email address"
+                  />
+                </div>
+              </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    placeholder="Password"
+                  />
+                </div>
+              </div>
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    placeholder="Confirm password"
+                  />
+                </div>
+              </div>
 
-            <div>
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
+                className="w-full py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200 flex items-center justify-center gap-2"
               >
                 {loading ? 'Processing...' : 'Register as Agent'}
-              </button>
-            </div>
-          </form>
+                {!loading && <ArrowRight className="h-4 w-4" />}
+              </Button>
+            </form>
+          </CardContent>
 
-          <div className="mt-6 text-center">
+          <CardFooter className="p-6 pt-0 text-center">
             <p className="text-sm text-gray-600">
               Already have an agent account?{' '}
               <Link
                 href="/agent/login"
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-purple-600 hover:text-purple-500 transition-colors"
               >
                 Login
               </Link>
             </p>
-          </div>
+          </CardFooter>
+        </Card>
+
+        <div className="mt-6 text-center text-sm text-gray-500">
+          <p>
+            By registering, you agree to our{' '}
+            <Link href="/terms" className="text-purple-600 hover:underline">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="text-purple-600 hover:underline">
+              Privacy Policy
+            </Link>
+          </p>
         </div>
       </div>
     </div>

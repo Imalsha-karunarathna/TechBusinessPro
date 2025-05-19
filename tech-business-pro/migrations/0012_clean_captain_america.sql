@@ -1,0 +1,1 @@
+ALTER TABLE "contact_requests" ADD COLUMN "read" boolean DEFAULT false NOT NULL;
