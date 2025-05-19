@@ -94,7 +94,7 @@ export default function AuthPage() {
   useEffect(() => {
     if (!isLoading && user) {
       if (user.role === 'admin') {
-        router.push('/admin/partner-applications');
+        router.push('/admin/partner-application');
       } else if (user.role === 'solution_provider') {
         router.push('/solutionProvider');
       } else {
