@@ -118,7 +118,7 @@ const Navbar = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="ml-3 flex items-center bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 cursor-pointer border-transparent text-white"
+                  className="px-8 py-4 gap-2 text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
                 >
                   <LogIn className="h-4 w-4 mr-1" />
                   Log in

@@ -16,9 +16,19 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Lock, Mail, User } from 'lucide-react';
+import {
+  Lock,
+  Mail,
+  User,
+  CheckCircle2,
+  AlertTriangle,
+  Key,
+  UserPlus,
+  LogIn,
+} from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent } from '@/components/ui/card';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -106,8 +116,11 @@ export default function AuthPage() {
   // Show loading state while checking authentication
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600 mb-4"></div>
+          <p className="text-gray-600">Loading your account...</p>
+        </div>
       </div>
     );
   }
@@ -164,29 +177,29 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
+
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center mb-4">
-              <div className="h-10 w-10 bg-primary-500 rounded-md flex items-center justify-center">
-                <span className="text-black font-bold text-xl">TM</span>
-              </div>
-              <span className="ml-3 text-2xl font-bold">Tech Mista</span>
+            <div className="inline-flex items-center justify-center h-16 w-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full mb-6">
+              <User className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              {activeTab === 'login'
-                ? 'Sign in to your account'
-                : 'Create an account'}
+            <h2 className="text-3xl font-bold text-gray-900">
+              {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
             </h2>
             <p className="mt-2 text-gray-600">
               {activeTab === 'login'
-                ? 'Enter your credentials to access solutions'
-                : 'Register to explore our solution marketplace'}
+                ? 'Sign in to access your account'
+                : 'Join our community of tech solution seekers'}
             </p>
           </div>
 
           {error && (
-            <Alert variant="destructive" className="mb-6">
+            <Alert
+              variant="destructive"
+              className="mb-6 bg-red-50 border border-red-200 text-red-800"
+            >
+              <AlertTriangle className="h-4 w-4 mr-2" />
               <AlertDescription>
                 {error === 'unauthorized'
                   ? 'You need to be logged in to access that page.'
@@ -198,233 +211,339 @@ export default function AuthPage() {
           )}
 
           {registered && (
-            <Alert className="mb-6 bg-green-50 border-green-200 text-green-800">
+            <Alert className="mb-6 bg-green-50 border border-green-200 text-green-800">
+              <CheckCircle2 className="h-4 w-4 mr-2" />
               <AlertDescription>
                 Registration successful! Please sign in with your new account.
               </AlertDescription>
             </Alert>
           )}
 
-          <Tabs
-            defaultValue="login"
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2 mb-8 gap-3">
-              <TabsTrigger
-                value="login"
-                className="cursor-pointer bg-gray-300 border-transparent hover:bg-gray-00"
+          <Card className="border-none shadow-xl overflow-hidden">
+            <CardContent className="p-0">
+              <Tabs
+                defaultValue="login"
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
               >
-                Login
-              </TabsTrigger>
-              <TabsTrigger
-                value="register"
-                className="cursor-pointer bg-gray-300 border-transparent hover:bg-gray-00"
-              >
-                Register
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login" className="mt-0">
-              <Form {...loginForm}>
-                <form
-                  onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-                  className="space-y-4"
-                >
-                  <FormField
-                    control={loginForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your username"
-                            {...field}
-                            disabled={loginMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={loginForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="••••••••"
-                            {...field}
-                            disabled={loginMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="submit"
-                    className="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-                    disabled={loginMutation.isPending}
+                <TabsList className="grid w-full grid-cols-2 rounded-none">
+                  <TabsTrigger
+                    value="login"
+                    className="py-4 data-[state=active]:bg-white  data-[state=active]:text-purple-600 data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-purple-600 rounded-lg cursor-pointer"
                   >
-                    {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
-                  </Button>
-                </form>
-              </Form>
-            </TabsContent>
-
-            <TabsContent value="register" className="mt-0">
-              <Form {...registerForm}>
-                <form
-                  onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
-                  className="space-y-4"
-                >
-                  <FormField
-                    control={registerForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your full name"
-                            {...field}
-                            disabled={registerMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={registerForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Choose a username"
-                            {...field}
-                            disabled={registerMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={registerForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="Enter your email"
-                            {...field}
-                            disabled={registerMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={registerForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Create a password"
-                            {...field}
-                            disabled={registerMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={registerForm.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Confirm your password"
-                            {...field}
-                            disabled={registerMutation.isPending}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="acceptPolicy"
-                    render={({ field }) => (
-                      <FormItem className="flex items-start space-x-2">
-                        <FormControl>
-                          <input
-                            type="checkbox"
-                            className="mt-1"
-                            checked={field.value}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="text-sm">
-                          <FormLabel className="!mt-0 flex flex-wrap items-center whitespace-nowrap">
-                            I confirm that I have read, understood and accept
-                            the terms and conditions in the&nbsp;
-                            <a
-                              href="/privacy-policy"
-                              target="_blank"
-                              className="text-blue-600 underline"
-                            >
-                              Privacy Policy
-                            </a>
-                          </FormLabel>
-
-                          <FormMessage className="text-red-500" />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="submit"
-                    className="w-full mt-6 bg-blue-500 hover:bg-blue-600 cursor-pointer text-white"
-                    disabled={registerMutation.isPending}
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="register"
+                    className="py-4 data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-purple-600 rounded-lg cursor-pointer"
                   >
-                    {registerMutation.isPending
-                      ? 'Creating account...'
-                      : 'Create account'}
-                  </Button>
-                </form>
-              </Form>
-            </TabsContent>
-          </Tabs>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Register
+                  </TabsTrigger>
+                </TabsList>
 
-          <div className="mt-8 text-center text-sm text-gray-500">
+                <div className="p-6">
+                  <TabsContent value="login" className="mt-0">
+                    <Form {...loginForm}>
+                      <form
+                        onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+                        className="space-y-4"
+                      >
+                        <FormField
+                          control={loginForm.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <User className="h-4 w-4 text-gray-500" />
+                                Username
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter your username"
+                                  {...field}
+                                  disabled={loginMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={loginForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <div className="flex items-center justify-between">
+                                <FormLabel className="flex items-center gap-2">
+                                  <Key className="h-4 w-4 text-gray-500" />
+                                  Password
+                                </FormLabel>
+                                <a
+                                  href="#"
+                                  className="text-sm text-purple-600 hover:text-purple-800"
+                                >
+                                  Forgot password?
+                                </a>
+                              </div>
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="••••••••"
+                                  {...field}
+                                  disabled={loginMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <Button
+                          type="submit"
+                          className="w-full py-6 cursor-pointer mt-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                          disabled={loginMutation.isPending}
+                        >
+                          {loginMutation.isPending ? (
+                            <div className="flex items-center justify-center">
+                              <svg
+                                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                              Signing in...
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center">
+                              <LogIn className="h-5 w-5 mr-2" />
+                              Sign in
+                            </div>
+                          )}
+                        </Button>
+                      </form>
+                    </Form>
+                  </TabsContent>
+
+                  <TabsContent value="register" className="mt-0">
+                    <Form {...registerForm}>
+                      <form
+                        onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
+                        className="space-y-4"
+                      >
+                        <FormField
+                          control={registerForm.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <User className="h-4 w-4 text-gray-500" />
+                                Full Name
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter your full name"
+                                  {...field}
+                                  disabled={registerMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={registerForm.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <User className="h-4 w-4 text-gray-500" />
+                                Username
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Choose a username"
+                                  {...field}
+                                  disabled={registerMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={registerForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Mail className="h-4 w-4 text-gray-500" />
+                                Email
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="email"
+                                  placeholder="Enter your email"
+                                  {...field}
+                                  disabled={registerMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={registerForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Lock className="h-4 w-4 text-gray-500" />
+                                Password
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="Create a password"
+                                  {...field}
+                                  disabled={registerMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={registerForm.control}
+                          name="confirmPassword"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Lock className="h-4 w-4 text-gray-500" />
+                                Confirm Password
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="Confirm your password"
+                                  {...field}
+                                  disabled={registerMutation.isPending}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={registerForm.control}
+                          name="acceptPolicy"
+                          render={({ field }) => (
+                            <FormItem className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg mt-6">
+                              <div className="flex items-center h-5">
+                                <input
+                                  type="checkbox"
+                                  className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                  checked={field.value}
+                                  onChange={field.onChange}
+                                  id="acceptPolicy"
+                                />
+                              </div>
+                              <div className="flex-2 min-w-0">
+                                <FormLabel
+                                  htmlFor="acceptPolicy"
+                                  className="text-sm text-gray-700 font-normal !mt-0 flex flex-wrap items-center whitespace-nowrap"
+                                >
+                                  I confirm that I have read, understood and
+                                  accept the terms and conditions in the
+                                  <a
+                                    href="/privacy-policy"
+                                    target="_blank"
+                                    className="text-purple-600 underline hover:text-purple-800"
+                                    rel="noreferrer"
+                                  >
+                                    Privacy Policy
+                                  </a>
+                                </FormLabel>
+                                <FormMessage className="text-red-500 mt-1" />
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+
+                        <Button
+                          type="submit"
+                          className="w-full py-6 mt-6 cursor-pointer bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                          disabled={registerMutation.isPending}
+                        >
+                          {registerMutation.isPending ? (
+                            <div className="flex items-center justify-center ">
+                              <svg
+                                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                              Creating account...
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center ">
+                              <UserPlus className="h-5 w-5 mr-2" />
+                              Create account
+                            </div>
+                          )}
+                        </Button>
+                      </form>
+                    </Form>
+                  </TabsContent>
+                </div>
+              </Tabs>
+            </CardContent>
+          </Card>
+
+          <div className="mt-8 text-center rounded text-sm text-gray-500">
             <p>
               {activeTab === 'login'
                 ? "Don't have an account? "
@@ -434,20 +553,11 @@ export default function AuthPage() {
                 onClick={() =>
                   setActiveTab(activeTab === 'login' ? 'register' : 'login')
                 }
-                className="text-primary-600 hover:underline font-medium"
+                className="text-purple-600 hover:text-purple-800 font-medium "
               >
                 {activeTab === 'login' ? 'Register' : 'Log in'}
               </button>
             </p>
-            {/* <p className="mt-2">
-              Are you a solution provider?{" "}
-              <Link
-                href="/provider-registration"
-                className="text-primary-600 hover:underline font-medium"
-              >
-                Register as a provider
-              </Link>
-            </p> */}
           </div>
         </div>
       </div>

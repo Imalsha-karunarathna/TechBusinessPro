@@ -1,0 +1,1 @@
+ALTER TABLE "contact_requests" ALTER COLUMN "preferred_date" SET DATA TYPE varchar(30);

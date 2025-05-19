@@ -105,3 +105,23 @@ export interface Provider {
     created_at: string;
   }[];
 }
+export interface ContactRequest {
+  id?: number;
+  provider_id: number;
+  seeker_id: number;
+  seeker_name: string;
+  seeker_email: string;
+  requirements: string;
+  preferred_date: string;
+  preferred_time_slot: string;
+  urgency: 'low' | 'medium' | 'high';
+  phone?: string | null;
+  company_name?: string | null;
+  budget?: string | null;
+  additional_info?: string | null;
+  status: 'pending' | 'contacted' | 'completed' | 'rejected';
+  notes?: string | null;
+  read?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+}

@@ -3,6 +3,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useState } from 'react';
+import {
+  Briefcase,
+  Globe,
+  Users,
+  CheckCircle,
+  Building,
+  User,
+  Mail,
+  Phone,
+  Globe2,
+  Award,
+  FileText,
+  Clock,
+  MessageSquare,
+} from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -25,8 +41,13 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
-import { Briefcase, Globe, Users } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 const partnerFormSchema = z.object({
   partner_name: z
@@ -49,11 +70,9 @@ const partnerFormSchema = z.object({
   description: z.string().min(3, {
     message: 'Please provide your Company description',
   }),
-
   designation: z.string().min(3, {
     message: 'Please provide your Job Title.',
   }),
-
   experience_years: z.number().int().positive().optional(),
   reason: z
     .string()
@@ -71,6 +90,7 @@ export function PartnerSection() {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<PartnerFormValues>({
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
@@ -91,7 +111,7 @@ export function PartnerSection() {
   async function onSubmit(data: PartnerFormValues) {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/partner-application', {
+      const response = await fetch('/api/partner-applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,440 +137,543 @@ export function PartnerSection() {
         title: 'Submission Failed',
         description:
           'There was an error submitting your application. Please try again.',
-        //variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
   }
+
   return (
-    <div id="partner" className="py-16 bg-white">
+    <div id="partner" className="py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-          <div>
-            <h2 className="text-base text-primary-600 font-semibold tracking-wide uppercase">
-              Become a Partner
-            </h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Partner with Us & Unlock Global Growth
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              Tap into international markets and expand your reach with
-              strategic collaborations.
-            </p>
+        <div className="text-center mb-16">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800 mb-4">
+            Partnership Program
+          </span>
+          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+            Partner with Us &{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+              Unlock Global Growth
+            </span>
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+            Tap into international markets and expand your reach with strategic
+            collaborations.
+          </p>
+        </div>
 
-            <div className="mt-8 space-y-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-black">
-                    <Briefcase className="h-6 w-6" />
+        <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-start">
+          <div className="lg:col-span-5">
+            <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 transform transition-all hover:scale-105 duration-300">
+              <div className="space-y-6">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                      <Briefcase className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-xl font-bold text-gray-900">
+                      Showcase Your Expertise
+                    </h3>
+                    <p className="mt-2 text-gray-600">
+                      Display your solutions and capabilities to a targeted
+                      audience looking for your specific services.
+                    </p>
                   </div>
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Showcase Your Expertise
-                  </h3>
-                  <p className="mt-1 text-gray-500">
-                    Display your solutions and capabilities to a targeted
-                    audience looking for your specific services.
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-black">
-                    <Users className="h-6 w-6" />
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                      <Users className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-xl font-bold text-gray-900">
+                      Expand Your Client Base
+                    </h3>
+                    <p className="mt-2 text-gray-600">
+                      Reach new clients in Sri Lanka, Australia, and eventually
+                      around the globe as we expand.
+                    </p>
                   </div>
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Expand Your Client Base
-                  </h3>
-                  <p className="mt-1 text-gray-500">
-                    Reach new clients in Sri Lanka, Australia, and eventually
-                    around the globe as we expand.
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-md bg-primary-500 text-black">
-                    <Globe className="h-6 w-6" />
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                      <Globe className="h-6 w-6" />
+                    </div>
                   </div>
-                </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Access Premium Resources
-                  </h3>
-                  <p className="mt-1 text-gray-500">
-                    Get exclusive tools, insights, and support to help grow your
-                    business and deliver better solutions.
-                  </p>
+                  <div className="ml-4">
+                    <h3 className="text-xl font-bold text-gray-900">
+                      Access Premium Resources
+                    </h3>
+                    <p className="mt-2 text-gray-600">
+                      Get exclusive tools, insights, and support to help grow
+                      your business and deliver better solutions.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 lg:mt-0 bg-gray-50 rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Expression of Interest
-            </h3>
-            {isSubmitted ? (
-              <div className="text-center py-10">
-                <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-                <h4 className="text-xl font-bold mb-2">
-                  Thank You for Your Interest!
-                </h4>
-                <p className="text-gray-600 mb-4">
-                  Your expression of interest has been received. We &apos;ll
-                  review your application and get back to you soon.
-                </p>
-                <p className="text-gray-500 text-sm">
-                  A confirmation email has been sent to your provided email
-                  address.
-                </p>
-              </div>
-            ) : (
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4"
-                >
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="partner_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Partner Name</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
+          <div className="lg:col-span-7 mt-10 lg:mt-0">
+            <Card className="border-none shadow-xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8 rounded-xl">
+                <CardTitle className="text-2xl font-bold">
+                  Expression of Interest
+                </CardTitle>
+                <CardDescription className="text-white text-opacity-90">
+                  Fill out the form below to join our partner network
+                </CardDescription>
+              </CardHeader>
 
-                    <FormField
-                      control={form.control}
-                      name="organization_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Organization Name</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
+              <CardContent className="p-8">
+                {isSubmitted ? (
+                  <div className="text-center py-10">
+                    <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-green-100 text-green-600 mb-6">
+                      <CheckCircle className="h-10 w-10" />
+                    </div>
+                    <h4 className="text-2xl font-bold mb-4">
+                      Thank You for Your Interest!
+                    </h4>
+                    <p className="text-gray-600 mb-6 text-lg">
+                      Your expression of interest has been received. We&apos;ll
+                      review your application and get back to you soon.
+                    </p>
                   </div>
-
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contact Email</FormLabel>
-                          <FormControl>
-                            <Input type="email" {...field} />
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contact Phone Number</FormLabel>
-                          <FormControl>
-                            <Input type="tel" {...field} />
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="website"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Website</FormLabel>
-                        <FormControl>
-                          <Input type="url" {...field} />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="expertise"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Areas of Expertise</FormLabel>
-                        <div className="relative">
-                          <Select
-                            onValueChange={(value) => {
-                              // Convert single selection to array if it's the first selection
-                              const currentValues = Array.isArray(field.value)
-                                ? field.value
-                                : field.value
-                                  ? [field.value]
-                                  : [];
-
-                              // If value is already selected, remove it, otherwise add it
-                              const newValues = currentValues.includes(value)
-                                ? currentValues.filter((v) => v !== value)
-                                : [...currentValues, value];
-
-                              field.onChange(newValues);
-                            }}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="text-gray-400">
-                                <SelectValue
-                                  className="placeholder:text-muted-foreground"
-                                  placeholder={
-                                    Array.isArray(field.value) &&
-                                    field.value.length > 0
-                                      ? `${field.value.length} area${field.value.length > 1 ? 's' : ''} selected`
-                                      : 'Select expertise areas'
-                                  }
+                ) : (
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="partner_name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <User className="h-4 w-4 text-gray-500" />
+                                Partner Name
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="Your full name"
                                 />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="max-h-[600px] bg-white">
-                              <SelectItem
-                                value="IT Security"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                IT Security
-                              </SelectItem>
-                              <SelectItem
-                                value="CRM Implementation"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                CRM Implementation
-                              </SelectItem>
-                              <SelectItem
-                                value="Web Development"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                Web Development
-                              </SelectItem>
-                              <SelectItem
-                                value="Business Applications"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                Business Applications
-                              </SelectItem>
-                              <SelectItem
-                                value="Cloud Computing"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                Cloud Computing
-                              </SelectItem>
-                              <SelectItem
-                                value="Data Analytics"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                Data Analytics
-                              </SelectItem>
-                              <SelectItem
-                                value="Artificial Intelligence"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                Artificial Intelligence
-                              </SelectItem>
-                              <SelectItem
-                                value="Other"
-                                className="hover:bg-blue-500 cursor-pointer"
-                              >
-                                Other
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        {Array.isArray(field.value) &&
-                          field.value.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mt-2">
-                              {field.value.map((item) => (
-                                <Badge
-                                  key={item}
-                                  variant="secondary"
-                                  className="px-2 py-1 bg-blue-100 text-blue-800"
-                                >
-                                  {item}
-                                  <button
-                                    type="button"
-                                    className="ml-1 text-blue-600 hover:text-blue-800"
-                                    onClick={() => {
-                                      if (Array.isArray(field.value)) {
-                                        field.onChange(
-                                          field.value.filter((v) => v !== item),
-                                        );
-                                      }
-                                    }}
-                                  >
-                                    ×
-                                  </button>
-                                </Badge>
-                              ))}
-                            </div>
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
                           )}
-                        <FormDescription>
-                          Select all areas that apply to your expertise
-                        </FormDescription>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Company Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            rows={3}
-                            {...field}
-                            placeholder="Describe your company here"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="designation"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Designation</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            rows={3}
-                            {...field}
-                            placeholder="Describe your job here"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="experience_years"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Years of Experience</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="0"
-                            {...field}
-                            onChange={(e) =>
-                              field.onChange(
-                                e.target.value
-                                  ? Number.parseInt(e.target.value)
-                                  : undefined,
-                              )
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
+                        />
 
-                  <FormField
-                    control={form.control}
-                    name="reason"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Why Partner with Tech Mista? (100 words max)
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea rows={3} {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Briefly explain why you want to partner with us
-                        </FormDescription>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="accept_privacy"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="flex items-start space-x-2">
-                          <input
-                            type="checkbox"
-                            checked={field.value ?? false}
-                            onChange={field.onChange}
-                            id="accept_privacy"
-                            className="mt-1"
-                          />
-                          <FormLabel
-                            htmlFor="accept_privacy"
-                            className="text-sm text-gray-700 flex flex-wrap gap-1"
-                          >
-                            I confirm that I have read, understood and accept
-                            the terms and conditions in the&nbsp;
-                            <a
-                              href="/privacy-policy"
-                              target="_blank"
-                              className="text-blue-600 underline"
+                        <FormField
+                          control={form.control}
+                          name="organization_name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Building className="h-4 w-4 text-gray-500" />
+                                Organization Name
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="Your company name"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Mail className="h-4 w-4 text-gray-500" />
+                                Contact Email
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="email"
+                                  {...field}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="you@company.com"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Phone className="h-4 w-4 text-gray-500" />
+                                Contact Phone Number
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="tel"
+                                  {...field}
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="+1 (555) 123-4567"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="website"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="flex items-center gap-2">
+                              <Globe2 className="h-4 w-4 text-gray-500" />
+                              Website
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="url"
+                                {...field}
+                                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                placeholder="https://yourcompany.com"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-500" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="expertise"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="flex items-center gap-2">
+                              <Award className="h-4 w-4 text-gray-500" />
+                              Areas of Expertise
+                            </FormLabel>
+                            <div className="relative">
+                              <Select
+                                onValueChange={(value) => {
+                                  // Convert single selection to array if it's the first selection
+                                  const currentValues = Array.isArray(
+                                    field.value,
+                                  )
+                                    ? field.value
+                                    : field.value
+                                      ? [field.value]
+                                      : [];
+
+                                  // If value is already selected, remove it, otherwise add it
+                                  const newValues = currentValues.includes(
+                                    value,
+                                  )
+                                    ? currentValues.filter((v) => v !== value)
+                                    : [...currentValues, value];
+
+                                  field.onChange(newValues);
+                                }}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+                                    <SelectValue
+                                      placeholder={
+                                        Array.isArray(field.value) &&
+                                        field.value.length > 0
+                                          ? `${field.value.length} area${field.value.length > 1 ? 's' : ''} selected`
+                                          : 'Select expertise areas'
+                                      }
+                                    />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-[600px] bg-white">
+                                  <SelectItem
+                                    value="IT Security"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    IT Security
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="CRM Implementation"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    CRM Implementation
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="Web Development"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    Web Development
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="Business Applications"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    Business Applications
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="Cloud Computing"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    Cloud Computing
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="Data Analytics"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    Data Analytics
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="Artificial Intelligence"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    Artificial Intelligence
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="Other"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    Other
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            {Array.isArray(field.value) &&
+                              field.value.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  {field.value.map((item) => (
+                                    <Badge
+                                      key={item}
+                                      variant="secondary"
+                                      className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full"
+                                    >
+                                      {item}
+                                      <button
+                                        type="button"
+                                        className="ml-2 text-purple-600 hover:text-purple-800"
+                                        onClick={() => {
+                                          if (Array.isArray(field.value)) {
+                                            field.onChange(
+                                              field.value.filter(
+                                                (v) => v !== item,
+                                              ),
+                                            );
+                                          }
+                                        }}
+                                      >
+                                        ×
+                                      </button>
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+                            <FormDescription className="text-gray-500 text-sm">
+                              Select all areas that apply to your expertise
+                            </FormDescription>
+                            <FormMessage className="text-red-500" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="description"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-gray-500" />
+                                Company Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  rows={3}
+                                  {...field}
+                                  placeholder="Tell us about your company"
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="designation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <User className="h-4 w-4 text-gray-500" />
+                                Designation
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  rows={3}
+                                  {...field}
+                                  placeholder="Your role in the company"
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="experience_years"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 text-gray-500" />
+                                Years of Experience
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  {...field}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      e.target.value
+                                        ? Number.parseInt(e.target.value)
+                                        : undefined,
+                                    )
+                                  }
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="reason"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <MessageSquare className="h-4 w-4 text-gray-500" />
+                                Why Partner with Tech Mista?
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  rows={3}
+                                  {...field}
+                                  placeholder="100 words max"
+                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                />
+                              </FormControl>
+                              <FormDescription className="text-gray-500 text-sm">
+                                Briefly explain why you want to partner with us
+                              </FormDescription>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="accept_privacy"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg">
+                              <div className="flex items-center h-5">
+                                <input
+                                  type="checkbox"
+                                  checked={field.value ?? false}
+                                  onChange={field.onChange}
+                                  id="accept_privacy"
+                                  className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <FormLabel
+                                  htmlFor="accept_privacy"
+                                  className="text-sm text-gray-700 flex flex-wrap gap-1"
+                                >
+                                  I confirm that I have read, understood and
+                                  accept the terms and conditions in the{' '}
+                                  <a
+                                    href="/privacy-policy"
+                                    target="_blank"
+                                    className="text-purple-600 underline hover:text-purple-800"
+                                    rel="noreferrer"
+                                  >
+                                    Privacy Policy
+                                  </a>
+                                  of Tech Mista
+                                </FormLabel>
+                                <FormMessage className="text-red-500 mt-1" />
+                              </div>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <Button
+                        type="submit"
+                        className="w-full cursor-pointer py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <div className="flex items-center justify-center">
+                            <svg
+                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
                             >
-                              Privacy Policy
-                            </a>
-                            &nbsp;of Tech Mista
-                          </FormLabel>
-                        </div>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-blue-800 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
-                  </Button>
-                </form>
-              </Form>
-            )}
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            Submitting...
+                          </div>
+                        ) : (
+                          'Submit Application'
+                        )}
+                      </Button>
+                    </form>
+                  </Form>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
