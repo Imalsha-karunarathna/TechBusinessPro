@@ -1,14 +1,10 @@
 'use client';
 
 import { useAuth } from '@/lib/auth';
-import { Bell, ChevronDown, User } from 'lucide-react';
+import { Bell, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
@@ -20,11 +16,11 @@ interface ProviderHeaderProps {
 }
 
 export function ProviderHeader({ providerData }: ProviderHeaderProps) {
-  const { user, logoutMutation } = useAuth();
+  const { user } = useAuth();
 
-  const handleLogout = () => {
-    logoutMutation.mutate();
-  };
+  // const handleLogout = () => {
+  //   logoutMutation.mutate();
+  // };
 
   return (
     <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
@@ -67,10 +63,10 @@ export function ProviderHeader({ providerData }: ProviderHeaderProps) {
                 <User className="h-5 w-5 text-gray-600" />
               </div>
               <span className="text-sm font-medium">{user?.username}</span>
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              {/* <ChevronDown className="h-4 w-4 text-gray-500" /> */}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          {/* <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile Settings</DropdownMenuItem>
@@ -80,7 +76,7 @@ export function ProviderHeader({ providerData }: ProviderHeaderProps) {
             <DropdownMenuItem onClick={handleLogout} className="text-red-600">
               Log out
             </DropdownMenuItem>
-          </DropdownMenuContent>
+          </DropdownMenuContent> */}
         </DropdownMenu>
       </div>
     </header>

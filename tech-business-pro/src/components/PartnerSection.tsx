@@ -91,7 +91,7 @@ export function PartnerSection() {
   async function onSubmit(data: PartnerFormValues) {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/partner-applications', {
+      const response = await fetch('/api/partner-application', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
