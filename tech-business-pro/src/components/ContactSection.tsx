@@ -127,12 +127,12 @@ const ContactSection = () => {
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800 mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
             Get in Touch
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
             Let Tech Mista{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
               Assist You
             </span>
           </h2>
@@ -145,7 +145,7 @@ const ContactSection = () => {
         <div className="mt-12">
           <div className="lg:col-span-7">
             <Card className="border-none shadow-xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8 rounded-xl">
+              <CardHeader className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-8 rounded-xl">
                 <CardTitle className="text-2xl font-bold">Contact Us</CardTitle>
                 <CardDescription className="text-white text-opacity-90">
                   Fill out the form below and we&apos;ll get back to you as soon
@@ -170,8 +170,8 @@ const ContactSection = () => {
                     {aiResponse && (
                       <div className="bg-purple-50 rounded-lg border border-purple-200 p-6 text-left">
                         <div className="flex items-center mb-3">
-                          <Bot className="h-5 w-5 mr-2 text-purple-600" />
-                          <h5 className="font-semibold text-purple-800">
+                          <Bot className="h-5 w-5 mr-2 text-[#3069FE]" />
+                          <h5 className="font-semibold text-[#3069FE]">
                             AI-Generated Initial Response:
                           </h5>
                         </div>
@@ -199,7 +199,7 @@ const ContactSection = () => {
                                 <Input
                                   required
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="Your full name"
                                 />
                               </FormControl>
@@ -222,7 +222,7 @@ const ContactSection = () => {
                                   type="email"
                                   required
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="you@example.com"
                                 />
                               </FormControl>
@@ -244,7 +244,7 @@ const ContactSection = () => {
                                 <Input
                                   type="tel"
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="+1 (555) 123-4567"
                                 />
                               </FormControl>
@@ -268,7 +268,7 @@ const ContactSection = () => {
                                 required
                               >
                                 <FormControl>
-                                  <SelectTrigger className="border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+                                  <SelectTrigger className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]">
                                     <SelectValue placeholder="Select inquiry type" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -303,7 +303,7 @@ const ContactSection = () => {
                               <Input
                                 required
                                 {...field}
-                                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 placeholder="Brief description of your inquiry"
                               />
                             </FormControl>
@@ -327,7 +327,7 @@ const ContactSection = () => {
                                 required
                                 {...field}
                                 placeholder="Please describe your inquiry in detail"
-                                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
                               />
                             </FormControl>
                             <FormMessage className="text-red-500" />
@@ -350,7 +350,7 @@ const ContactSection = () => {
                                 defaultValue={field.value}
                               >
                                 <FormControl>
-                                  <SelectTrigger className="border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+                                  <SelectTrigger className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]">
                                     <SelectValue placeholder="Select solution type" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -386,7 +386,7 @@ const ContactSection = () => {
                               defaultValue={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+                                <SelectTrigger className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]">
                                   <SelectValue placeholder="Select contact method" />
                                 </SelectTrigger>
                               </FormControl>
@@ -409,7 +409,7 @@ const ContactSection = () => {
 
                       <Button
                         type="submit"
-                        className="w-full py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                        className="w-full py-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200"
                         disabled={mutation.isPending}
                       >
                         {mutation.isPending ? (

@@ -12,12 +12,12 @@ const HowItWorksSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800 mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
             Process
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
             How Tech Mista{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
               Works
             </span>
           </h2>
@@ -60,7 +60,7 @@ const HowItWorksSection = () => {
                   className="relative mb-16 lg:mb-0 transform transition-all duration-500 hover:scale-105 h-full flex flex-col"
                 >
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="h-20 w-20 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold flex items-center justify-center text-2xl shadow-lg">
+                    <div className="h-20 w-20 rounded-full bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white font-bold flex items-center justify-center text-2xl shadow-lg">
                       {step}
                     </div>
                   </div>

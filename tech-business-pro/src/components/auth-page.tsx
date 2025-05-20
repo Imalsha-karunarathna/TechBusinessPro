@@ -25,10 +25,12 @@ import {
   Key,
   UserPlus,
   LogIn,
+  Home,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -181,7 +183,16 @@ export default function AuthPage() {
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center h-16 w-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full mb-6">
+            <div className="mb-4 text-center">
+              <Link
+                href="/"
+                className="inline-flex items-center text-sm text-[#3069FE] hover:underline"
+              >
+                <Home className="h-4 w-4 mr-2" />
+                Back to Home
+              </Link>
+            </div>
+            <div className="inline-flex items-center justify-center h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full mb-6">
               <User className="h-8 w-8 text-white" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900">
@@ -230,14 +241,14 @@ export default function AuthPage() {
                 <TabsList className="grid w-full grid-cols-2 rounded-none">
                   <TabsTrigger
                     value="login"
-                    className="py-4 data-[state=active]:bg-white  data-[state=active]:text-purple-600 data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-purple-600 rounded-lg cursor-pointer"
+                    className="py-4 data-[state=active]:bg-white  data-[state=active]:text-[#3069FE] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#3069FE] rounded-lg cursor-pointer"
                   >
                     <LogIn className="h-4 w-4 mr-2" />
                     Login
                   </TabsTrigger>
                   <TabsTrigger
                     value="register"
-                    className="py-4 data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-purple-600 rounded-lg cursor-pointer"
+                    className="py-4 data-[state=active]:bg-white data-[state=active]:text-[#3069FE] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#3069FE] rounded-lg cursor-pointer"
                   >
                     <UserPlus className="h-4 w-4 mr-2" />
                     Register
@@ -265,7 +276,7 @@ export default function AuthPage() {
                                   placeholder="Enter your username"
                                   {...field}
                                   disabled={loginMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -285,7 +296,7 @@ export default function AuthPage() {
                                 </FormLabel>
                                 <a
                                   href="#"
-                                  className="text-sm text-purple-600 hover:text-purple-800"
+                                  className="text-sm text-[#3069FE] hover:text-[#3069FE]"
                                 >
                                   Forgot password?
                                 </a>
@@ -296,7 +307,7 @@ export default function AuthPage() {
                                   placeholder="••••••••"
                                   {...field}
                                   disabled={loginMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -306,7 +317,7 @@ export default function AuthPage() {
 
                         <Button
                           type="submit"
-                          className="w-full py-6 cursor-pointer mt-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                          className="w-full py-6 cursor-pointer mt-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200"
                           disabled={loginMutation.isPending}
                         >
                           {loginMutation.isPending ? (
@@ -364,7 +375,7 @@ export default function AuthPage() {
                                   placeholder="Enter your full name"
                                   {...field}
                                   disabled={registerMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -386,7 +397,7 @@ export default function AuthPage() {
                                   placeholder="Choose a username"
                                   {...field}
                                   disabled={registerMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -409,7 +420,7 @@ export default function AuthPage() {
                                   placeholder="Enter your email"
                                   {...field}
                                   disabled={registerMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -432,7 +443,7 @@ export default function AuthPage() {
                                   placeholder="Create a password"
                                   {...field}
                                   disabled={registerMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -455,7 +466,7 @@ export default function AuthPage() {
                                   placeholder="Confirm your password"
                                   {...field}
                                   disabled={registerMutation.isPending}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -471,7 +482,7 @@ export default function AuthPage() {
                               <div className="flex items-center h-5">
                                 <input
                                   type="checkbox"
-                                  className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                  className="h-4 w-4 text-[#3069FE] border-gray-300 rounded focus:ring-[#3069FE]"
                                   checked={field.value}
                                   onChange={field.onChange}
                                   id="acceptPolicy"
@@ -487,7 +498,7 @@ export default function AuthPage() {
                                   <a
                                     href="/privacy-policy"
                                     target="_blank"
-                                    className="text-purple-600 underline hover:text-purple-800"
+                                    className="text-[#3069FE] underline hover:text-[#3069FE]"
                                     rel="noreferrer"
                                   >
                                     Privacy Policy
@@ -501,7 +512,7 @@ export default function AuthPage() {
 
                         <Button
                           type="submit"
-                          className="w-full py-6 mt-6 cursor-pointer bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                          className="w-full py-6 mt-6 cursor-pointer bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200"
                           disabled={registerMutation.isPending}
                         >
                           {registerMutation.isPending ? (
@@ -553,7 +564,7 @@ export default function AuthPage() {
                 onClick={() =>
                   setActiveTab(activeTab === 'login' ? 'register' : 'login')
                 }
-                className="text-purple-600 hover:text-purple-800 font-medium "
+                className="text-[#3069FE] hover:text-[#3069FE] font-medium "
               >
                 {activeTab === 'login' ? 'Register' : 'Log in'}
               </button>

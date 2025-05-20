@@ -5,38 +5,37 @@ import { Globe, Users, Briefcase } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <div className="pt-16">
-      <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-blue-700 text-white">
+    <div className="relative pt-16 overflow-hidden">
+      <div className="bg-gradient-to-r from-[#3069FE] via-[#42C3EE] to-[#3069FE] text-white relative z-0">
         {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10 z-0">
           <svg
-            className="h-full w-full"
+            className="w-full h-full"
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
-            <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#grid)" />
+            <defs>
+              <pattern
+                id="grid"
+                width="10"
+                height="10"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 10 0 L 0 0 0 10"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="0.5"
+                />
+              </pattern>
+            </defs>
           </svg>
-          <defs>
-            <pattern
-              id="grid"
-              width="10"
-              height="10"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M 10 0 L 0 0 0 10"
-                fill="none"
-                stroke="white"
-                strokeWidth="0.5"
-              />
-            </pattern>
-          </defs>
         </div>
 
-        {/* Floating elements */}
-
-        <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8  z-10">
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Text section */}
             <div className="text-center lg:text-left">
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
                 Building{' '}
@@ -45,23 +44,22 @@ const HeroSection = () => {
                 </span>{' '}
                 Partnerships
               </h1>
-
               <p className="mt-6 max-w-md mx-auto lg:mx-0 text-xl text-white text-opacity-90 sm:text-2xl">
                 Transforming Vision into Business Success
               </p>
 
               <div className="mt-8 space-y-4 sm:space-y-0 sm:flex sm:flex-row sm:justify-center lg:justify-start sm:gap-4">
                 <Link
-                  href="#solutions"
-                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-gray-900 bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                  href="/#solutions"
+                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-[#3069FE] bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
                 >
                   <Globe className="h-5 w-5 mr-2" />
                   Find Solutions
                 </Link>
 
                 <Link
-                  href="#partner"
-                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-gray-900 bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                  href="/#partner"
+                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-[#3069FE] bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
                 >
                   <Users className="h-5 w-5 mr-2" />
                   Be a Partner
@@ -69,44 +67,22 @@ const HeroSection = () => {
 
                 <Link
                   href="/agent/register-agent"
-                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-gray-900 bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-[#3069FE] bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
                 >
                   <Briefcase className="h-5 w-5 mr-2" />
                   Be an Agent
                 </Link>
               </div>
-
-              {/* <div className="mt-12 hidden sm:flex items-center">
-                <div className="flex -space-x-2 mr-4">
-                  <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                    src="/placeholder.svg?height=40&width=40"
-                    alt="User"
-                  />
-                  <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                    src="/placeholder.svg?height=40&width=40"
-                    alt="User"
-                  />
-                  <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                    src="/placeholder.svg?height=40&width=40"
-                    alt="User"
-                  />
-                </div>
-              </div> */}
             </div>
 
-            {/* Image with enhanced styling */}
+            {/* Image section */}
             <div className="hidden lg:block">
               <div className="relative">
-                <div className="absolute -inset-4 bg-white bg-opacity-10 rounded-2xl blur-m"></div>
+                <div className="absolute -inset-4 bg-white bg-opacity-10 rounded-2xl blur-xs"></div>
                 <img
                   className="relative h-96 w-full object-cover rounded-xl shadow-2xl transform transition-all duration-500 hover:scale-105"
                   src="https://images.pexels.com/photos/3184432/pexels-photo-3184432.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                   alt="Global business connections"
-                  width={800}
-                  height={600}
                 />
               </div>
             </div>
@@ -114,7 +90,7 @@ const HeroSection = () => {
         </div>
 
         {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
+        <div className="absolute bottom-0 left-0 right-0 z-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1440 120"

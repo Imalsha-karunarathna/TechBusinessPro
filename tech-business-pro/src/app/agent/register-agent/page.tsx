@@ -87,7 +87,7 @@ export default function RegisterAgentPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md">
         <Card className="border-none shadow-xl bg-white overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-xl">
+          <CardHeader className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-6 rounded-xl">
             <div className="flex justify-center mb-4">
               <div className="h-16 w-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                 <User className="h-8 w-8 text-gray-800" />
@@ -129,7 +129,7 @@ export default function RegisterAgentPage() {
                     required
                     value={formData.username}
                     onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-[#3069FE] focus:ring-[#3069FE]"
                     placeholder="Username"
                   />
                 </div>
@@ -147,7 +147,7 @@ export default function RegisterAgentPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-[#3069FE] focus:ring-[#3069FE]"
                     placeholder="Email address"
                   />
                 </div>
@@ -165,7 +165,7 @@ export default function RegisterAgentPage() {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-[#3069FE] focus:ring-[#3069FE]"
                     placeholder="Password"
                   />
                 </div>
@@ -183,7 +183,7 @@ export default function RegisterAgentPage() {
                     required
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-purple-300"
+                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-[#3069FE]"
                     placeholder="Confirm password"
                   />
                 </div>
@@ -192,7 +192,7 @@ export default function RegisterAgentPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200 flex items-center justify-center gap-2"
+                className="w-full py-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {loading ? 'Processing...' : 'Register as Agent'}
                 {!loading && <ArrowRight className="h-4 w-4" />}
@@ -205,7 +205,7 @@ export default function RegisterAgentPage() {
               Already have an agent account?{' '}
               <Link
                 href="/agent/login"
-                className="font-medium text-purple-600 hover:text-purple-500 transition-colors"
+                className="font-medium text-[#3069FE] hover:text-[#3069FE] transition-colors"
               >
                 Login
               </Link>
@@ -216,11 +216,11 @@ export default function RegisterAgentPage() {
         <div className="mt-6 text-center text-sm text-gray-500">
           <p>
             By registering, you agree to our{' '}
-            <Link href="/terms" className="text-purple-600 hover:underline">
+            <Link href="/terms" className="text-[#3069FE] hover:underline">
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link href="/privacy" className="text-purple-600 hover:underline">
+            <Link href="/privacy" className="text-[#3069FE] hover:underline">
               Privacy Policy
             </Link>
           </p>

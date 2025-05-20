@@ -147,12 +147,12 @@ export function PartnerSection() {
     <div id="partner" className="py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800 mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
             Partnership Program
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
             Partner with Us &{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
               Unlock Global Growth
             </span>
           </h2>
@@ -168,7 +168,7 @@ export function PartnerSection() {
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white">
                       <Briefcase className="h-6 w-6" />
                     </div>
                   </div>
@@ -185,7 +185,7 @@ export function PartnerSection() {
 
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white">
                       <Users className="h-6 w-6" />
                     </div>
                   </div>
@@ -202,7 +202,7 @@ export function PartnerSection() {
 
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white">
                       <Globe className="h-6 w-6" />
                     </div>
                   </div>
@@ -222,7 +222,7 @@ export function PartnerSection() {
 
           <div className="lg:col-span-7 mt-10 lg:mt-0">
             <Card className="border-none shadow-xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8 rounded-xl">
+              <CardHeader className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-8 rounded-xl">
                 <CardTitle className="text-2xl font-bold">
                   Expression of Interest
                 </CardTitle>
@@ -264,7 +264,7 @@ export function PartnerSection() {
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="Your full name"
                                 />
                               </FormControl>
@@ -285,7 +285,7 @@ export function PartnerSection() {
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="Your company name"
                                 />
                               </FormControl>
@@ -309,7 +309,7 @@ export function PartnerSection() {
                                 <Input
                                   type="email"
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="you@company.com"
                                 />
                               </FormControl>
@@ -331,7 +331,7 @@ export function PartnerSection() {
                                 <Input
                                   type="tel"
                                   {...field}
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="+1 (555) 123-4567"
                                 />
                               </FormControl>
@@ -354,7 +354,7 @@ export function PartnerSection() {
                               <Input
                                 type="url"
                                 {...field}
-                                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 placeholder="https://yourcompany.com"
                               />
                             </FormControl>
@@ -395,7 +395,7 @@ export function PartnerSection() {
                                 }}
                               >
                                 <FormControl>
-                                  <SelectTrigger className="border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+                                  <SelectTrigger className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]">
                                     <SelectValue
                                       placeholder={
                                         Array.isArray(field.value) &&
@@ -465,12 +465,12 @@ export function PartnerSection() {
                                     <Badge
                                       key={item}
                                       variant="secondary"
-                                      className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full"
+                                      className="px-3 py-1 bg-purple-100 text-[#3069FE] rounded-full"
                                     >
                                       {item}
                                       <button
                                         type="button"
-                                        className="ml-2 text-purple-600 hover:text-purple-800"
+                                        className="ml-2 text-[#3069FE] hover:text-[#3069FE]"
                                         onClick={() => {
                                           if (Array.isArray(field.value)) {
                                             field.onChange(
@@ -510,7 +510,7 @@ export function PartnerSection() {
                                   rows={3}
                                   {...field}
                                   placeholder="Tell us about your company"
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -532,7 +532,7 @@ export function PartnerSection() {
                                   rows={3}
                                   {...field}
                                   placeholder="Your role in the company"
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -563,7 +563,7 @@ export function PartnerSection() {
                                         : undefined,
                                     )
                                   }
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -585,7 +585,7 @@ export function PartnerSection() {
                                   rows={3}
                                   {...field}
                                   placeholder="100 words max"
-                                  className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                  className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
                                 />
                               </FormControl>
                               <FormDescription className="text-gray-500 text-sm">
@@ -609,7 +609,7 @@ export function PartnerSection() {
                                   checked={field.value ?? false}
                                   onChange={field.onChange}
                                   id="accept_privacy"
-                                  className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                  className="h-4 w-4 text-[#3069FE] border-gray-300 rounded focus:ring-[#3069FE]"
                                 />
                               </div>
                               <div className="flex-1 min-w-0">
@@ -622,7 +622,7 @@ export function PartnerSection() {
                                   <a
                                     href="/privacy-policy"
                                     target="_blank"
-                                    className="text-purple-600 underline hover:text-purple-800"
+                                    className="text-[#3069FE] underline hover:text-[#3069FE]"
                                     rel="noreferrer"
                                   >
                                     Privacy Policy
@@ -638,7 +638,7 @@ export function PartnerSection() {
 
                       <Button
                         type="submit"
-                        className="w-full cursor-pointer py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-200"
+                        className="w-full cursor-pointer py-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200"
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
