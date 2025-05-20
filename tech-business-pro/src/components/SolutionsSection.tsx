@@ -149,12 +149,12 @@ const SolutionsSection = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800 mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
             Solution Marketplace
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
             Find Solutions to{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
               Accelerate
             </span>{' '}
             Your Business
@@ -244,7 +244,7 @@ const SolutionsSection = () => {
                           key={expertise}
                           className={`px-5 py-2 rounded-lg cursor-pointer font-medium text-sm transition-all duration-300 ${
                             selectedExpertise === expertise
-                              ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md transform scale-105'
+                              ? 'bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white shadow-md transform scale-105'
                               : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shadow-sm'
                           }`}
                           onClick={() => handleExpertiseChange(expertise)}
@@ -304,7 +304,7 @@ const SolutionsSection = () => {
                               className="overflow-hidden border-none shadow-xl hover:shadow-2xl transition-all duration-300 group"
                             >
                               <CardContent className="p-0">
-                                <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 relative rounded-lg">
+                                <div className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] p-6 relative rounded-lg">
                                   {/* Verified badge */}
                                   {provider.verification_status ===
                                     'approved' && (
@@ -373,7 +373,7 @@ const SolutionsSection = () => {
                                             <Badge
                                               key={index}
                                               variant="outline"
-                                              className="bg-purple-50 text-purple-700 border-purple-200 px-3 py-1 rounded-full"
+                                              className="bg-purple-50 text-[#3069FE] border-purple-200 px-3 py-1 rounded-full"
                                             >
                                               {skill}
                                             </Badge>
@@ -480,7 +480,7 @@ const SolutionsSection = () => {
         ) : (
           <div className="mt-16 text-center">
             <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-10 rounded-xl border border-purple-100 max-w-2xl mx-auto shadow-xl">
-              <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white mb-6">
+              <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white mb-6">
                 <LogIn className="h-10 w-10" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
@@ -492,7 +492,7 @@ const SolutionsSection = () => {
               </p>
               <Button
                 onClick={handleLogin}
-                className="px-8 py-6 gap-2 text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+                className="px-8 py-6 gap-2 text-white bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
               >
                 <LogIn className="h-5 w-5 mr-2" />
                 Log in to view solutions

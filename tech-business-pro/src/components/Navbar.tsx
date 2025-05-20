@@ -1,11 +1,12 @@
 'use client';
 
-import { Search, LogIn, LogOut, User } from 'lucide-react';
+import { LogIn, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -35,41 +36,42 @@ const Navbar = () => {
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
-                  <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
-                    <span className="text-white bg-blue-500 rounded-lg p-1 font-bold text-lg">
-                      TM
-                    </span>
+                  <div className="h-20 w-20 rounded-md flex items-center justify-center overflow-hidden">
+                    <Image
+                      src="/TechMista_logo.svg"
+                      alt="Tech Mista Logo"
+                      width={100}
+                      height={60}
+                      className="object-contain"
+                    />
                   </div>
-                  <span className="ml-2 text-xl font-semibold text-gray-800">
-                    Tech Mista
-                  </span>
                 </div>
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link href="/">
                 <span
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  className={`border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                     isActive('/')
-                      ? 'border-primary-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                      ? 'border-primary-500 text-[#3069FE]'
+                      : 'border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
                   Home
                 </span>
               </Link>
               <Link href="/#about">
-                <span className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   About
                 </span>
               </Link>
               <Link href="/#solutions">
-                <span className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Solutions
                 </span>
               </Link>
               <Link href="/#partner">
-                <span className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Partners
                 </span>
               </Link>
@@ -79,18 +81,18 @@ const Navbar = () => {
                 </span>
               </Link> */}
               <Link href="/#contact">
-                <span className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Contact
                 </span>
               </Link>
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <div className="ml-3 relative">
+            {/* <div className="ml-3 relative">
               <button className="text-gray-500 hover:text-gray-700 px-3 py-2">
                 <Search className="h-6 w-6" />
               </button>
-            </div>
+            </div> */}
 
             {user ? (
               <div className="ml-3 flex items-center space-x-2">
@@ -105,7 +107,7 @@ const Navbar = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="flex items-center text-gray-500"
+                  className="px-8 py-4 gap-2 text-white bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
                   onClick={handleLogout}
                   disabled={logoutMutation.isPending}
                 >
@@ -118,7 +120,7 @@ const Navbar = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="px-8 py-4 gap-2 text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  className="px-8 py-4 gap-2 text-white bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
                 >
                   <LogIn className="h-4 w-4 mr-1" />
                   Log in
