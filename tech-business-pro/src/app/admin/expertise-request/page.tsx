@@ -6,8 +6,8 @@ export default async function ExpertiseRequestsPage() {
   const pendingRequests = result.success && result.data ? result.data : [];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <div className="flex-1 p-8">
+    <div className="flex min-h-screen bg-gray-100 p-8 rounded-lg">
+      <div className="flex-1">
         <div className="mb-8">
           <h1 className="text-2xl font-bold">Expertise Approval Requests</h1>
           <p className="text-gray-500">

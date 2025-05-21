@@ -148,10 +148,7 @@ export function PartnerSection() {
             Partnership Program
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Partner with Us &{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
-              Unlock Global Growth
-            </span>
+            Partner with Us & Unlock Global Growth
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Tap into international markets and expand your reach with strategic
@@ -159,9 +156,9 @@ export function PartnerSection() {
           </p>
         </div>
 
-        <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-start">
-          <div className="lg:col-span-5">
-            <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 transform transition-all hover:scale-105 duration-300">
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-12">
+          <div className="w-full lg:w-5/12">
+            <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 transform transition-all hover:scale-105 duration-300 h-full">
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
@@ -217,7 +214,7 @@ export function PartnerSection() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 mt-10 lg:mt-0">
+          <div className="w-full lg:w-7/12">
             <Card className="border-none shadow-xl overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-8 rounded-xl">
                 <CardTitle className="text-2xl font-bold">

@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 
 import { useEffect, useState } from 'react';
 import { getUnreadContactRequestsCount } from '@/app/actions/contact-provider-action';
+import Image from 'next/image';
 
 interface ProviderSidebarProps {
   activeTab: string;
@@ -72,7 +73,16 @@ export function ProviderSidebar({
   };
 
   return (
-    <div className="w-64 bg-gray-900 text-white min-h-screen p-4 hidden md:block">
+    <div className="fixed top-0 left-0 w-64 h-screen bg-gray-800 text-white p-4">
+      <div className="h-20 w-20 rounded-md flex items-center mx-10 justify-center overflow-hidden">
+        <Image
+          src="/TechMista_logo.svg"
+          alt="Tech Mista Logo"
+          width={100}
+          height={60}
+          className="object-contain"
+        />
+      </div>
       <div className="mb-8 px-4 py-3">
         <h1 className="text-xl font-bold">Provider Dashboard</h1>
         <p className="text-sm text-gray-400 mt-1">Manage your tech solutions</p>
@@ -84,9 +94,9 @@ export function ProviderSidebar({
             key={item.value}
             onClick={() => setActiveTab(item.value)}
             className={cn(
-              'flex items-center w-full px-4 py-3 text-sm rounded-md transition-colors',
+              'flex items-center w-full px-4 py-3 text-sm rounded-md transition-colors cursor-pointer',
               activeTab === item.value
-                ? 'bg-gray-800 text-white'
+                ? 'bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white'
                 : 'text-gray-300 hover:text-white hover:bg-gray-800',
             )}
           >
@@ -105,7 +115,7 @@ export function ProviderSidebar({
         <Button
           variant="ghost"
           size="sm"
-          className="flex items-center text-gray-500"
+          className="flex items-center text-gray-500 hover:bg-gradient-to-r from-[#3069FE] to-[#42C3EE] cursor-pointer "
           onClick={handleLogout}
           disabled={logoutMutation.isPending}
         >

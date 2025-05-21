@@ -29,7 +29,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 bg-gradient-to-b from-gray-300 to-gray-200 shadow w-full z-10">
+    <nav className="fixed top-0 bg-gray-800 text-white shadow w-full z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center justify-between h-16 w-full">
@@ -51,27 +51,27 @@ const Navbar = () => {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link href="/">
                 <span
-                  className={`border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  className={`border-transparent text-[#3069FE] hover:border-gray-300 hover:text-[#3069FE] inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                     isActive('/')
-                      ? 'border-primary-500 text-[#3069FE]'
-                      : 'border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700'
+                      ? 'border-primary-500 text-white'
+                      : 'border-transparent text-[#3069FE] hover:border-gray-300 hover:text-[#3069FE]'
                   }`}
                 >
                   Home
                 </span>
               </Link>
               <Link href="/#about">
-                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-white hover:border-gray-300 hover:text-[#3069FE] inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   About
                 </span>
               </Link>
               <Link href="/#solutions">
-                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-white hover:border-gray-300 hover:text-[#3069FE] inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Solutions
                 </span>
               </Link>
               <Link href="/#partner">
-                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-white hover:border-gray-300 hover:text-[#3069FE] inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Partners
                 </span>
               </Link>
@@ -81,7 +81,7 @@ const Navbar = () => {
                 </span>
               </Link> */}
               <Link href="/#contact">
-                <span className="border-transparent text-[#3069FE] hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <span className="border-transparent text-white hover:border-gray-300 hover:text-[#3069FE] inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Contact
                 </span>
               </Link>
@@ -100,7 +100,7 @@ const Navbar = () => {
                   <div className="bg-gray-100 p-1 rounded-full">
                     <User className="h-5 w-5 text-gray-600" />
                   </div>
-                  <span className="ml-2 text-sm font-medium text-gray-700">
+                  <span className="ml-2 text-sm font-medium text-gray-400">
                     {user.username}
                   </span>
                 </div>

@@ -11,10 +11,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-b from-gray-300 to-gray-200 ">
+      <body className="bg-gradient-to-b from-purple-100 to-purple-100 ">
         <Providers>
           {/* <Navbar /> */}
-          <main className="pt-16">
+          <main className="pt-1">
             {children}
             <Toaster />
           </main>

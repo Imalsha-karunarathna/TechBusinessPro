@@ -4,9 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useState, useEffect } from 'react';
-
 import { useRouter } from 'next/navigation';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,7 +18,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createOrUpdateProvider } from '@/app/actions/provider-actions';
-import { Loader2 } from 'lucide-react';
+import {
+  Loader2,
+  Save,
+  Building,
+  Mail,
+  Globe,
+  Phone,
+  ImageIcon,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 // Define the form schema
@@ -53,7 +59,6 @@ interface ProviderProfileFormProps {
 
 export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
 
   // Initialize form with default values
@@ -108,7 +113,6 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
 
       const result = await createOrUpdateProvider({
         id: initialData?.user_id, // Make sure to include the ID for updates
-
         name: data.name,
         email: data.email,
         website: data.website,
@@ -139,46 +143,13 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
     }
   }
 
-  // Add a region to the regions_served array
-  // const addRegion = (value: string) => {
-  //   const currentValues = form.getValues('regions_served');
-  //   const regionsArray = Array.isArray(currentValues)
-  //     ? currentValues
-  //     : currentValues
-  //       ? [currentValues]
-  //       : [];
-
-  //   if (!regionsArray.includes(value)) {
-  //     form.setValue('regions_served', [...regionsArray, value]);
-  //   }
-  // };
-
-  // // Remove a region from the regions_served array
-  // const removeRegion = (value: string) => {
-  //   const currentValues = form.getValues('regions_served');
-  //   const regionsArray = Array.isArray(currentValues)
-  //     ? currentValues
-  //     : currentValues
-  //       ? [currentValues]
-  //       : [];
-
-  //   form.setValue(
-  //     'regions_served',
-  //     regionsArray.filter((region) => region !== value),
-  //   );
-  // };
-
-  // // Get the current regions as an array
-  // const getRegionsArray = () => {
-  //   const regions = form.getValues('regions_served');
-  //   return Array.isArray(regions) ? regions : regions ? [regions] : [];
-  // };
-
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Provider Profile</h2>
-        <p className="text-muted-foreground">
+      <div className="border-b border-[#42C3EE]/20 pb-5">
+        <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#3069FE] to-[#42C3EE] bg-clip-text text-transparent">
+          Provider Profile
+        </h2>
+        <p className="text-muted-foreground mt-2">
           Manage your company profile and information
         </p>
       </div>
@@ -190,12 +161,19 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Name</FormLabel>
+                <FormItem className="transition-all duration-200 hover:shadow-md hover:shadow-[#3069FE]/10 p-4 rounded-lg border border-[#42C3EE]/20">
+                  <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                    <Building className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                    Company Name
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Your company name" {...field} />
+                    <Input
+                      placeholder="Your company name"
+                      {...field}
+                      className="border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -204,16 +182,20 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Email</FormLabel>
+                <FormItem className="transition-all duration-200 hover:shadow-md hover:shadow-[#3069FE]/10 p-4 rounded-lg border border-[#42C3EE]/20">
+                  <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                    <Mail className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                    Contact Email
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="contact@example.com"
                       {...field}
                       value={field.value || ''}
+                      className="border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -222,16 +204,20 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
               control={form.control}
               name="website"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Website</FormLabel>
+                <FormItem className="transition-all duration-200 hover:shadow-md hover:shadow-[#3069FE]/10 p-4 rounded-lg border border-[#42C3EE]/20">
+                  <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                    <Globe className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                    Website
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://example.com"
                       {...field}
                       value={field.value || ''}
+                      className="border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -240,16 +226,20 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
               control={form.control}
               name="phone"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                <FormItem className="transition-all duration-200 hover:shadow-md hover:shadow-[#3069FE]/10 p-4 rounded-lg border border-[#42C3EE]/20">
+                  <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                    <Phone className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                    Phone
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="+1 (555) 123-4567"
                       {...field}
                       value={field.value || ''}
+                      className="border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -258,20 +248,24 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
               control={form.control}
               name="logo_url"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Logo URL</FormLabel>
+                <FormItem className="transition-all duration-200 hover:shadow-md hover:shadow-[#3069FE]/10 p-4 rounded-lg border border-[#42C3EE]/20 md:col-span-2">
+                  <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                    <ImageIcon className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                    Logo URL
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://example.com/logo.png"
                       {...field}
                       value={field.value || ''}
+                      className="border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20"
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-gray-500 text-sm mt-1">
                     Provide a URL to your company logo (recommended size:
                     200x200px)
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -281,34 +275,43 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
             control={form.control}
             name="description"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company Description</FormLabel>
+              <FormItem className="transition-all duration-200 hover:shadow-md hover:shadow-[#3069FE]/10 p-4 rounded-lg border border-[#42C3EE]/20">
+                <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                  Company Description
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Describe your company and the solutions you provide..."
-                    className="min-h-32"
+                    className="min-h-32 border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20"
                     {...field}
                     value={field.value || ''}
                   />
                 </FormControl>
-                <FormDescription>
+                <FormDescription className="text-gray-500 text-sm mt-1">
                   This description will be displayed on your provider profile
                   and solution listings
                 </FormDescription>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#3069FE]/20 text-white font-medium px-6 py-2 rounded-md cursor-pointer"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saving...
                 </>
               ) : (
-                'Save Profile'
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Profile
+                </>
               )}
             </Button>
           </div>

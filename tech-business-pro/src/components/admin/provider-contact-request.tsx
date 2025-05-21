@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
 import {
   getContactRequestsForProvider,
   updateContactRequestStatus,
@@ -41,6 +40,7 @@ import {
   FileText,
   User,
   XCircle,
+  Inbox,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ContactRequest } from '@/lib/types';
@@ -191,8 +191,9 @@ export function ProviderContactRequests({
         return (
           <Badge
             variant="outline"
-            className="bg-yellow-50 text-yellow-700 border-yellow-200"
+            className="bg-yellow-50 text-yellow-700 border-yellow-200 flex items-center gap-1 px-2.5 py-1"
           >
+            <Clock className="h-3 w-3" />
             Pending
           </Badge>
         );
@@ -200,8 +201,9 @@ export function ProviderContactRequests({
         return (
           <Badge
             variant="outline"
-            className="bg-blue-50 text-blue-700 border-blue-200"
+            className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30 flex items-center gap-1 px-2.5 py-1"
           >
+            <Phone className="h-3 w-3" />
             Contacted
           </Badge>
         );
@@ -209,8 +211,9 @@ export function ProviderContactRequests({
         return (
           <Badge
             variant="outline"
-            className="bg-green-50 text-green-700 border-green-200"
+            className="bg-green-50 text-green-700 border-green-200 flex items-center gap-1 px-2.5 py-1"
           >
+            <CheckCircle className="h-3 w-3" />
             Completed
           </Badge>
         );
@@ -218,8 +221,9 @@ export function ProviderContactRequests({
         return (
           <Badge
             variant="outline"
-            className="bg-red-50 text-red-700 border-red-200"
+            className="bg-red-50 text-red-700 border-red-200 flex items-center gap-1 px-2.5 py-1"
           >
+            <XCircle className="h-3 w-3" />
             Rejected
           </Badge>
         );
@@ -243,7 +247,7 @@ export function ProviderContactRequests({
         return (
           <Badge
             variant="outline"
-            className="bg-blue-50 text-blue-700 border-blue-200"
+            className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30"
           >
             Medium
           </Badge>
@@ -279,20 +283,22 @@ export function ProviderContactRequests({
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Loading contact requests...</span>
+        <Loader2 className="h-8 w-8 animate-spin text-[#3069FE]" />
+        <span className="ml-2 text-[#3069FE] font-medium">
+          Loading contact requests...
+        </span>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[#42C3EE]/20 pb-5">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">
+          <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#3069FE] to-[#42C3EE] bg-clip-text text-transparent">
             Contact Requests
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mt-2">
             {providerId
               ? 'Manage inquiries from potential clients interested in your solutions'
               : 'Admin view of all contact requests across providers'}
@@ -305,12 +311,15 @@ export function ProviderContactRequests({
         value={activeTab}
         onValueChange={setActiveTab}
       >
-        <TabsList className="grid grid-cols-5 w-full max-w-2xl">
-          <TabsTrigger value="pending" className="relative">
+        <TabsList className="grid grid-cols-5 w-full max-w-2xl bg-[#3069FE]/5 p-1 rounded-lg">
+          <TabsTrigger
+            value="pending"
+            className="relative data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#3069FE] data-[state=active]:to-[#42C3EE] data-[state=active]:text-white rounded-md transition-all duration-200"
+          >
             Pending
             {requests.filter((r) => r.status === 'pending' && !r.read).length >
               0 && (
-              <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+              <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                 {
                   requests.filter((r) => r.status === 'pending' && !r.read)
                     .length
@@ -318,20 +327,40 @@ export function ProviderContactRequests({
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="contacted">Contacted</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-          <TabsTrigger value="rejected">Rejected</TabsTrigger>
-          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger
+            value="contacted"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#3069FE] data-[state=active]:to-[#42C3EE] data-[state=active]:text-white rounded-md transition-all duration-200"
+          >
+            Contacted
+          </TabsTrigger>
+          <TabsTrigger
+            value="completed"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#3069FE] data-[state=active]:to-[#42C3EE] data-[state=active]:text-white rounded-md transition-all duration-200"
+          >
+            Completed
+          </TabsTrigger>
+          <TabsTrigger
+            value="rejected"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#3069FE] data-[state=active]:to-[#42C3EE] data-[state=active]:text-white rounded-md transition-all duration-200"
+          >
+            Rejected
+          </TabsTrigger>
+          <TabsTrigger
+            value="all"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#3069FE] data-[state=active]:to-[#42C3EE] data-[state=active]:text-white rounded-md transition-all duration-200"
+          >
+            All
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-6">
           {filteredRequests.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
-              <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-1">
+            <div className="text-center py-12 bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 rounded-lg border border-[#42C3EE]/20">
+              <Inbox className="h-16 w-16 text-[#42C3EE]/40 mx-auto mb-4" />
+              <h3 className="text-xl font-medium text-[#3069FE] mb-2">
                 No {activeTab} requests
               </h3>
-              <p className="text-gray-500">
+              <p className="text-gray-500 max-w-md mx-auto">
                 {activeTab === 'pending'
                   ? 'There are no pending contact requests at the moment.'
                   : `There are no ${activeTab} requests.`}
@@ -342,16 +371,22 @@ export function ProviderContactRequests({
               {filteredRequests.map((request) => (
                 <Card
                   key={request.id}
-                  className={`overflow-hidden transition-all duration-200 hover:shadow-md ${!request.read ? 'border-l-4 border-l-blue-500' : ''}`}
+                  className={`overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-[#3069FE]/10 border ${
+                    !request.read
+                      ? 'border-l-4 border-l-[#3069FE] bg-gradient-to-r from-[#3069FE]/5 to-transparent'
+                      : 'border-[#42C3EE]/20'
+                  }`}
                 >
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start">
                       <div className="flex items-center">
-                        <Avatar className="h-10 w-10 mr-2">
+                        <Avatar className="h-10 w-10 mr-2 border-2 border-[#42C3EE]/20">
                           <AvatarImage
-                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(request.seeker_name)}&background=random`}
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                              request.seeker_name,
+                            )}&background=random`}
                           />
-                          <AvatarFallback>
+                          <AvatarFallback className="bg-gradient-to-r from-[#3069FE]/20 to-[#42C3EE]/20 text-[#3069FE]">
                             {request.seeker_name.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
@@ -360,7 +395,7 @@ export function ProviderContactRequests({
                             {request.seeker_name}
                           </CardTitle>
                           <CardDescription className="mt-1 flex items-center">
-                            <Mail className="h-3.5 w-3.5 mr-1" />
+                            <Mail className="h-3.5 w-3.5 mr-1 text-[#42C3EE]" />
                             {request.seeker_email}
                           </CardDescription>
                         </div>
@@ -371,68 +406,71 @@ export function ProviderContactRequests({
                   <CardContent className="pb-3">
                     <div className="space-y-3">
                       {/* Show provider info in admin view */}
-                      {!providerId && (
-                        <div>
-                          <div className="text-xs font-medium text-gray-500 mb-1">
+                      {!providerId && request.provider_name && (
+                        <div className="bg-[#3069FE]/5 p-2 rounded-md">
+                          <div className="text-xs font-medium text-[#3069FE] mb-1">
                             Provider
                           </div>
-                          <p className="text-sm">
-                            {request.provider_name && (
-                              <span className=" text-gray-700 font-semibold">
-                                {request.provider_name} - ID:
-                                {request.provider_id}
-                              </span>
-                            )}
+                          <p className="text-sm flex items-center">
+                            <Building className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                            <span className="font-medium">
+                              {request.provider_name}
+                            </span>
+                            <span className="text-xs text-gray-500 ml-2">
+                              (ID: {request.provider_id})
+                            </span>
                           </p>
                         </div>
                       )}
 
                       <div>
-                        <div className="text-xs font-medium text-gray-500 mb-1">
+                        <div className="text-xs font-medium text-[#3069FE] mb-1 flex items-center">
+                          <FileText className="h-3.5 w-3.5 mr-1 text-[#42C3EE]" />
                           Requirements
                         </div>
-                        <p className="text-sm line-clamp-3">
+                        <p className="text-sm line-clamp-3 bg-gray-50 p-2 rounded-md">
                           {request.requirements}
                         </p>
                       </div>
 
                       <div className="flex flex-wrap gap-4 text-sm">
                         <div className="flex items-center text-gray-600">
-                          <AlertCircle className="h-3.5 w-3.5 mr-1.5" />
+                          <AlertCircle className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
                           Urgency: {getUrgencyBadge(request.urgency)}
                         </div>
 
                         <div className="flex items-center text-gray-600">
-                          <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                          <Calendar className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
                           {formatDate(request.preferred_date)}
                         </div>
 
                         <div className="flex items-center text-gray-600">
-                          <Clock className="h-3.5 w-3.5 mr-1.5" />
+                          <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
                           {request.preferred_time_slot}
                         </div>
                       </div>
 
                       {request.company_name && (
                         <div className="flex items-center text-gray-600 text-sm">
-                          <Building className="h-3.5 w-3.5 mr-1.5" />
+                          <Building className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
                           {request.company_name}
                         </div>
                       )}
 
                       {request.budget && (
                         <div className="flex items-center text-gray-600 text-sm">
-                          <DollarSign className="h-3.5 w-3.5 mr-1.5" />
+                          <DollarSign className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
                           {request.budget}
                         </div>
                       )}
                     </div>
                   </CardContent>
-                  <CardFooter className="pt-3 flex justify-between items-center">
-                    <div className="text-xs text-gray-500">
+                  <CardFooter className="pt-3 flex justify-between items-center border-t border-[#42C3EE]/10">
+                    <div className="text-xs text-gray-500 flex items-center">
+                      <Clock className="h-3 w-3 mr-1 text-[#42C3EE]" />
                       {new Date(request.created_at!).toLocaleDateString()}
                       {!request.read && (
-                        <span className="ml-2 inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+                        <span className="ml-2 inline-flex items-center rounded-full bg-[#3069FE]/10 px-2 py-0.5 text-xs font-medium text-[#3069FE]">
                           New
                         </span>
                       )}
@@ -441,7 +479,7 @@ export function ProviderContactRequests({
                       variant="outline"
                       size="sm"
                       onClick={() => handleViewRequest(request)}
-                      className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer"
+                      className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white border-none hover:opacity-90 transition-all duration-200"
                     >
                       View Details
                     </Button>
@@ -456,22 +494,31 @@ export function ProviderContactRequests({
       {/* Request Details Dialog */}
       {selectedRequest && (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-gray-200">
-            <DialogHeader>
+          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-white border border-[#42C3EE]/20 rounded-xl shadow-xl">
+            <DialogHeader className="border-b border-[#42C3EE]/20 pb-4">
               <div className="flex items-center">
-                <Avatar className="h-10 w-10 mr-3">
+                <Avatar className="h-12 w-12 mr-3 border-2 border-[#42C3EE]/20">
                   <AvatarImage
-                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(selectedRequest.seeker_name)}&background=random`}
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                      selectedRequest.seeker_name,
+                    )}&background=random`}
                   />
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-gradient-to-r from-[#3069FE]/20 to-[#42C3EE]/20 text-[#3069FE]">
                     {selectedRequest.seeker_name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <DialogTitle className="text-xl">
+                  <DialogTitle className="text-xl font-bold bg-gradient-to-r from-[#3069FE] to-[#42C3EE] bg-clip-text text-transparent">
                     Contact Request from {selectedRequest.seeker_name}
                   </DialogTitle>
-                  <DialogDescription>
+                  {!providerId && selectedRequest.provider_name && (
+                    <div className="text-sm text-gray-600 mt-1 flex items-center">
+                      <Building className="h-3.5 w-3.5 mr-1 text-[#42C3EE]" />
+                      Provider: {selectedRequest.provider_name}
+                    </div>
+                  )}
+                  <DialogDescription className="flex items-center mt-1">
+                    <Clock className="h-3.5 w-3.5 mr-1 text-[#42C3EE]" />
                     Received on{' '}
                     {new Date(selectedRequest.created_at!).toLocaleString()}
                   </DialogDescription>
@@ -480,51 +527,55 @@ export function ProviderContactRequests({
             </DialogHeader>
 
             <div className="space-y-6 py-4">
-              <div className="flex flex-wrap justify-between items-center gap-2 bg-gray-50 p-3 rounded-lg">
+              <div className="flex flex-wrap justify-between items-center gap-2 bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 p-4 rounded-lg border border-[#42C3EE]/20">
                 <div className="flex items-center">
-                  <span className="font-medium mr-2">Status:</span>
+                  <span className="font-medium mr-2 text-[#3069FE]">
+                    Status:
+                  </span>
                   {getStatusBadge(selectedRequest.status)}
                 </div>
                 <div className="flex items-center">
-                  <span className="font-medium mr-2">Urgency:</span>
+                  <span className="font-medium mr-2 text-[#3069FE]">
+                    Urgency:
+                  </span>
                   {getUrgencyBadge(selectedRequest.urgency)}
                 </div>
                 <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                  <Calendar className="h-4 w-4 mr-2 text-[#42C3EE]" />
                   <span>{formatDate(selectedRequest.preferred_date)}</span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                  <Clock className="h-4 w-4 mr-2 text-[#42C3EE]" />
                   <span>{selectedRequest.preferred_time_slot}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-sm font-medium mb-2 flex items-center">
-                    <User className="h-4 w-4 mr-2 text-gray-500" />
+                  <h4 className="text-sm font-medium mb-2 flex items-center text-[#3069FE]">
+                    <User className="h-4 w-4 mr-2 text-[#42C3EE]" />
                     Contact Information
                   </h4>
-                  <div className="bg-gray-50 p-4 rounded-md space-y-3">
+                  <div className="bg-white p-4 rounded-md space-y-3 border border-[#42C3EE]/20 shadow-sm">
                     <div className="flex items-center">
-                      <Mail className="h-4 w-4 mr-2 text-gray-500" />
+                      <Mail className="h-4 w-4 mr-2 text-[#42C3EE]" />
                       <span>{selectedRequest.seeker_email}</span>
                     </div>
                     {selectedRequest.phone && (
                       <div className="flex items-center">
-                        <Phone className="h-4 w-4 mr-2 text-gray-500" />
+                        <Phone className="h-4 w-4 mr-2 text-[#42C3EE]" />
                         <span>{selectedRequest.phone}</span>
                       </div>
                     )}
                     {selectedRequest.company_name && (
                       <div className="flex items-center">
-                        <Building className="h-4 w-4 mr-2 text-gray-500" />
+                        <Building className="h-4 w-4 mr-2 text-[#42C3EE]" />
                         <span>{selectedRequest.company_name}</span>
                       </div>
                     )}
                     {selectedRequest.budget && (
                       <div className="flex items-center">
-                        <DollarSign className="h-4 w-4 mr-2 text-gray-500" />
+                        <DollarSign className="h-4 w-4 mr-2 text-[#42C3EE]" />
                         <span>Budget: {selectedRequest.budget}</span>
                       </div>
                     )}
@@ -532,11 +583,11 @@ export function ProviderContactRequests({
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-medium mb-2 flex items-center">
-                    <FileText className="h-4 w-4 mr-2 text-gray-500" />
+                  <h4 className="text-sm font-medium mb-2 flex items-center text-[#3069FE]">
+                    <FileText className="h-4 w-4 mr-2 text-[#42C3EE]" />
                     Requirements
                   </h4>
-                  <div className="bg-gray-50 p-4 rounded-md h-[calc(100%-28px)] overflow-auto">
+                  <div className="bg-white p-4 rounded-md h-[calc(100%-28px)] overflow-auto border border-[#42C3EE]/20 shadow-sm">
                     <p>{selectedRequest.requirements}</p>
                   </div>
                 </div>
@@ -544,32 +595,32 @@ export function ProviderContactRequests({
 
               {selectedRequest.additional_info && (
                 <div>
-                  <h4 className="text-sm font-medium mb-2 flex items-center">
-                    <FileText className="h-4 w-4 mr-2 text-gray-500" />
+                  <h4 className="text-sm font-medium mb-2 flex items-center text-[#3069FE]">
+                    <FileText className="h-4 w-4 mr-2 text-[#42C3EE]" />
                     Additional Information
                   </h4>
-                  <div className="bg-gray-50 p-4 rounded-md">
+                  <div className="bg-white p-4 rounded-md border border-[#42C3EE]/20 shadow-sm">
                     <p>{selectedRequest.additional_info}</p>
                   </div>
                 </div>
               )}
 
               <div>
-                <h4 className="text-sm font-medium mb-2 flex items-center">
-                  <MessageSquare className="h-4 w-4 mr-2 text-gray-500" />
+                <h4 className="text-sm font-medium mb-2 flex items-center text-[#3069FE]">
+                  <MessageSquare className="h-4 w-4 mr-2 text-[#42C3EE]" />
                   Admin Notes
                 </h4>
                 <Textarea
                   placeholder="Add notes about this request..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="min-h-[100px]"
+                  className="min-h-[100px] border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]/20 resize-none"
                 />
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-md">
-                <h4 className="text-sm font-medium mb-3 flex items-center">
-                  <AlertCircle className="h-4 w-4 mr-2 text-gray-500" />
+              <div className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 p-4 rounded-md border border-[#42C3EE]/20">
+                <h4 className="text-sm font-medium mb-3 flex items-center text-[#3069FE]">
+                  <AlertCircle className="h-4 w-4 mr-2 text-[#42C3EE]" />
                   Update Status
                 </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -580,7 +631,11 @@ export function ProviderContactRequests({
                         : 'outline'
                     }
                     size="sm"
-                    className={`gap-1 ${selectedRequest.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}`}
+                    className={`gap-1 ${
+                      selectedRequest.status === 'pending'
+                        ? 'bg-yellow-500 hover:bg-yellow-600'
+                        : 'hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-300'
+                    }`}
                     onClick={() => handleUpdateStatus('pending')}
                     disabled={
                       statusUpdateLoading ||
@@ -597,7 +652,11 @@ export function ProviderContactRequests({
                         : 'outline'
                     }
                     size="sm"
-                    className={`gap-1 ${selectedRequest.status === 'contacted' ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
+                    className={`gap-1 ${
+                      selectedRequest.status === 'contacted'
+                        ? 'bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:opacity-90'
+                        : 'hover:bg-[#3069FE]/10 hover:text-[#3069FE] hover:border-[#42C3EE]/30'
+                    }`}
                     onClick={() => handleUpdateStatus('contacted')}
                     disabled={
                       statusUpdateLoading ||
@@ -614,7 +673,11 @@ export function ProviderContactRequests({
                         : 'outline'
                     }
                     size="sm"
-                    className={`gap-1 ${selectedRequest.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                    className={`gap-1 ${
+                      selectedRequest.status === 'completed'
+                        ? 'bg-green-500 hover:bg-green-600'
+                        : 'hover:bg-green-50 hover:text-green-700 hover:border-green-300'
+                    }`}
                     onClick={() => handleUpdateStatus('completed')}
                     disabled={
                       statusUpdateLoading ||
@@ -631,7 +694,11 @@ export function ProviderContactRequests({
                         : 'outline'
                     }
                     size="sm"
-                    className={`gap-1 ${selectedRequest.status === 'rejected' ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                    className={`gap-1 ${
+                      selectedRequest.status === 'rejected'
+                        ? 'bg-red-500 hover:bg-red-600'
+                        : 'hover:bg-red-50 hover:text-red-700 hover:border-red-300'
+                    }`}
                     onClick={() => handleUpdateStatus('rejected')}
                     disabled={
                       statusUpdateLoading ||
@@ -645,12 +712,12 @@ export function ProviderContactRequests({
               </div>
             </div>
 
-            <DialogFooter className="flex justify-between">
+            <DialogFooter className="flex justify-between border-t border-[#42C3EE]/20 pt-4">
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-1"
+                  className="gap-1 border-[#42C3EE]/30 hover:bg-[#3069FE]/5 hover:text-[#3069FE]"
                   onClick={() => {
                     // Create a mailto link with pre-filled subject and body
                     const subject = `Re: Your inquiry about our services`;
@@ -665,7 +732,7 @@ export function ProviderContactRequests({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="gap-1"
+                    className="gap-1 border-[#42C3EE]/30 hover:bg-[#3069FE]/5 hover:text-[#3069FE]"
                     onClick={() => {
                       window.location.href = `tel:${selectedRequest.phone}`;
                     }}
@@ -675,7 +742,12 @@ export function ProviderContactRequests({
                   </Button>
                 )}
               </div>
-              <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+              <Button
+                onClick={() => setIsDialogOpen(false)}
+                className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:opacity-90 transition-all duration-200 text-white"
+              >
+                Close
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

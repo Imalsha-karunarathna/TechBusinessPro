@@ -23,6 +23,19 @@ import { formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import {
+  Building,
+  User,
+  Mail,
+  Phone,
+  Globe,
+  Clock,
+  Award,
+  FileText,
+  CheckCircle,
+  XCircle,
+  Loader2,
+} from 'lucide-react';
 
 interface PartnerApplicationDetailProps {
   /*eslint-disable @typescript-eslint/no-explicit-any */
@@ -72,7 +85,6 @@ export function PartnerApplicationDetail({
       console.error('Error updating status:', error);
       toast('Update Failed', {
         description: 'There was an error updating the application status.',
-        //variant: "destructive",
       });
     } finally {
       setIsUpdating(false);
@@ -86,10 +98,14 @@ export function PartnerApplicationDetail({
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Application Details</CardTitle>
-          <CardDescription>
+      <Card className="border border-[#42C3EE]/20 shadow-md hover:shadow-lg hover:shadow-[#3069FE]/10 transition-all duration-300 overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 border-b border-[#42C3EE]/20">
+          <CardTitle className="text-xl font-bold text-[#3069FE] flex items-center">
+            <FileText className="h-5 w-5 mr-2 text-[#42C3EE]" />
+            Application Details
+          </CardTitle>
+          <CardDescription className="flex items-center">
+            <Clock className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
             Submitted{' '}
             {application.created_at
               ? formatDistanceToNow(new Date(application.created_at), {
@@ -98,36 +114,41 @@ export function PartnerApplicationDetail({
               : 'Unknown'}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <Building className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Organization
               </h3>
               <p className="text-lg font-medium">
                 {application.organization_name}
               </p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <User className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Contact Person
               </h3>
               <p className="text-lg font-medium">{application.partner_name}</p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <Mail className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Email
               </h3>
               <p>{application.email}</p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <Phone className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Phone
               </h3>
               <p>{application.phone || 'Not provided'}</p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <Globe className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Website
               </h3>
               <p>
@@ -136,40 +157,53 @@ export function PartnerApplicationDetail({
                     href={application.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
+                    className="text-[#3069FE] hover:underline flex items-center"
                   >
                     {application.website}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="ml-1"
+                    >
+                      <path d="M7 7h10v10" />
+                      <path d="M7 17 17 7" />
+                    </svg>
                   </a>
                 ) : (
                   'Not provided'
                 )}
               </p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <Clock className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Years of Experience
               </h3>
               <p>{application.experience_years || 'Not specified'}</p>
             </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-1">
+          <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+            <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+              <Award className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
               Area of Expertise
             </h3>
-            <p>{application.expertise}</p>
+            <p className="bg-[#3069FE]/10 text-[#3069FE] px-3 py-1 rounded-full text-sm font-medium inline-block">
+              {application.expertise}
+            </p>
           </div>
 
-          {/* <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-1">
-              Proposed Collaboration
-            </h3>
-            <p className="whitespace-pre-line">{application.collaboration}</p>
-          </div> */}
-
           {application.reason && (
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <FileText className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Why Partner with Us
               </h3>
               <p className="whitespace-pre-line">{application.reason}</p>
@@ -177,8 +211,9 @@ export function PartnerApplicationDetail({
           )}
 
           {application.additional_notes && (
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="p-4 rounded-lg border border-[#42C3EE]/20">
+              <h3 className="text-sm font-medium text-[#3069FE] mb-2 flex items-center">
+                <FileText className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
                 Additional Notes
               </h3>
               <p className="whitespace-pre-line">
@@ -187,14 +222,14 @@ export function PartnerApplicationDetail({
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between border-t pt-6">
-          <div className="flex items-center">
-            <div className="mr-4">
-              <span className="text-sm font-medium text-muted-foreground">
+        <CardFooter className="flex justify-between border-t border-[#42C3EE]/20 pt-6 px-6 pb-6">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center">
+              <span className="text-sm font-medium text-gray-500 mr-2">
                 Status:
-              </span>{' '}
+              </span>
               <span
-                className={`font-medium ${
+                className={`font-medium flex items-center ${
                   application.application_status === 'approved'
                     ? 'text-green-600'
                     : application.application_status === 'rejected'
@@ -202,17 +237,25 @@ export function PartnerApplicationDetail({
                       : 'text-yellow-600'
                 }`}
               >
+                {application.application_status === 'approved' ? (
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                ) : application.application_status === 'rejected' ? (
+                  <XCircle className="h-4 w-4 mr-1" />
+                ) : (
+                  <Clock className="h-4 w-4 mr-1" />
+                )}
                 {application.application_status.charAt(0).toUpperCase() +
                   application.application_status.slice(1)}
               </span>
             </div>
 
             {application.reviewer_id && (
-              <div>
-                <span className="text-sm font-medium text-muted-foreground">
+              <div className="flex items-center">
+                <span className="text-sm font-medium text-gray-500 mr-2">
                   Reviewed by:
-                </span>{' '}
-                <span className="font-medium">
+                </span>
+                <span className="font-medium flex items-center">
+                  <User className="h-4 w-4 mr-1 text-[#42C3EE]" />
                   {application.reviewer?.name || 'Unknown'}
                 </span>
               </div>
@@ -223,15 +266,17 @@ export function PartnerApplicationDetail({
             <div className="flex gap-2">
               <Button
                 variant="outline"
-                className="border-red-200 text-red-700 hover:bg-red-50"
+                className="border-red-200 text-red-700 hover:bg-red-50 transition-colors duration-200"
                 onClick={() => openReviewDialog('rejected')}
               >
+                <XCircle className="h-4 w-4 mr-2" />
                 Reject
               </Button>
               <Button
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:opacity-90 transition-all duration-200 text-white border-none"
                 onClick={() => openReviewDialog('approved')}
               >
+                <CheckCircle className="h-4 w-4 mr-2" />
                 Approve
               </Button>
             </div>
@@ -240,10 +285,14 @@ export function PartnerApplicationDetail({
       </Card>
 
       {application.review_notes && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Review Notes</CardTitle>
-            <CardDescription>
+        <Card className="border border-[#42C3EE]/20 shadow-md">
+          <CardHeader className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5 border-b border-[#42C3EE]/20">
+            <CardTitle className="text-lg font-bold text-[#3069FE] flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-[#42C3EE]" />
+              Review Notes
+            </CardTitle>
+            <CardDescription className="flex items-center">
+              <Clock className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
               Added{' '}
               {application.reviewed_at
                 ? formatDistanceToNow(new Date(application.reviewed_at), {
@@ -252,19 +301,26 @@ export function PartnerApplicationDetail({
                 : 'Unknown'}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-line">{application.review_notes}</p>
+          <CardContent className="p-6">
+            <p className="whitespace-pre-line bg-gray-50 p-4 rounded-lg border border-[#42C3EE]/10">
+              {application.review_notes}
+            </p>
           </CardContent>
         </Card>
       )}
 
       <Dialog open={isReviewDialogOpen} onOpenChange={setIsReviewDialogOpen}>
-        <DialogContent className="bg-gray-800">
+        <DialogContent className="bg-gradient-to-br from-gray-900 to-[#3069FE]/90 text-white border border-[#42C3EE]/30 rounded-xl shadow-xl">
           <DialogHeader>
-            <DialogTitle className="text-white">
+            <DialogTitle className="text-xl font-bold flex items-center">
+              {selectedStatus === 'approved' ? (
+                <CheckCircle className="h-5 w-5 mr-2 text-green-400" />
+              ) : (
+                <XCircle className="h-5 w-5 mr-2 text-red-400" />
+              )}
               {selectedStatus === 'approved' ? 'Approve' : 'Reject'} Application
             </DialogTitle>
-            <DialogDescription className="text-gray-400">
+            <DialogDescription className="text-gray-300 mt-2">
               {selectedStatus === 'approved'
                 ? 'The applicant will be notified that their application has been approved.'
                 : 'Please provide a reason for rejecting this application.'}
@@ -274,9 +330,12 @@ export function PartnerApplicationDetail({
           <div className="py-4">
             <label
               htmlFor="review-notes"
-              className="text-sm font-medium mb-2 block text-gray-200"
+              className="text-sm font-medium mb-2  text-gray-200 flex items-center"
             >
-              Review Notes {selectedStatus === 'rejected' && '(Required)'}
+              Review Notes{' '}
+              {selectedStatus === 'rejected' && (
+                <span className="text-red-400 ml-1">(Required)</span>
+              )}
             </label>
             <Textarea
               id="review-notes"
@@ -284,7 +343,7 @@ export function PartnerApplicationDetail({
               onChange={(e) => setReviewNotes(e.target.value)}
               placeholder="Enter your review notes here..."
               rows={4}
-              className="text-gray-400"
+              className="bg-gray-800 border-[#42C3EE]/30 text-white focus:ring-[#42C3EE]/30 resize-none"
             />
           </div>
 
@@ -292,6 +351,7 @@ export function PartnerApplicationDetail({
             <Button
               variant="outline"
               onClick={() => setIsReviewDialogOpen(false)}
+              className="border-gray-600 text-white hover:bg-gray-800"
             >
               Cancel
             </Button>
@@ -303,15 +363,20 @@ export function PartnerApplicationDetail({
               }
               className={
                 selectedStatus === 'approved'
-                  ? 'bg-green-600 hover:bg-green-700 cursor-pointer'
-                  : 'bg-red-600 hover:bg-red-700 cursor-pointer'
+                  ? 'bg-gradient-to-r from-green-500 to-green-600 hover:opacity-90 text-white'
+                  : 'bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90 text-white'
               }
             >
-              {isUpdating
-                ? 'Processing...'
-                : selectedStatus === 'approved'
-                  ? 'Approve'
-                  : 'Reject'}
+              {isUpdating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : selectedStatus === 'approved' ? (
+                'Approve'
+              ) : (
+                'Reject'
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
