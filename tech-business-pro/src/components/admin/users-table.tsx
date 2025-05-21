@@ -18,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 import {
   CheckCircle,
@@ -29,6 +28,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface UsersTableProps {
   /*eslint-disable @typescript-eslint/no-explicit-any */
@@ -36,7 +36,6 @@ interface UsersTableProps {
 }
 
 export function UsersTable({ users }: UsersTableProps) {
-  const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleStatusChange = async (userId: number, isActive: boolean) => {
@@ -44,8 +43,7 @@ export function UsersTable({ users }: UsersTableProps) {
     try {
       const result = await updateUserStatus(userId, isActive);
       if (result.success) {
-        toast({
-          title: 'Status Updated',
+        toast('Status Updated', {
           description: `User has been ${
             isActive ? 'activated' : 'deactivated'
           }.`,
@@ -57,8 +55,7 @@ export function UsersTable({ users }: UsersTableProps) {
       }
     } catch (error) {
       console.error('Error updating status:', error);
-      toast({
-        title: 'Update Failed',
+      toast('Update Failed', {
         description: 'There was an error updating the user status.',
         //variant: "destructive",
       });
@@ -72,8 +69,7 @@ export function UsersTable({ users }: UsersTableProps) {
     try {
       const result = await updateUserRole(userId, role);
       if (result.success) {
-        toast({
-          title: 'Role Updated',
+        toast('Role Updated', {
           description: `User role has been changed to ${role.replace(
             '_',
             ' ',
@@ -86,8 +82,7 @@ export function UsersTable({ users }: UsersTableProps) {
       }
     } catch (error) {
       console.error('Error updating role:', error);
-      toast({
-        title: 'Update Failed',
+      toast('Update Failed', {
         description: 'There was an error updating the user role.',
         //variant: "destructive",
       });

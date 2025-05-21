@@ -21,10 +21,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
 import { updateExpertiseStatus } from '@/app/actions/expertise-actions';
 import { useRouter } from 'next/navigation';
 import { ExpertiseRequest } from '@/lib/types';
+import { toast } from 'sonner';
 
 interface ExpertiseRequestsTableProps {
   requests: ExpertiseRequest[];
@@ -41,7 +41,6 @@ export function ExpertiseRequestsTable({
   >(null);
   const [reviewNotes, setReviewNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
   const router = useRouter();
 
   const openReviewDialog = (
@@ -66,10 +65,12 @@ export function ExpertiseRequestsTable({
       );
 
       if (result.success) {
-        toast({
-          title: `Expertise ${selectedAction === 'approved' ? 'Approved' : 'Rejected'}`,
-          description: `The expertise request has been ${selectedAction === 'approved' ? 'approved' : 'rejected'}.`,
-        });
+        toast(
+          `Expertise ${selectedAction === 'approved' ? 'Approved' : 'Rejected'}`,
+          {
+            description: `The expertise request has been ${selectedAction === 'approved' ? 'approved' : 'rejected'}.`,
+          },
+        );
         setIsReviewDialogOpen(false);
 
         // Refresh the page to update the list
@@ -81,8 +82,7 @@ export function ExpertiseRequestsTable({
       }
     } catch (error) {
       console.error(`Error ${selectedAction}ing expertise:`, error);
-      toast({
-        title: 'Error',
+      toast('Error', {
         description: `There was an error ${selectedAction}ing the expertise. Please try again.`,
       });
     } finally {

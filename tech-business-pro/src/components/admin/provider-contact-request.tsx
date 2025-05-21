@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+
 import {
   getContactRequestsForProvider,
   updateContactRequestStatus,
@@ -46,6 +46,7 @@ import { format } from 'date-fns';
 import type { ContactRequest } from '@/lib/types';
 import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { toast } from 'sonner';
 
 interface ProviderContactRequestsProps {
   providerId?: number;
@@ -55,7 +56,6 @@ interface ProviderContactRequestsProps {
 export function ProviderContactRequests({
   providerId,
 }: ProviderContactRequestsProps) {
-  const { toast } = useToast();
   const [requests, setRequests] = useState<ContactRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
@@ -84,15 +84,13 @@ export function ProviderContactRequests({
         if (result.success) {
           setRequests((result.data as ContactRequest[]) || []);
         } else {
-          toast({
-            title: 'Error',
+          toast('Error', {
             description: result.error || 'Failed to load contact requests',
           });
         }
         /* eslint-disable @typescript-eslint/no-unused-vars */
       } catch (error) {
-        toast({
-          title: 'Error',
+        toast('Error', {
           description: 'An unexpected error occurred',
         });
       } finally {
@@ -167,22 +165,19 @@ export function ProviderContactRequests({
           ),
         );
 
-        toast({
-          title: 'Status updated',
+        toast('Status updated', {
           description: `Request status updated to ${status}`,
         });
 
         setIsDialogOpen(false);
       } else {
-        toast({
-          title: 'Error',
+        toast('Error', {
           description: result.error || 'Failed to update status',
         });
       }
       /* eslint-disable @typescript-eslint/no-unused-vars */
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast('Error', {
         description: 'An unexpected error occurred',
       });
     } finally {

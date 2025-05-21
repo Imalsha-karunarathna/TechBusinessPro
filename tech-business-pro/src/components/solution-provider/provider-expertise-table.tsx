@@ -27,13 +27,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
+
 import {
   getProviderExpertise,
   addProviderExpertise,
   deleteProviderExpertise,
 } from '@/app/actions/expertise-actions';
 import { AddExpertiseForm } from './add-expertise-form';
+import { toast } from 'sonner';
 
 export function ProviderExpertiseTable({
   providerId,
@@ -50,7 +51,6 @@ export function ProviderExpertiseTable({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [providerExpertise, setProviderExpertise] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
 
   // Debug logging for applicationExpertise
   useEffect(() => {
@@ -79,15 +79,13 @@ export function ProviderExpertiseTable({
           setProviderExpertise(result.data || []);
         } else {
           console.error('Error loading provider expertise:', result.error);
-          toast({
-            title: 'Error',
+          toast('Error', {
             description: result.error || 'Failed to load expertise',
           });
         }
       } catch (error) {
         console.error('Exception in fetchExpertise:', error);
-        toast({
-          title: 'Error',
+        toast('Error', {
           description: 'Failed to load expertise. Please try again later.',
         });
       } finally {
@@ -135,8 +133,7 @@ export function ProviderExpertiseTable({
 
     // Check if expertise already exists in application expertise
     if (applicationExpertise && applicationExpertise.includes(expertise)) {
-      toast({
-        title: 'Expertise already exists',
+      toast('Expertise already exists', {
         description:
           'This expertise is already in your profile from your application.',
       });
@@ -155,8 +152,7 @@ export function ProviderExpertiseTable({
 
         setIsAddDialogOpen(false);
 
-        toast({
-          title: 'Expertise added',
+        toast('Expertise added', {
           description: 'Your expertise has been added and is pending approval.',
         });
       } else {
@@ -165,8 +161,7 @@ export function ProviderExpertiseTable({
       }
     } catch (error) {
       console.error('Exception adding expertise:', error);
-      toast({
-        title: 'Error',
+      toast('Error', {
         description:
           'There was an error adding your expertise. Please try again.',
       });
@@ -190,8 +185,7 @@ export function ProviderExpertiseTable({
         setIsDeleteDialogOpen(false);
         setExpertiseToDelete(null);
 
-        toast({
-          title: 'Expertise removed',
+        toast('Expertise removed', {
           description: 'Your expertise has been removed successfully.',
         });
       } else {
@@ -200,8 +194,7 @@ export function ProviderExpertiseTable({
       }
     } catch (error) {
       console.error('Exception deleting expertise:', error);
-      toast({
-        title: 'Error',
+      toast('Error', {
         description:
           'There was an error removing your expertise. Please try again.',
       });

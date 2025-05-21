@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 import { updateUserCredentials } from '@/app/actions/reset-token';
 import { User, Lock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface ResetPasswordFormProps {
   token: string;
@@ -30,7 +30,6 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
   const [passwordStrength, setPasswordStrength] = useState(0);
 
   const router = useRouter();
-  const { toast } = useToast();
 
   const validateForm = () => {
     const newErrors: {
@@ -97,10 +96,8 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
       const result = await updateUserCredentials(userId, username, password);
 
       if (result.success) {
-        toast({
-          title: 'Account created successfully!',
+        toast('Account created successfully!', {
           description: 'Your credentials have been set. You can now log in.',
-          // variant: 'default',
         });
 
         // Redirect to login page
@@ -110,11 +107,9 @@ export function ResetPasswordForm({ userId, email }: ResetPasswordFormProps) {
       }
     } catch (error) {
       console.error('Error updating credentials:', error);
-      toast({
-        title: 'Error',
+      toast('Error', {
         description:
           'There was a problem setting your credentials. Please try again.',
-        // variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
