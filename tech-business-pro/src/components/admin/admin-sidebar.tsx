@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Users, Briefcase, LogOutIcon, Award } from 'lucide-react';
+import {
+  Users,
+  Briefcase,
+  LogOutIcon,
+  Award,
+  MessageSquare,
+} from 'lucide-react';
 import { Button } from '../ui/button';
 import { useAuth } from '@/lib/auth';
 
@@ -25,6 +31,12 @@ export function AdminSidebar() {
       name: 'Users',
       href: '/admin/users',
       icon: Users,
+    },
+    {
+      name: 'Messages',
+      icon: MessageSquare,
+      href: '/admin/request-messages',
+      value: 'messages',
     },
     // {
     //   name: 'Settings',

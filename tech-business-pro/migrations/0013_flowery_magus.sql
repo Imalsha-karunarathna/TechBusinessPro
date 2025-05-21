@@ -1,0 +1,1 @@
+ALTER TABLE "contact_requests" ADD COLUMN "provider_name" text NOT NULL;

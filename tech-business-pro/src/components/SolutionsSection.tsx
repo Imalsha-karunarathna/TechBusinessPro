@@ -48,6 +48,19 @@ const SolutionsSection = () => {
   // Check if user is a solution seeker
   const isSolutionSeeker = user && user.role === 'solution_seeker';
 
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    if (hash === '#solutions') {
+      const el = document.getElementById('solutions');
+      if (el) {
+        // Ensure smooth scroll happens after render
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 300); // enough delay for layout to be ready
+      }
+    }
+  }, []);
   // Fetch all expertise categories
   useEffect(() => {
     const fetchExpertiseCategories = async () => {

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/lib/auth';
-import { useToast } from '@/hooks/use-toast';
 
 import {
   Dialog,
@@ -42,6 +41,7 @@ import {
 } from '@/components/ui/select';
 import { sendContactRequest } from '@/app/actions/contact-provider-action';
 import { timeSlots } from '@/lib/constants';
+import { toast } from 'sonner';
 
 const contactFormSchema = z.object({
   requirements: z
@@ -75,9 +75,8 @@ export function ContactProviderModal({
   providerName,
 }: ContactProviderModalProps) {
   const { user } = useAuth();
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -102,6 +101,7 @@ export function ContactProviderModal({
       const result = await sendContactRequest({
         providerId,
         seekerId: user.id,
+        providerName: providerName || 'Unknown',
         seekerName: user.name || 'Unknown',
         seekerEmail: user.email,
         requirements: data.requirements,
@@ -116,25 +116,20 @@ export function ContactProviderModal({
       });
 
       if (result.success) {
-        toast({
-          title: 'Request sent successfully',
+        toast('Request sent successfully', {
           description: `Your request has been sent to ${providerName}. They will contact you soon.`,
         });
         onClose();
         form.reset();
       } else {
-        toast({
-          title: 'Error sending request',
-          description: result.error || 'An error occurred. Please try again.',
-          //variant: 'destructive',
+        toast('Error sending request', {
+          description: `An error occurred. Please try again.`,
         });
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error sending request',
-        description: 'An unexpected error occurred. Please try again.',
-        // variant: 'destructive',
+      toast('Error sending request', {
+        description: `An error occurred. Please try again.`,
       });
     } finally {
       setIsSubmitting(false);

@@ -2,9 +2,9 @@
 
 import { useAuth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
-import { LogOut, PlusCircle, User, MessageSquare } from 'lucide-react';
+import { LogOut, PlusCircle, User } from 'lucide-react';
 import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
+
 import { useEffect, useState } from 'react';
 import { getUnreadContactRequestsCount } from '@/app/actions/contact-provider-action';
 
@@ -19,7 +19,7 @@ export function ProviderSidebar({
   setActiveTab,
   providerId,
 }: ProviderSidebarProps) {
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [, setUnreadCount] = useState(0);
   const { logoutMutation } = useAuth();
 
   // Fetch unread contact requests count
@@ -50,12 +50,12 @@ export function ProviderSidebar({
       icon: PlusCircle,
       value: 'solutions',
     },
-    {
-      name: 'Messages',
-      icon: MessageSquare,
-      value: 'messages',
-      badge: unreadCount > 0 ? unreadCount : undefined,
-    },
+    // {
+    //   name: 'Messages',
+    //   icon: MessageSquare,
+    //   value: 'messages',
+    //   badge: unreadCount > 0 ? unreadCount : undefined,
+    // },
     {
       name: 'Profile',
       icon: User,
@@ -92,11 +92,11 @@ export function ProviderSidebar({
           >
             <item.icon className="h-5 w-5 mr-3" />
             <span className="flex-1 text-left">{item.name}</span>
-            {item.badge && (
+            {/* {item.badge && (
               <Badge className="ml-auto bg-blue-600 hover:bg-blue-700">
                 {item.badge}
               </Badge>
-            )}
+            )} */}
           </button>
         ))}
       </nav>

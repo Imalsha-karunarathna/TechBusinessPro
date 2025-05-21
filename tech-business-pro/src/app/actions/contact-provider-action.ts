@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 export type ContactRequest = {
   id?: number;
   providerId: number | string;
+  providerName: string;
   seekerId: number | string;
   seekerName: string;
   seekerEmail: string;
@@ -41,6 +42,7 @@ export async function sendContactRequest(data: ContactRequest) {
       .insert(contactRequests)
       .values({
         provider_id: providerId,
+        provider_name: data.providerName,
         seeker_id: seekerId,
         seeker_name: data.seekerName,
         seeker_email: data.seekerEmail,
@@ -71,6 +73,27 @@ export async function sendContactRequest(data: ContactRequest) {
           ? error.message
           : 'Failed to send contact request',
     };
+  }
+}
+
+export async function hasExistingContactRequest(
+  seekerId: number,
+  providerId: number,
+) {
+  try {
+    const existing = await db.query.contactRequests.findFirst({
+      where: (requests, { and, eq }) =>
+        and(
+          eq(requests.seeker_id, seekerId),
+          eq(requests.provider_id, providerId),
+          eq(requests.status, 'pending'),
+        ),
+    });
+
+    return !!existing;
+  } catch (error) {
+    console.error('Error checking existing contact request:', error);
+    return false;
   }
 }
 

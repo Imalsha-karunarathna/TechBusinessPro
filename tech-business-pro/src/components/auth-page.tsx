@@ -109,12 +109,13 @@ export default function AuthPage() {
         router.push('/admin/partner-application');
       } else if (user.role === 'solution_provider') {
         router.push('/solutionProvider');
+      } else if (user.role === 'solution_seeker') {
+        router.push('/#solutions'); // Go to homepage with hash
       } else {
         router.push('/');
       }
     }
   }, [user, isLoading, router]);
-
   // Show loading state while checking authentication
   if (isLoading) {
     return (
