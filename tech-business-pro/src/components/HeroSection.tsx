@@ -51,7 +51,7 @@ const HeroSection = () => {
               <div className="mt-8 space-y-4 sm:space-y-0 sm:flex sm:flex-row sm:justify-center lg:justify-start sm:gap-4">
                 <Link
                   href="/#solutions"
-                  className="group w-full sm:w-auto px-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
+                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
                   <span className="relative flex items-center">
