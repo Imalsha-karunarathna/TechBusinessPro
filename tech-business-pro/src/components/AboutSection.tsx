@@ -82,7 +82,7 @@ const AboutSection = () => {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0 bg-purple-200 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Globe className="h-8 w-8 text-white" />
                 </div>
@@ -98,7 +98,7 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0 bg-purple-200 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Shield className="h-8 w-8 text-white" />
                 </div>
@@ -114,7 +114,7 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0 bg-purple-200 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Lightbulb className="h-8 w-8 text-white" />
                 </div>
@@ -130,7 +130,7 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0 bg-purple-200 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <TrendingUp className="h-8 w-8 text-white" />
                 </div>
