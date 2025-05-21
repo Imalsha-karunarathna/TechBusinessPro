@@ -11,6 +11,7 @@ import {
   Mail,
   Lock,
   ArrowRight,
+  Home,
 } from 'lucide-react';
 import { registerAgent } from '@/app/actions/agent-auth';
 import { Button } from '@/components/ui/button';
@@ -84,10 +85,19 @@ export default function RegisterAgentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md">
         <Card className="border-none shadow-xl bg-white overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-6 rounded-xl">
+          <CardHeader className="-mt-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-2 rounded-sm">
+            <div className="mb-4 text-center">
+              <Link
+                href="/"
+                className="inline-flex items-center text-sm text-gray-300 hover:underline"
+              >
+                <Home className="h-4 w-4 mr-2" />
+                Back to Home
+              </Link>
+            </div>
             <div className="flex justify-center mb-4">
               <div className="h-16 w-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                 <User className="h-8 w-8 text-gray-800" />

@@ -143,13 +143,10 @@ const SolutionsSection = () => {
   };
 
   return (
-    <div
-      id="solutions"
-      className="py-20 bg-gradient-to-b from-white to-gray-50"
-    >
+    <div id="solutions" className="py-20 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
             Solution Marketplace
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
@@ -208,7 +205,7 @@ const SolutionsSection = () => {
               className="w-full"
             >
               <div className="flex justify-center mb-10">
-                <TabsList className="grid w-[400px] grid-cols-1 p-1 bg-purple-100 rounded-full">
+                <TabsList className="grid w-[400px] grid-cols-1 p-1  rounded-full">
                   <TabsTrigger value="providers" className="rounded-lg py-3 ">
                     <Briefcase className="h-4 w-4 mr-2" />
                     Solution Providers

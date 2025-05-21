@@ -10,10 +10,10 @@ import {
 
 const AboutSection = () => {
   return (
-    <div id="about" className="py-24 bg-gradient-to-b from-white to-gray-50">
+    <div id="about" className="py-24 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="lg:text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
             About Us
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
@@ -74,7 +74,7 @@ const AboutSection = () => {
 
         <div className="mt-24">
           <div className="lg:text-center mb-16">
-            <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
+            <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
               What We Do
             </span>
             <h3 className="text-3xl font-bold text-gray-900">Our Focus</h3>

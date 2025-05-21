@@ -5,7 +5,7 @@ import { Globe, Users, Briefcase } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <div className="relative pt-16 overflow-hidden">
+    <div className="relative overflow-hidden bg-gradient-to-b from-gray-300 to-gray-200">
       <div className="bg-gradient-to-r from-[#3069FE] via-[#42C3EE] to-[#3069FE] text-white relative z-0">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10 z-0">
@@ -51,26 +51,35 @@ const HeroSection = () => {
               <div className="mt-8 space-y-4 sm:space-y-0 sm:flex sm:flex-row sm:justify-center lg:justify-start sm:gap-4">
                 <Link
                   href="/#solutions"
-                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-[#3069FE] bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                  className="group w-full sm:w-auto px-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
-                  <Globe className="h-5 w-5 mr-2" />
-                  Find Solutions
+                  <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
+                  <span className="relative flex items-center">
+                    <Globe className="h-5 w-5 mr-2 group-hover:animate-pulse" />
+                    Find Solutions
+                  </span>
                 </Link>
 
                 <Link
                   href="/#partner"
-                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-[#3069FE] bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
-                  <Users className="h-5 w-5 mr-2" />
-                  Be a Partner
+                  <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
+                  <span className="relative flex items-center">
+                    <Users className="h-5 w-5 mr-2 group-hover:animate-pulse" />
+                    Be a Partner
+                  </span>
                 </Link>
 
                 <Link
                   href="/agent/register-agent"
-                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl text-[#3069FE] bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                  className="group w-full sm:w-auto px-8 py-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
-                  <Briefcase className="h-5 w-5 mr-2" />
-                  Be an Agent
+                  <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
+                  <span className="relative flex items-center">
+                    <Briefcase className="h-5 w-5 mr-2 group-hover:animate-pulse" />
+                    Be an Agent
+                  </span>
                 </Link>
               </div>
             </div>
@@ -78,9 +87,9 @@ const HeroSection = () => {
             {/* Image section */}
             <div className="hidden lg:block">
               <div className="relative">
-                <div className="absolute -inset-4 bg-white bg-opacity-10 rounded-2xl blur-xs"></div>
+                <div className="absolute -inset-4 rounded-2xl blur-xs"></div>
                 <img
-                  className="relative h-96 w-full object-cover rounded-xl shadow-2xl transform transition-all duration-500 hover:scale-105"
+                  className="relative h-100 w-full object-cover rounded-xl shadow-2xl transform transition-all duration-500 hover:scale-105"
                   src="https://images.pexels.com/photos/3184432/pexels-photo-3184432.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                   alt="Global business connections"
                 />
