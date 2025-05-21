@@ -40,7 +40,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
 import {
   Card,
   CardContent,
@@ -48,6 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 const partnerFormSchema = z.object({
   partner_name: z
@@ -87,7 +87,6 @@ const partnerFormSchema = z.object({
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 export function PartnerSection() {
-  const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -123,8 +122,7 @@ export function PartnerSection() {
 
       if (result.success) {
         setIsSubmitted(true);
-        toast({
-          title: 'Application Submitted',
+        toast('Application Submitted', {
           description:
             'Your partner application has been submitted successfully.',
         });
@@ -133,8 +131,7 @@ export function PartnerSection() {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast({
-        title: 'Submission Failed',
+      toast('Submission Failed', {
         description:
           'There was an error submitting your application. Please try again.',
       });

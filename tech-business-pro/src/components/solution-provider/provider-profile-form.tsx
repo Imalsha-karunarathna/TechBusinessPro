@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createOrUpdateProvider } from '@/app/actions/provider-actions';
 import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 // Define the form schema
 const formSchema = z.object({
@@ -52,7 +53,7 @@ interface ProviderProfileFormProps {
 
 export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+
   const router = useRouter();
 
   // Initialize form with default values
@@ -120,8 +121,7 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
       });
 
       if (result.success) {
-        toast({
-          title: 'Profile updated',
+        toast('Profile updated', {
           description: 'Your provider profile has been updated successfully.',
         });
         router.refresh();
@@ -130,8 +130,7 @@ export function ProviderProfileForm({ initialData }: ProviderProfileFormProps) {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast({
-        title: 'Error',
+      toast('Error', {
         description:
           'There was an error updating your profile. Please try again.',
       });

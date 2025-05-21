@@ -61,13 +61,13 @@ export default function AgentDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+      <div className="bg-gradient-to-r from-[#3069FE] via-[#42C3EE] to-[#3069FE] text-white">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Agent Dashboard</h1>
             <button
               onClick={handleLogout}
-              className="flex items-center px-3 py-2 rounded-md bg-white/10 hover:bg-white/20 transition-colors"
+              className="flex items-center px-3 py-2 rounded-md bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
             >
               <LogOut className="h-4 w-4 mr-2" />
               Logout
@@ -80,7 +80,7 @@ export default function AgentDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="col-span-1 bg-white rounded-lg shadow p-6">
             <div className="flex flex-col items-center text-center mb-6">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold mb-4">
+              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-[#3069FE] via-[#42C3EE] to-[#3069FE] flex items-center justify-center text-white text-2xl font-bold mb-4">
                 {agent.username.substring(0, 1).toUpperCase()}
               </div>
               <h2 className="text-xl font-semibold">{agent.username}</h2>
@@ -158,7 +158,7 @@ export default function AgentDashboard() {
                 </p>
                 <Link
                   href="/agent/profile"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-[#3069FE] via-[#42C3EE] to-[#3069FE] hover:from-[#42C3EE] hover:to-[#3069FE]"
                 >
                   Complete Your Profile
                 </Link>

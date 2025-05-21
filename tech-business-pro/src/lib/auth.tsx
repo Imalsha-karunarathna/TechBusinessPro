@@ -9,8 +9,9 @@ import {
 import { useRouter } from 'next/navigation';
 
 import { getQueryFn, apiRequest, queryClient } from '@/lib/queryClient';
-import { useToast } from '@/hooks/use-toast';
+
 import type { User } from './db/schema';
+import { toast } from 'sonner';
 
 type LoginData = {
   username: string;
@@ -35,7 +36,6 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { toast } = useToast();
   const router = useRouter();
 
   const {
@@ -63,8 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
 
     onError: (error: Error) => {
-      toast({
-        title: 'Login failed',
+      toast('Login failed', {
         description: error.message || 'Invalid username or password',
         // variant: "destructive",
       });
@@ -78,8 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: User) => {
       queryClient.setQueryData(['/api/user'], user);
-      toast({
-        title: 'Registration successful',
+      toast('Registration successful', {
         description: 'Your account has been created',
       });
 
@@ -87,8 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       router.push('/');
     },
     onError: (error: Error) => {
-      toast({
-        title: 'Registration failed',
+      toast('Registration failed', {
         description: error.message || 'Could not create account',
         // variant: "destructive",
       });
@@ -101,8 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       queryClient.setQueryData(['/api/user'], null);
-      toast({
-        title: 'Logged out',
+      toast('Logged out', {
         description: 'You have been logged out successfully',
       });
 
@@ -110,8 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       router.push('/');
     },
     onError: (error: Error) => {
-      toast({
-        title: 'Logout failed',
+      toast('Logout failed', {
         description: error.message,
         //  variant: "destructive",
       });

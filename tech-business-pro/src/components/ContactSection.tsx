@@ -40,7 +40,6 @@ import {
 } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
-import { toast } from '@/hooks/use-toast';
 import {
   Card,
   CardContent,
@@ -48,6 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -99,8 +99,7 @@ const ContactSection = () => {
       return response.json();
     },
     onSuccess: (data) => {
-      toast({
-        title: 'Inquiry Submitted',
+      toast('Inquiry Submitted', {
         description: "We've received your message and will respond shortly.",
       });
       setIsSubmitted(true);
@@ -109,8 +108,7 @@ const ContactSection = () => {
       }
     },
     onError: (error) => {
-      toast({
-        title: 'Submission Failed',
+      toast('Submission Failed', {
         description: error.message || 'Please try again later.',
       });
     },

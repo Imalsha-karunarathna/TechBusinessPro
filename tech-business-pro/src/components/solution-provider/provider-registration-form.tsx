@@ -26,9 +26,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
+
 import { useAuth } from '@/lib/auth';
 import { Select } from '../ui/select';
+import { toast } from 'sonner';
 
 const providerRegistrationSchema = z
   .object({
@@ -75,7 +76,7 @@ type ProviderRegistrationValues = z.infer<typeof providerRegistrationSchema>;
 
 export default function ProviderRegistrationForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+
   const router = useRouter();
   const { registerMutation } = useAuth();
 
@@ -127,8 +128,7 @@ export default function ProviderRegistrationForm() {
         throw new Error('Failed to create provider profile');
       }
 
-      toast({
-        title: 'Registration successful',
+      toast('Registration successful', {
         description:
           'Your provider account has been created and is pending verification.',
       });
@@ -136,8 +136,7 @@ export default function ProviderRegistrationForm() {
       router.push('/auth-page?registered=true');
     } catch (error) {
       console.error('Registration error:', error);
-      toast({
-        title: 'Registration failed',
+      toast('Registration failed', {
         description:
           'There was an error creating your provider account. Please try again.',
         // variant: "destructive",

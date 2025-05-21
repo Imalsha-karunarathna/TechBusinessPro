@@ -6,15 +6,14 @@ import { ProviderProfileForm } from './provider-profile-form';
 import { ProviderSidebar } from './provider-sidebar';
 import { ProviderHeader } from './provider-header';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 import { ProviderExpertiseTable } from './provider-expertise-table';
 import { getOrCreateProviderProfileByEmail } from '@/app/actions/provider-actions';
+import { toast } from 'sonner';
 
 export function ProviderDashboard() {
   const [activeTab, setActiveTab] = useState<string>('solutions');
   const { user, isLoading } = useAuth();
   const router = useRouter();
-  const { toast } = useToast();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [providerData, setProviderData] = useState<any>(null);
   const [providerLoading, setProviderLoading] = useState(true);
@@ -35,8 +34,7 @@ export function ProviderDashboard() {
 
           // Show toast if this is a new profile
           if (result.isNew) {
-            toast({
-              title: 'Profile created',
+            toast('Profile created', {
               description:
                 'Your provider profile has been created. Please complete your profile information.',
             });
@@ -46,23 +44,20 @@ export function ProviderDashboard() {
 
           // Show toast if profile was created from application
           if (result.isFromApplication) {
-            toast({
-              title: 'Profile created from application',
+            toast('Profile created from application', {
               description:
                 'Your provider profile has been created based on your partner application.',
             });
           }
         } else {
           console.error('Error loading provider profile:', result.error);
-          toast({
-            title: 'Error',
+          toast('Error', {
             description: result.error || 'Failed to load provider profile',
           });
         }
       } catch (error) {
         console.error('Error fetching provider profile:', error);
-        toast({
-          title: 'Error',
+        toast('Error', {
           description:
             'Failed to load provider profile. Please try again later.',
         });

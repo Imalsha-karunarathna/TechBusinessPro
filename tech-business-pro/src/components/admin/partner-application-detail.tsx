@@ -19,10 +19,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface PartnerApplicationDetailProps {
   /*eslint-disable @typescript-eslint/no-explicit-any */
@@ -32,7 +32,6 @@ interface PartnerApplicationDetailProps {
 export function PartnerApplicationDetail({
   application,
 }: PartnerApplicationDetailProps) {
-  const { toast } = useToast();
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [reviewNotes, setReviewNotes] = useState(
@@ -53,8 +52,7 @@ export function PartnerApplicationDetail({
       );
 
       if (result.success) {
-        toast({
-          title: 'Status Updated',
+        toast('Status Updated', {
           description: `Application has been ${status}.`,
         });
         setIsReviewDialogOpen(false);
@@ -72,8 +70,7 @@ export function PartnerApplicationDetail({
       }
     } catch (error) {
       console.error('Error updating status:', error);
-      toast({
-        title: 'Update Failed',
+      toast('Update Failed', {
         description: 'There was an error updating the application status.',
         //variant: "destructive",
       });
