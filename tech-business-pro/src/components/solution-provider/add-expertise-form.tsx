@@ -22,7 +22,7 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Award, PlusCircle, X } from 'lucide-react';
 import { useEffect } from 'react';
 import { getAllExpertiseCategories } from '@/app/actions/expertise-actions';
 
@@ -99,49 +99,56 @@ export function AddExpertiseForm({
             control={form.control}
             name="expertise"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select Expertise</FormLabel>
+              <FormItem className="space-y-3">
+                <FormLabel className="text-white flex items-center text-lg">
+                  <Award className="h-5 w-5 mr-2 text-[#42C3EE]" />
+                  Select Expertise
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   disabled={isLoadingOptions}
                 >
                   <FormControl>
-                    <SelectTrigger className="bg-gray-700">
+                    <SelectTrigger className="bg-gray-800 border-[#42C3EE]/30 text-white focus:ring-[#42C3EE]/30 h-11">
                       <SelectValue placeholder="Select an expertise" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="bg-gray-700 text-white">
+                  <SelectContent className="bg-gray-800 text-white border-[#42C3EE]/30">
                     {isLoadingOptions ? (
                       <div className="flex items-center justify-center p-4">
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <Loader2 className="h-4 w-4 animate-spin mr-2 text-[#42C3EE]" />
                         Loading...
                       </div>
                     ) : expertiseOptions.length === 0 ? (
-                      <div className="p-2 text-sm text-gray-500">
+                      <div className="p-4 text-sm text-gray-400">
                         No available expertise options. Try adding a custom one.
                       </div>
                     ) : (
                       expertiseOptions.map((option) => (
-                        <SelectItem key={option} value={option}>
+                        <SelectItem
+                          key={option}
+                          value={option}
+                          className="focus:bg-[#3069FE]/20 focus:text-white"
+                        >
                           {option}
                         </SelectItem>
                       ))
                     )}
                   </SelectContent>
                 </Select>
-                <FormDescription>
+                <FormDescription className="text-gray-400">
                   Select from existing expertise categories or{' '}
                   <Button
                     type="button"
                     variant="link"
-                    className="p-0 h-auto"
+                    className="p-0 h-auto text-[#42C3EE] hover:text-[#42C3EE]/80"
                     onClick={() => setCustomExpertise(true)}
                   >
                     add a custom one
                   </Button>
                 </FormDescription>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -150,40 +157,48 @@ export function AddExpertiseForm({
             control={form.control}
             name="expertise"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Custom Expertise</FormLabel>
+              <FormItem className="space-y-3">
+                <FormLabel className="text-white flex items-center text-lg">
+                  <PlusCircle className="h-5 w-5 mr-2 text-[#42C3EE]" />
+                  Custom Expertise
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your expertise" {...field} />
+                  <Input
+                    placeholder="Enter your expertise"
+                    {...field}
+                    className="bg-gray-800 border-[#42C3EE]/30 text-white focus:ring-[#42C3EE]/30 h-11"
+                  />
                 </FormControl>
-                <FormDescription>
+                <FormDescription className="text-gray-400">
                   Enter a custom expertise or{' '}
                   <Button
                     type="button"
                     variant="link"
-                    className="p-0 h-auto"
+                    className="p-0 h-auto text-[#42C3EE] hover:text-[#42C3EE]/80"
                     onClick={() => setCustomExpertise(false)}
                   >
                     select from existing ones
                   </Button>
                 </FormDescription>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
         )}
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-3 pt-2">
           <Button
             type="button"
             onClick={onCancel}
-            className="cursor-pointer bg-red-500"
+            className="bg-transparent border border-gray-600 text-white hover:bg-gray-700 transition-all duration-200 flex items-center cursor-pointer"
           >
+            <X className="mr-2 h-4 w-4" />
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="cursor-pointer bg-green-600"
+            className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:opacity-90 transition-all duration-200 shadow-md text-white font-medium cursor-pointer"
           >
             {isSubmitting ? (
               <>
@@ -191,7 +206,10 @@ export function AddExpertiseForm({
                 Submitting...
               </>
             ) : (
-              'Add Expertise'
+              <>
+                <Award className="mr-2 h-4 w-4" />
+                Add Expertise
+              </>
             )}
           </Button>
         </div>

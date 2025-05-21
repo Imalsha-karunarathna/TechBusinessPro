@@ -100,7 +100,7 @@ export function ProviderDashboard() {
   console.log('Application expertise in dashboard:', applicationExpertise);
 
   return (
-    <div className="flex h-screen -mt-10 bg-gray-50">
+    <div className="ml-64 flex-1 p-8">
       <ProviderSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="flex-1 flex flex-col overflow-hidden">

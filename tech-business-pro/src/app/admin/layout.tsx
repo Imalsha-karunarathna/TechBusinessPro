@@ -10,9 +10,9 @@ export default async function AdminLayout({
   await requireAdmin();
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen p-4 ">
       <AdminSidebar />
-      <div className="flex-1 p-8">{children}</div>
+      <div className="ml-64 flex-1 p-8">{children}</div>
     </div>
   );
 }

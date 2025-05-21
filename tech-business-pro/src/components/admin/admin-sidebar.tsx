@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useAuth } from '@/lib/auth';
+import Image from 'next/image';
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -56,8 +57,21 @@ export function AdminSidebar() {
   };
 
   return (
-    <div className="w-64 bg-gray-900 text-white min-h-screen p-4">
-      <div className="mb-8 px-4 py-3">
+    <div className="fixed top-0 left-0 w-64 h-screen bg-gray-800 text-white p-4">
+      <div className="flex-shrink-0 flex items-center">
+        <div className="flex items-center cursor-pointer">
+          <div className="h-20 w-20 rounded-md flex items-center mx-10 justify-center overflow-hidden">
+            <Image
+              src="/TechMista_logo.svg"
+              alt="Tech Mista Logo"
+              width={100}
+              height={60}
+              className="object-contain"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="mb-8 px-4 py-3 ">
         <h1 className="text-xl font-bold">Admin Dashboard</h1>
       </div>
 
@@ -69,7 +83,7 @@ export function AdminSidebar() {
             className={cn(
               'flex items-center px-4 py-3 text-sm rounded-md transition-colors',
               pathname === item.href || pathname.startsWith(`${item.href}/`)
-                ? 'bg-gray-800 text-white'
+                ? 'bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white'
                 : 'text-gray-300 hover:text-white hover:bg-gray-800',
             )}
           >
@@ -83,7 +97,7 @@ export function AdminSidebar() {
         <Button
           variant="ghost"
           size="sm"
-          className="flex items-center text-gray-500 cursor-pointer"
+          className="flex items-center  hover:bg-gradient-to-r from-[#3069FE] to-[#42C3EE]  text-gray-200 cursor-pointer"
           onClick={handleLogout}
           disabled={logoutMutation.isPending}
         >

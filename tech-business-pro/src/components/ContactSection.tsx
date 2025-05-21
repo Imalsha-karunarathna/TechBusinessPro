@@ -126,10 +126,7 @@ const ContactSection = () => {
             Get in Touch
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Let Tech Mista{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
-              Assist You
-            </span>
+            Let Tech Mista Assist You
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Complete the form below to receive an AI-powered response with

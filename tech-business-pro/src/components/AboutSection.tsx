@@ -17,10 +17,7 @@ const AboutSection = () => {
             About Us
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Our Vision &{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
-              Mission
-            </span>
+            Our Vision & Mission
           </h2>
           <p className="mt-6 max-w-4xl text-xl text-gray-500 lg:mx-auto leading-relaxed">
             Tech Mista is transforming global collaboration by connecting
@@ -77,8 +74,9 @@ const AboutSection = () => {
             <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
               What We Do
             </span>
-            <h3 className="text-3xl font-bold text-gray-900">Our Focus</h3>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full mx-auto mt-4"></div>
+            <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+              Our Focus
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">

@@ -163,11 +163,7 @@ const SolutionsSection = () => {
             Solution Marketplace
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Find Solutions to{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3069FE] to-[#42C3EE]">
-              Accelerate
-            </span>{' '}
-            Your Business
+            Find Solutions to Accelerate Your Business
           </h2>
           <p className="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
             Explore customised strategies designed to elevate your success

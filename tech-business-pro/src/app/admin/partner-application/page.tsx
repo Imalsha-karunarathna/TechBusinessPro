@@ -23,12 +23,12 @@ export default async function PartnerApplicationsPage(
   const status = statusParam;
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">Partner Applications</h1>
+    <div className="container mx-auto py-10 bg-gray-100 p-8 rounded-lg">
+      <h1 className="text-2xl font-bold  mb-6">Partner Applications</h1>
 
       <Tabs value={status} className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="pending" asChild>
+          <TabsTrigger value="pending" asChild className="">
             <Link
               href="/admin/partner-application?status=pending"
               prefetch={false}
