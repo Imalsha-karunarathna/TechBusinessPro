@@ -20,7 +20,7 @@ export function ContactProviderButton({
   const { user } = useAuth();
   const router = useRouter();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!user) {
       // Redirect to auth page if not logged in
       router.push(`/auth-page?redirect=/providers/${providerId}`);
@@ -30,6 +30,23 @@ export function ContactProviderButton({
     if (user.role === 'solution_provider') {
       // Show toast or alert that providers can't contact other providers
       alert('As a solution provider, you cannot contact other providers.');
+      return;
+    }
+
+    const res = await fetch('/api/admin/contact-request', {
+      method: 'POST',
+      body: JSON.stringify({
+        seekerId: user.id,
+        providerId,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.exists) {
+      alert(
+        'You have already contacted this provider. Please wait for their response.',
+      );
       return;
     }
 

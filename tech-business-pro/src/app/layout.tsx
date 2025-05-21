@@ -2,6 +2,7 @@ import type React from 'react';
 
 import './globals.css';
 import { Providers } from './providers';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({
   children,
@@ -13,7 +14,10 @@ export default function RootLayout({
       <body className="bg-gradient-to-b from-gray-300 to-gray-200 ">
         <Providers>
           {/* <Navbar /> */}
-          <main className="pt-16">{children}</main>
+          <main className="pt-16">
+            {children}
+            <Toaster />
+          </main>
         </Providers>
       </body>
     </html>

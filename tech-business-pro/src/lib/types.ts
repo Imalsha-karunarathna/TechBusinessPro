@@ -108,6 +108,7 @@ export interface Provider {
 export interface ContactRequest {
   id?: number;
   provider_id: number;
+  provider_name: string;
   seeker_id: number;
   seeker_name: string;
   seeker_email: string;

@@ -11,6 +11,7 @@ import {
 export const contactRequests = pgTable('contact_requests', {
   id: serial('id').primaryKey(),
   provider_id: integer('provider_id').notNull(),
+  provider_name: text('provider_name').notNull(),
   seeker_id: integer('seeker_id').notNull(),
   seeker_name: text('seeker_name').notNull(),
   seeker_email: text('seeker_email').notNull(),
