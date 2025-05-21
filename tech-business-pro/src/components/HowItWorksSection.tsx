@@ -3,7 +3,7 @@ import { ArrowRight, UserPlus, ShieldCheck, Handshake } from 'lucide-react';
 
 const HowItWorksSection = () => {
   return (
-    <div className="py-24 bg-gradient-to-b from-gray-50 to-white  ">
+    <div className="py-24   ">
       {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-0 w-64 h-64 bg-purple-200 rounded-full opacity-20 blur-3xl"></div>
@@ -12,7 +12,7 @@ const HowItWorksSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-purple-100 text-[#3069FE] mb-4">
+          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
             Process
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">

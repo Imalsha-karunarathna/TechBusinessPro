@@ -133,7 +133,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen ">
       <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-primary-600 to-primary-700 flex-col justify-center p-16 text-black">
         <h1 className="text-4xl font-bold mb-6">Welcome to Tech Mista</h1>
         <p className="text-xl mb-8">

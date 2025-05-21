@@ -5,7 +5,7 @@ import type React from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Home } from 'lucide-react';
 import { loginAgent } from '@/app/actions/agent-auth';
 
 export default function AgentLoginPage() {
@@ -47,12 +47,21 @@ export default function AgentLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
+    <div className="min-h-screen py-12">
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-lg">
-        <div className="p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Agent Login</h1>
-            <p className="mt-2 text-gray-600">Access your agent dashboard</p>
+        <div className="p-0">
+          <div className="text-center mb-8 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white rounded-sm p-6">
+            <div className="mb-4 text-center">
+              <Link
+                href="/"
+                className="inline-flex items-center text-sm text-gray-300 hover:underline"
+              >
+                <Home className="h-4 w-4 mr-2" />
+                Back to Home
+              </Link>
+            </div>
+            <h1 className="text-3xl font-bold ">Agent Login</h1>
+            <p className="mt-2 text-gray-300">Access your agent dashboard</p>
           </div>
 
           {error && (
@@ -62,7 +71,7 @@ export default function AgentLoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 p-8">
             <div>
               <label
                 htmlFor="email"
@@ -95,7 +104,7 @@ export default function AgentLoginPage() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3069FE] focus:border-blue-500"
               />
             </div>
 
@@ -105,7 +114,7 @@ export default function AgentLoginPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-[#3069FE] focus:ring-[#3069FE] rounded"
                 />
                 <label
                   htmlFor="remember-me"
@@ -118,7 +127,7 @@ export default function AgentLoginPage() {
               <div className="text-sm">
                 <Link
                   href="/agent/forgot-password"
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="font-medium text-[#3069FE] hover:text-blue-500"
                 >
                   Forgot your password?
                 </Link>
@@ -129,19 +138,19 @@ export default function AgentLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[] disabled:opacity-50 cursor-pointer"
               >
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </div>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 p-4 text-center">
             <p className="text-sm text-gray-600">
               Don&apos;t have an agent account?{' '}
               <Link
                 href="/agent/register-agent"
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-[#3069FE] hover:text-blue-500"
               >
                 Register now
               </Link>

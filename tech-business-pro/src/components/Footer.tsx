@@ -1,4 +1,5 @@
 import { Facebook, Twitter, Linkedin } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const Footer = () => {
@@ -8,12 +9,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <Link href="/">
-              <div className="flex items-center cursor-pointer">
-                <div className="h-10 w-10 bg-primary-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">TM</span>
-                </div>
-                <span className="ml-3 text-xl font-bold">Tech Mista</span>
-              </div>
+              <Image
+                src="/TechMista_logo.svg"
+                alt="Tech Mista Logo"
+                width={100}
+                height={60}
+                className="object-contain"
+              />
             </Link>
             <p className="mt-4 text-sm text-gray-300">
               Connecting Ambition to Achievement in the technology world across
@@ -154,7 +156,12 @@ const Footer = () => {
           </p>
           <div className="mt-4 md:mt-0">
             <p className="text-sm text-gray-400">
-              Phase One: Sri Lanka and Australia
+              Developed by :{' '}
+              <span className="text-[#3069FE]">
+                <Link href="https://www.liveroom.xyz/">
+                  Liveroom Technologies{' '}
+                </Link>
+              </span>
             </p>
           </div>
         </div>
