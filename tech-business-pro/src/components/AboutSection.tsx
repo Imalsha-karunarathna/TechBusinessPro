@@ -7,17 +7,35 @@ import {
   Globe,
   Lightbulb,
 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const AboutSection = () => {
   return (
-    <div id="about" className="py-24 ">
+    <div id="about" className="py-1">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+        <div className="flex items-center justify-center ">
+          <Link href="/">
+            <div className="flex items-center cursor-pointer mb-10">
+              <Image
+                src="/TechMista_logo.svg"
+                alt="Tech Mista Logo"
+                width={150}
+                height={60}
+                className="object-contain"
+              />
+            </div>
+          </Link>
+        </div>
         <div className="lg:text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
+          <span className="inline-block px-3 bg-white py-1 text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
             About Us
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Our Vision & Mission
+            Our Vision &{' '}
+            <span className="text-transparent bg-clip-text bg-[#3069FE]">
+              Mission
+            </span>
           </h2>
           <p className="mt-6 max-w-4xl text-xl text-gray-500 lg:mx-auto leading-relaxed">
             Tech Mista is transforming global collaboration by connecting
@@ -71,18 +89,21 @@ const AboutSection = () => {
 
         <div className="mt-24">
           <div className="lg:text-center mb-16">
-            <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
+            <span className="inline-block px-3 py-1 bg-white text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
               What We Do
             </span>
             <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-              Our Focus
+              Our{' '}
+              <span className="text-transparent bg-clip-text bg-[#3069FE]">
+                Focus
+              </span>
             </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0 bg-purple-100 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Globe className="h-8 w-8 text-white" />
                 </div>
@@ -98,7 +119,7 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0 bg-purple-100 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Shield className="h-8 w-8 text-white" />
                 </div>
@@ -114,7 +135,7 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0 bg-purple-100  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Lightbulb className="h-8 w-8 text-white" />
                 </div>
@@ -130,7 +151,7 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="absolute inset-0 bg-purple-100 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <TrendingUp className="h-8 w-8 text-white" />
                 </div>
