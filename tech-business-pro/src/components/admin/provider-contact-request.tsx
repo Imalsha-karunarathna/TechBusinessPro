@@ -41,9 +41,12 @@ import {
   User,
   XCircle,
   Inbox,
+  Paperclip,
+  Download,
+  File,
 } from 'lucide-react';
 import { format } from 'date-fns';
-import type { ContactRequest } from '@/lib/types';
+import type { ContactRequest, DocumentInfo } from '@/lib/types';
 import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
@@ -77,7 +80,6 @@ export function ProviderContactRequests({
           result = await getContactRequestsForProvider(providerId);
         } else {
           // For admin view, fetch all contact requests
-          // You'll need to create a new server action for this
           result = await getAllContactRequests();
         }
 
@@ -88,7 +90,7 @@ export function ProviderContactRequests({
             description: result.error || 'Failed to load contact requests',
           });
         }
-        /* eslint-disable @typescript-eslint/no-unused-vars */
+        /*eslint-disable @typescript-eslint/no-unused-vars */
       } catch (error) {
         toast('Error', {
           description: 'An unexpected error occurred',
@@ -103,13 +105,11 @@ export function ProviderContactRequests({
     // Set up polling to refresh data every minute
     const interval = setInterval(() => fetchRequests(), 60000);
     return () => clearInterval(interval);
-  }, [providerId, toast]);
+  }, [providerId]);
 
   // Function to fetch all contact requests (for admin)
   async function getAllContactRequests() {
     try {
-      // This is a client component, so we need to call a server action
-      // Let's assume you have a server action to get all contact requests
       const response = await fetch('/api/admin/contact-request');
       const data = await response.json();
 
@@ -175,7 +175,7 @@ export function ProviderContactRequests({
           description: result.error || 'Failed to update status',
         });
       }
-      /* eslint-disable @typescript-eslint/no-unused-vars */
+      /*eslint-disable @typescript-eslint/no-unused-vars */
     } catch (error) {
       toast('Error', {
         description: 'An unexpected error occurred',
@@ -274,10 +274,65 @@ export function ProviderContactRequests({
   const formatDate = (dateString: string) => {
     try {
       return format(new Date(dateString), 'PPP');
-      /* eslint-disable @typescript-eslint/no-unused-vars */
+      /*eslint-disable @typescript-eslint/no-unused-vars */
     } catch (error) {
       return dateString;
     }
+  };
+
+  // Function to get file icon based on mime type
+  const getFileIcon = (mimeType: string) => {
+    if (mimeType.includes('pdf')) {
+      return <File className="h-4 w-4 text-red-500" />;
+    } else if (mimeType.includes('word') || mimeType.includes('document')) {
+      return <File className="h-4 w-4 text-blue-500" />;
+    } else if (mimeType.includes('excel') || mimeType.includes('sheet')) {
+      return <File className="h-4 w-4 text-green-500" />;
+    } else if (mimeType.includes('image')) {
+      return <File className="h-4 w-4 text-purple-500" />;
+    }
+    return <File className="h-4 w-4 text-gray-500" />;
+  };
+
+  // Function to format file size
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    else return (bytes / 1048576).toFixed(1) + ' MB';
+  };
+
+  const formatTimeSlot = (timeSlot: string) => {
+    // If the time slot already includes time zone info (SLT), return as is
+    if (timeSlot.includes('SLT')) {
+      return timeSlot;
+    }
+
+    // For time slots that don't have time zone info, add AEST/AEDT
+    if (!timeSlot.includes('AEST') && !timeSlot.includes('AEDT')) {
+      // Check if it's a standard time slot format (e.g., "9:00 AM - 10:00 AM")
+      const timeSlotRegex = /^\d{1,2}:\d{2} [AP]M - \d{1,2}:\d{2} [AP]M$/;
+      if (timeSlotRegex.test(timeSlot)) {
+        return `${timeSlot} (AEST/AEDT)`;
+      }
+    }
+
+    return timeSlot;
+  };
+  // Helper function to check if documents exist
+  const hasDocuments = (request: ContactRequest) => {
+    return (
+      request.documents &&
+      Array.isArray(request.documents) &&
+      request.documents.length > 0
+    );
+  };
+
+  // Helper function to get documents array
+  const getDocuments = (request: ContactRequest): DocumentInfo[] => {
+    if (request.documents && Array.isArray(request.documents)) {
+      return request.documents;
+    }
+    return [];
   };
 
   if (loading) {
@@ -433,6 +488,18 @@ export function ProviderContactRequests({
                         </p>
                       </div>
 
+                      {/* Show document count if there are any */}
+                      {hasDocuments(request) && (
+                        <div className="flex items-center text-sm text-[#3069FE]">
+                          <Paperclip className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                          {getDocuments(request).length}{' '}
+                          {getDocuments(request).length === 1
+                            ? 'Document'
+                            : 'Documents'}{' '}
+                          attached
+                        </div>
+                      )}
+
                       <div className="flex flex-wrap gap-4 text-sm">
                         <div className="flex items-center text-gray-600">
                           <AlertCircle className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
@@ -444,9 +511,14 @@ export function ProviderContactRequests({
                           {formatDate(request.preferred_date)}
                         </div>
 
-                        <div className="flex items-center text-gray-600">
-                          <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
-                          {request.preferred_time_slot}
+                        <div>
+                          <div key={request.id} className="mb-4">
+                            <div className="flex items-center text-gray-600">
+                              <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                              {formatTimeSlot(request.preferred_time_slot)}
+                            </div>
+                            {/* Other request details */}
+                          </div>
                         </div>
                       </div>
 
@@ -592,6 +664,49 @@ export function ProviderContactRequests({
                   </div>
                 </div>
               </div>
+
+              {/* Document Section */}
+              {hasDocuments(selectedRequest) && (
+                <div>
+                  <h4 className="text-sm font-medium mb-2 flex items-center text-[#3069FE]">
+                    <Paperclip className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                    Attached Documents
+                  </h4>
+                  <div className="bg-white p-4 rounded-md border border-[#42C3EE]/20 shadow-sm">
+                    <div className="space-y-2">
+                      {getDocuments(selectedRequest).map(
+                        (doc: DocumentInfo, index: number) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between bg-gray-50 p-3 rounded-md border border-[#42C3EE]/20"
+                          >
+                            <div className="flex items-center">
+                              {getFileIcon(doc.mimeType)}
+                              <div className="ml-2">
+                                <p className="text-sm font-medium">
+                                  {doc.originalName}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {formatFileSize(doc.size)}
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="flex items-center gap-1 border-[#42C3EE]/30 hover:bg-[#3069FE]/5 hover:text-[#3069FE]"
+                              onClick={() => window.open(doc.url, '_blank')}
+                            >
+                              <Download className="h-4 w-4" />
+                              Download
+                            </Button>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {selectedRequest.additional_info && (
                 <div>

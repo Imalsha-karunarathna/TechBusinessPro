@@ -81,7 +81,7 @@ const HowItWorksSection = () => {
                     <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 border-t border-gray-100"></div>
                   </div>
                   {step !== 3 && (
-                    <div className="hidden lg:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 z-10">
+                    <div className="hidden lg:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 z-0">
                       <div className="bg-white rounded-full p-2 shadow-md">
                         <ArrowRight className="h-6 w-6 text-blue-600" />
                       </div>
