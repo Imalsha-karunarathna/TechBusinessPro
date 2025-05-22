@@ -144,11 +144,14 @@ export function PartnerSection() {
     <div id="partner" className="py-20 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
+          <span className="inline-block px-3 py-1 bg-white text-sm font-medium rounded-lg text-[#3069FE] mb-4">
             Partnership Program
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Partner with Us & Unlock Global Growth
+            Partner with Us &{' '}
+            <span className="text-transparent bg-clip-text bg-[#3069FE]">
+              Unlock Global Growth
+            </span>
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Tap into international markets and expand your reach with strategic

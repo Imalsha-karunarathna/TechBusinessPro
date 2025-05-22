@@ -122,11 +122,14 @@ const ContactSection = () => {
     <div id="contact" className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full  text-[#3069FE] mb-4">
+          <span className="inline-block px-3 bg-white py-1 text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
             Get in Touch
           </span>
           <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Let Tech Mista Assist You
+            Let Tech Mista{' '}
+            <span className="text-transparent bg-clip-text bg-[#3069FE]">
+              Assist You
+            </span>
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Complete the form below to receive an AI-powered response with
