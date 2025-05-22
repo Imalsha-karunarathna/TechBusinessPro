@@ -2,100 +2,11 @@
 
 import { db } from '@/db';
 import { contactRequests } from '@/lib/db/schema';
-import { and, eq, sql } from 'drizzle-orm';
+import type { DocumentInfo } from '@/lib/types';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
-
-export type ContactRequest = {
-  id?: number;
-  providerId: number | string;
-  providerName: string;
-  seekerId: number | string;
-  seekerName: string;
-  seekerEmail: string;
-  requirements: string;
-  preferredDate: string;
-  preferredTimeSlot: string;
-  urgency: 'low' | 'medium' | 'high';
-  phone?: string;
-  companyName?: string;
-  budget?: string;
-  additionalInfo?: string;
-  status: 'pending' | 'contacted' | 'completed' | 'rejected';
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
-export async function sendContactRequest(data: ContactRequest) {
-  try {
-    // Convert string IDs to numbers if needed
-    const providerId =
-      typeof data.providerId === 'string'
-        ? Number.parseInt(data.providerId)
-        : data.providerId;
-    const seekerId =
-      typeof data.seekerId === 'string'
-        ? Number.parseInt(data.seekerId)
-        : data.seekerId;
-
-    // Insert the contact request into the database
-    const result = await db
-      .insert(contactRequests)
-      .values({
-        provider_id: providerId,
-        provider_name: data.providerName,
-        seeker_id: seekerId,
-        seeker_name: data.seekerName,
-        seeker_email: data.seekerEmail,
-        requirements: data.requirements,
-        preferred_date: data.preferredDate,
-        preferred_time_slot: data.preferredTimeSlot,
-        urgency: data.urgency,
-        phone: data.phone || null,
-        company_name: data.companyName || null,
-        budget: data.budget || null,
-        additional_info: data.additionalInfo || null,
-        status: data.status,
-        created_at: new Date(),
-        updated_at: new Date(),
-      })
-      .returning();
-
-    // Revalidate the provider dashboard path
-    revalidatePath('/solutionProvider');
-
-    return { success: true, data: result[0] };
-  } catch (error) {
-    console.error('Error sending contact request:', error);
-    return {
-      success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : 'Failed to send contact request',
-    };
-  }
-}
-
-export async function hasExistingContactRequest(
-  seekerId: number,
-  providerId: number,
-) {
-  try {
-    const existing = await db.query.contactRequests.findFirst({
-      where: (requests, { and, eq }) =>
-        and(
-          eq(requests.seeker_id, seekerId),
-          eq(requests.provider_id, providerId),
-          eq(requests.status, 'pending'),
-        ),
-    });
-
-    return !!existing;
-  } catch (error) {
-    console.error('Error checking existing contact request:', error);
-    return false;
-  }
-}
+import { v4 as uuidv4 } from 'uuid';
+import { put } from '@vercel/blob';
 
 export async function getContactRequestsForProvider(providerId: number) {
   try {
@@ -148,6 +59,7 @@ export async function updateContactRequestStatus(
     };
   }
 }
+
 export async function markRequestAsRead(requestId: number) {
   try {
     const result = await db
@@ -175,31 +87,139 @@ export async function markRequestAsRead(requestId: number) {
   }
 }
 
-export async function getUnreadContactRequestsCount(providerId: number) {
+export async function hasExistingContactRequest(
+  seekerId: number,
+  providerId: number,
+) {
   try {
-    const result = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(contactRequests)
-      .where(
+    const existing = await db.query.contactRequests.findFirst({
+      where: (requests, { and, eq }) =>
         and(
-          eq(contactRequests.provider_id, providerId),
-          eq(contactRequests.read, false),
+          eq(requests.seeker_id, seekerId),
+          eq(requests.provider_id, providerId),
+          eq(requests.status, 'pending'),
         ),
-      );
+    });
 
-    return {
-      success: true,
-      count: result[0]?.count || 0,
-    };
+    return !!existing;
   } catch (error) {
-    console.error('Error counting unread requests:', error);
+    console.error('Error checking existing contact request:', error);
+    return false;
+  }
+}
+
+// New function to handle file uploads with Vercel Blob
+export async function uploadFilesToBlob(
+  files: File[],
+): Promise<DocumentInfo[]> {
+  const documentInfos: DocumentInfo[] = [];
+
+  if (!files || files.length === 0) {
+    return documentInfos;
+  }
+
+  for (const file of files) {
+    try {
+      // Generate a unique filename
+      const fileExtension = file.name.split('.').pop();
+      const uniqueFilename = `${uuidv4()}.${fileExtension}`;
+
+      // Upload to Vercel Blob
+      const blob = await put(uniqueFilename, file, {
+        access: 'public', // Use 'private' for sensitive documents
+      });
+
+      // Store document information
+      documentInfos.push({
+        filename: uniqueFilename,
+        originalName: file.name,
+        size: file.size,
+        mimeType: file.type,
+        url: blob.url,
+      });
+    } catch (error) {
+      console.error('Error uploading file to Blob:', error);
+      // Continue with other files if one fails
+    }
+  }
+
+  return documentInfos;
+}
+
+// Function to send contact request with file support
+export async function sendContactRequestWithFiles(formData: FormData) {
+  try {
+    // Extract form fields
+    const providerId = Number(formData.get('providerId'));
+    const seekerId = Number(formData.get('seekerId'));
+    const providerName = formData.get('providerName') as string;
+    const seekerName = formData.get('seekerName') as string;
+    const seekerEmail = formData.get('seekerEmail') as string;
+    const requirements = formData.get('requirements') as string;
+    const preferredDate = formData.get('preferredDate') as string;
+    const preferredTimeSlot = formData.get('preferredTimeSlot') as string;
+    const urgency = formData.get('urgency') as string;
+    const phone = formData.get('phone') as string;
+    const companyName = formData.get('companyName') as string;
+    const budget = formData.get('budget') as string;
+    const additionalInfo = formData.get('additionalInfo') as string;
+    const status = formData.get('status') as string;
+
+    // Check for existing pending request
+    const existing = await hasExistingContactRequest(seekerId, providerId);
+    if (existing) {
+      return {
+        success: false,
+        error:
+          'You already have a pending request with this provider. Please wait for a response.',
+      };
+    }
+
+    // Handle file uploads
+    const files = formData.getAll('files') as File[];
+    let documentInfos: DocumentInfo[] = [];
+
+    if (files && files.length > 0) {
+      documentInfos = await uploadFilesToBlob(files);
+    }
+
+    // Insert the contact request with document information
+    const result = await db
+      .insert(contactRequests)
+      .values({
+        provider_id: providerId,
+        provider_name: providerName,
+        seeker_id: seekerId,
+        seeker_name: seekerName,
+        seeker_email: seekerEmail,
+        requirements: requirements,
+        preferred_date: preferredDate,
+        preferred_time_slot: preferredTimeSlot,
+        urgency: urgency,
+        phone: phone || null,
+        company_name: companyName || null,
+        budget: budget || null,
+        additional_info: additionalInfo || null,
+        status: status,
+        documents: documentInfos.length > 0 ? documentInfos : null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      })
+      .returning();
+
+    // Revalidate the provider dashboard path
+    revalidatePath('/solutionProvider');
+    revalidatePath('/admin/contact-requests');
+
+    return { success: true, data: result[0] };
+  } catch (error) {
+    console.error('Error sending contact request with files:', error);
     return {
       success: false,
-      count: 0,
       error:
         error instanceof Error
           ? error.message
-          : 'Failed to count unread requests',
+          : 'Failed to send contact request',
     };
   }
 }

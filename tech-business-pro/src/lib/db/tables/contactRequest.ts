@@ -1,6 +1,8 @@
+import { DocumentInfo } from '@/lib/types';
 import {
   boolean,
   integer,
+  jsonb,
   pgTable,
   serial,
   text,
@@ -26,6 +28,7 @@ export const contactRequests = pgTable('contact_requests', {
   status: varchar('status', { length: 20 }).notNull().default('pending'),
   notes: text('notes'),
   read: boolean('read').default(false).notNull(),
+  documents: jsonb('documents').$type<DocumentInfo[]>(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull(),
 });

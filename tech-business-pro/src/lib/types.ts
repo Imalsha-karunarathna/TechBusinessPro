@@ -123,6 +123,15 @@ export interface ContactRequest {
   status: 'pending' | 'contacted' | 'completed' | 'rejected';
   notes?: string | null;
   read?: boolean;
+  documents?: DocumentInfo | null;
   created_at?: Date;
   updated_at?: Date;
+}
+
+export interface DocumentInfo {
+  filename: string;
+  originalName: string;
+  size: number;
+  mimeType: string;
+  url: string;
 }

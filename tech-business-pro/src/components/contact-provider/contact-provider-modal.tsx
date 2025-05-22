@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import type React from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/lib/auth';
@@ -42,6 +43,11 @@ import {
   CheckCircle2,
   CalendarPlus2Icon as CalendarIcon2,
   Clock3,
+  Upload,
+  File,
+  X,
+  Paperclip,
+  Globe,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -52,10 +58,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { sendContactRequest } from '@/app/actions/contact-provider-action';
-import { timeSlots } from '@/lib/constants';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
+import { sendContactRequestWithFiles } from '@/app/actions/contact-provider-action';
+
+// Define time slots with timezone information
+const timeSlots = [
+  { value: '9:00 AM - 10:00 AM', label: '9:00 AM - 10:00 AM (AEST/AEDT)' },
+  { value: '10:00 AM - 11:00 AM', label: '10:00 AM - 11:00 AM (AEST/AEDT)' },
+  { value: '11:00 AM - 12:00 PM', label: '11:00 AM - 12:00 PM (AEST/AEDT)' },
+  { value: '12:00 PM - 1:00 PM', label: '12:00 PM - 1:00 PM (AEST/AEDT)' },
+  { value: '1:00 PM - 2:00 PM', label: '1:00 PM - 2:00 PM (AEST/AEDT)' },
+  { value: '2:00 PM - 3:00 PM', label: '2:00 PM - 3:00 PM (AEST/AEDT)' },
+  { value: '3:00 PM - 4:00 PM', label: '3:00 PM - 4:00 PM (AEST/AEDT)' },
+  { value: '4:00 PM - 5:00 PM', label: '4:00 PM - 5:00 PM (AEST/AEDT)' },
+  // Sri Lankan time (UTC+5:30)
+  { value: '9:00 AM - 10:00 AM (SLT)', label: '9:00 AM - 10:00 AM (SLT)' },
+  { value: '10:00 AM - 11:00 AM (SLT)', label: '10:00 AM - 11:00 AM (SLT)' },
+  { value: '11:00 AM - 12:00 PM (SLT)', label: '11:00 AM - 12:00 PM (SLT)' },
+  { value: '12:00 PM - 1:00 PM (SLT)', label: '12:00 PM - 1:00 PM (SLT)' },
+  { value: '1:00 PM - 2:00 PM (SLT)', label: '1:00 PM - 2:00 PM (SLT)' },
+  { value: '2:00 PM - 3:00 PM (SLT)', label: '2:00 PM - 3:00 PM (SLT)' },
+  { value: '3:00 PM - 4:00 PM (SLT)', label: '3:00 PM - 4:00 PM (SLT)' },
+  { value: '4:00 PM - 5:00 PM (SLT)', label: '4:00 PM - 5:00 PM (SLT)' },
+];
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_FILE_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'image/jpeg',
+  'image/png',
+];
 
 const contactFormSchema = z.object({
   requirements: z
@@ -71,6 +108,7 @@ const contactFormSchema = z.object({
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms to proceed',
   }),
+  // We'll handle file validation separately since it's not directly part of the form data
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -89,8 +127,17 @@ export function ContactProviderModal({
   providerName,
 }: ContactProviderModalProps) {
   const { user } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [summaryValues, setSummaryValues] = useState({
+    preferredDate: new Date(),
+    preferredTimeSlot: '',
+    urgency: 'medium',
+  });
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -106,28 +153,102 @@ export function ContactProviderModal({
     },
   });
 
+  // Watch form values for summary updates
+  const watchedValues = useWatch({
+    control: form.control,
+    name: ['preferredDate', 'preferredTimeSlot', 'urgency'],
+  });
+
+  // Update summary when form values change
+  useEffect(() => {
+    setSummaryValues({
+      preferredDate: watchedValues[0] || new Date(),
+      preferredTimeSlot: watchedValues[1] || '',
+      urgency: watchedValues[2] || 'medium',
+    });
+  }, [watchedValues]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileError(null);
+    const selectedFiles = Array.from(e.target.files || []);
+
+    // Validate file types and sizes
+    for (const file of selectedFiles) {
+      if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+        setFileError(
+          'Invalid file type. Please upload PDF, Word, Excel, or image files.',
+        );
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        setFileError('File size exceeds 5MB limit.');
+        return;
+      }
+    }
+
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+  };
+
+  const removeFile = (index: number) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: ContactFormValues) => {
     if (!user) return;
 
     setIsSubmitting(true);
 
     try {
-      const result = await sendContactRequest({
-        providerId,
-        seekerId: user.id,
-        providerName: providerName || 'Unknown',
-        seekerName: user.name || 'Unknown',
-        seekerEmail: user.email,
-        requirements: data.requirements,
-        preferredDate: data.preferredDate.toISOString(),
-        preferredTimeSlot: data.preferredTimeSlot,
-        urgency: data.urgency,
-        phone: data.phone || '',
-        companyName: data.companyName || '',
-        budget: data.budget || '',
-        additionalInfo: data.additionalInfo || '',
-        status: 'pending',
+      // First check if there's an existing pending request
+      const checkResponse = await fetch(`/api/admin/contact-request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          seekerId: user.id,
+          providerId: providerId,
+        }),
       });
+
+      const checkResult = await checkResponse.json();
+
+      if (checkResult.exists) {
+        toast('Request already exists', {
+          description:
+            'You already have a pending request with this provider. Please wait for a response.',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Create FormData to handle file uploads
+      const formData = new FormData();
+
+      // Add form data
+      formData.append('providerId', providerId.toString());
+      formData.append('seekerId', user.id.toString());
+      formData.append('providerName', providerName || 'Unknown');
+      formData.append('seekerName', user.name || 'Unknown');
+      formData.append('seekerEmail', user.email);
+      formData.append('requirements', data.requirements);
+      formData.append('preferredDate', data.preferredDate.toISOString());
+      formData.append('preferredTimeSlot', data.preferredTimeSlot);
+      formData.append('urgency', data.urgency);
+      formData.append('phone', data.phone || '');
+      formData.append('companyName', data.companyName || '');
+      formData.append('budget', data.budget || '');
+      formData.append('additionalInfo', data.additionalInfo || '');
+      formData.append('status', 'pending');
+
+      // Add files
+      files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      // Send the request with files using the server action
+      const result = await sendContactRequestWithFiles(formData);
 
       if (result.success) {
         toast('Request sent successfully', {
@@ -135,12 +256,13 @@ export function ContactProviderModal({
         });
         onClose();
         form.reset();
+        setFiles([]);
       } else {
         toast('Error sending request', {
-          description: `An error occurred. Please try again.`,
+          description: result.error || 'An error occurred. Please try again.',
         });
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      /*eslint-disable @typescript-eslint/no-unused-vars */
     } catch (error) {
       toast('Error sending request', {
         description: `An error occurred. Please try again.`,
@@ -148,6 +270,42 @@ export function ContactProviderModal({
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setFileError(null);
+    const droppedFiles = Array.from(e.dataTransfer.files);
+
+    // Validate file types and sizes
+    for (const file of droppedFiles) {
+      if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+        setFileError(
+          'Invalid file type. Please upload PDF, Word, Excel, or image files.',
+        );
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        setFileError('File size exceeds 5MB limit.');
+        return;
+      }
+    }
+
+    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+  };
+
+  // Get the display label for a time slot
+  const getTimeSlotLabel = (value: string) => {
+    const slot = timeSlots.find((slot) => slot.value === value);
+    return slot ? slot.label : value;
   };
 
   return (
@@ -222,10 +380,7 @@ export function ContactProviderModal({
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        {/* <PopoverContent
-                          className="bg-white border border-[#42C3EE]/20 p-0"
-                          align="start"
-                        > */}
+                        {/* <PopoverContent className="w-auto p-0" align="start"> */}
                         <Calendar
                           mode="single"
                           selected={field.value}
@@ -260,16 +415,40 @@ export function ContactProviderModal({
                             <SelectValue placeholder="Select a time slot" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="bg-white border border-[#42C3EE]/20">
-                          {timeSlots.map((slot) => (
+                        <SelectContent className="bg-white border border-[#42C3EE]/20 max-h-[300px]">
+                          <div className="p-2 border-b border-[#42C3EE]/20">
+                            <div className="flex items-center text-sm font-medium text-[#3069FE]">
+                              <Globe className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
+                              Australian Eastern Time
+                            </div>
+                          </div>
+                          {timeSlots.slice(0, 8).map((slot) => (
                             <SelectItem
-                              key={slot}
-                              value={slot}
+                              key={slot.value}
+                              value={slot.value}
                               className="hover:bg-[#3069FE]/5"
                             >
                               <div className="flex items-center">
                                 <Clock className="h-4 w-4 mr-2 text-[#42C3EE]" />
-                                {slot}
+                                {slot.label}
+                              </div>
+                            </SelectItem>
+                          ))}
+                          <div className="p-2 border-t border-b border-[#42C3EE]/20 mt-1">
+                            <div className="flex items-center text-sm font-medium text-[#3069FE]">
+                              <Globe className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
+                              Sri Lanka Time
+                            </div>
+                          </div>
+                          {timeSlots.slice(8).map((slot) => (
+                            <SelectItem
+                              key={slot.value}
+                              value={slot.value}
+                              className="hover:bg-[#3069FE]/5"
+                            >
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                                {slot.label}
                               </div>
                             </SelectItem>
                           ))}
@@ -374,6 +553,94 @@ export function ContactProviderModal({
                 )}
               />
 
+              {/* Document Upload Section */}
+              <div className="bg-gray-50 p-4 rounded-lg border border-[#42C3EE]/20">
+                <div className="flex items-center mb-3">
+                  <Paperclip className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                  <h3 className="text-sm font-medium text-[#3069FE]">
+                    Attach Documents
+                  </h3>
+                </div>
+
+                <div className="mb-3">
+                  <p className="text-sm text-gray-600 mb-2">
+                    If you have any relevant documents, please upload them here.
+                    Supported formats: PDF, Word, Excel, JPEG, PNG (max 5MB
+                    each).
+                  </p>
+
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
+                    multiple
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                  />
+
+                  <div
+                    className="w-full border-dashed border-2 border-[#42C3EE]/40 bg-white hover:bg-[#3069FE]/5 hover:border-[#3069FE] py-6 rounded-md"
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                  >
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="mx-auto flex flex-col items-center justify-center border-0 bg-transparent shadow-none hover:bg-transparent"
+                    >
+                      <Upload className="h-6 w-6 mb-2 text-[#42C3EE]" />
+                      <span className="text-sm font-medium">
+                        Click to upload files
+                      </span>
+                      <span className="text-xs text-gray-500 mt-1">
+                        or drag and drop
+                      </span>
+                    </Button>
+                  </div>
+
+                  {fileError && (
+                    <p className="text-sm text-red-500 mt-2">{fileError}</p>
+                  )}
+                </div>
+
+                {files.length > 0 && (
+                  <div className="space-y-2 mt-4">
+                    <h4 className="text-sm font-medium text-gray-700">
+                      Attached Files:
+                    </h4>
+                    <div className="max-h-40 overflow-y-auto">
+                      {files.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-white p-2 rounded-md border border-[#42C3EE]/20 mb-2"
+                        >
+                          <div className="flex items-center">
+                            <File className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                            <span className="text-sm truncate max-w-[200px]">
+                              {file.name}
+                            </span>
+                            <span className="text-xs text-gray-500 ml-2">
+                              ({(file.size / 1024).toFixed(1)} KB)
+                            </span>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(index)}
+                            className="h-6 w-6 p-0 hover:bg-red-50 hover:text-red-500"
+                          >
+                            <X className="h-4 w-4" />
+                            <span className="sr-only">Remove file</span>
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
@@ -391,10 +658,6 @@ export function ContactProviderModal({
                           className="border-[#42C3EE]/30 focus:border-[#3069FE] focus:ring-[#3069FE]"
                         />
                       </FormControl>
-                      {/* <FormDescription className="text-gray-500 text-sm">
-                        Provide a phone number if you prefer to be contacted
-                        that way
-                      </FormDescription> */}
                       <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
@@ -506,36 +769,43 @@ export function ContactProviderModal({
                       className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30"
                     >
                       <CalendarIcon2 className="h-3.5 w-3.5 mr-1.5" />
-                      {format(
-                        form.getValues().preferredDate || new Date(),
-                        'PPP',
-                      )}
+                      {format(summaryValues.preferredDate, 'PPP')}
                     </Badge>
-                    {form.getValues().preferredTimeSlot && (
+                    {summaryValues.preferredTimeSlot && (
                       <Badge
                         variant="outline"
                         className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30"
                       >
                         <Clock className="h-3.5 w-3.5 mr-1.5" />
-                        {form.getValues().preferredTimeSlot}
+                        {getTimeSlotLabel(summaryValues.preferredTimeSlot)}
                       </Badge>
                     )}
                     <Badge
                       variant="outline"
                       className={cn('border', {
                         'bg-green-50 text-green-700 border-green-200':
-                          form.getValues().urgency === 'low',
+                          summaryValues.urgency === 'low',
                         'bg-blue-50 text-blue-700 border-blue-200':
-                          form.getValues().urgency === 'medium',
+                          summaryValues.urgency === 'medium',
                         'bg-red-50 text-red-700 border-red-200':
-                          form.getValues().urgency === 'high',
+                          summaryValues.urgency === 'high',
                       })}
                     >
                       <AlertTriangle className="h-3.5 w-3.5 mr-1.5" />
-                      {form.getValues().urgency.charAt(0).toUpperCase() +
-                        form.getValues().urgency.slice(1)}{' '}
+                      {summaryValues.urgency.charAt(0).toUpperCase() +
+                        summaryValues.urgency.slice(1)}{' '}
                       Urgency
                     </Badge>
+                    {files.length > 0 && (
+                      <Badge
+                        variant="outline"
+                        className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30"
+                      >
+                        <Paperclip className="h-3.5 w-3.5 mr-1.5" />
+                        {files.length}{' '}
+                        {files.length === 1 ? 'Document' : 'Documents'}
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </div>

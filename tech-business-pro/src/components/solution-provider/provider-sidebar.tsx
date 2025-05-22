@@ -4,9 +4,6 @@ import { useAuth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 import { LogOut, PlusCircle, User } from 'lucide-react';
 import { Button } from '../ui/button';
-
-import { useEffect, useState } from 'react';
-import { getUnreadContactRequestsCount } from '@/app/actions/contact-provider-action';
 import Image from 'next/image';
 
 interface ProviderSidebarProps {
@@ -18,32 +15,11 @@ interface ProviderSidebarProps {
 export function ProviderSidebar({
   activeTab,
   setActiveTab,
-  providerId,
+  // providerId,
 }: ProviderSidebarProps) {
-  const [, setUnreadCount] = useState(0);
   const { logoutMutation } = useAuth();
 
   // Fetch unread contact requests count
-  useEffect(() => {
-    if (providerId) {
-      const fetchUnreadCount = async () => {
-        try {
-          const result = await getUnreadContactRequestsCount(providerId);
-          if (result.success) {
-            setUnreadCount(result.count);
-          }
-        } catch (error) {
-          console.error('Failed to fetch unread count:', error);
-        }
-      };
-
-      fetchUnreadCount();
-
-      // Set up polling to check for new requests every minute
-      const interval = setInterval(fetchUnreadCount, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [providerId]);
 
   const navItems = [
     {
