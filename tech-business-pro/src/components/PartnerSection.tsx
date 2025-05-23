@@ -164,13 +164,12 @@ export function PartnerSection() {
           <div className="w-full lg:w-5/12">
             {/* EOI Image */}
             <div className="relative mb-20 mt-20 rounded-2xl overflow-hidden shadow-xl transform transition-all hover:scale-105 duration-300">
-              <Image
-                src="/assets/eoi.jpg"
+              <img
+                src="../assets/eoi-image.jpg"
                 alt="Partnership collaboration"
                 width={600}
                 height={400}
                 className="w-full h-64 lg:h-80 object-cover"
-                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
               <div className="absolute bottom-6 left-6 text-white">
