@@ -147,11 +147,8 @@ export function PartnerSection() {
           <span className="inline-block px-3 py-1 bg-white text-sm font-medium rounded-lg text-[#3069FE] mb-4">
             Partnership Program
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Partner with Us &{' '}
-            <span className="text-transparent bg-clip-text bg-[#3069FE]">
-              Unlock Global Growth
-            </span>
+          <h2 className="text-4xl font-extrabold tracking-tight text-gray-800 sm:text-5xl">
+            Partner with Us & Unlock Global Growth
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Tap into international markets and expand your reach with strategic
@@ -162,13 +159,13 @@ export function PartnerSection() {
         <div className="flex flex-col lg:flex-row justify-center items-start gap-8 lg:gap-12">
           <div className="w-full lg:w-5/12">
             {/* EOI Image */}
-            <div className="relative mb-20 mt-20 rounded-2xl overflow-hidden shadow-xl transform transition-all hover:scale-105 duration-300">
+            <div className="relative mb-10 mt-20 rounded-2xl  overflow-hidden shadow-xl transform transition-all hover:scale-105 duration-300">
               <img
                 src="../assets/eoi-image.jpg"
                 alt="Partnership collaboration"
                 width={600}
                 height={400}
-                className="w-full h-64 lg:h-80 object-cover"
+                className="w-full h-64 lg:h-100 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
               <div className="absolute bottom-6 left-6 text-white">
@@ -241,7 +238,7 @@ export function PartnerSection() {
             <Card className="border-none shadow-xl overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-8 rounded-xl">
                 <CardTitle className="text-2xl font-bold">
-                  Expression of Interest
+                  Expression of Interest to Become a Partner
                 </CardTitle>
                 <CardDescription className="text-white text-opacity-90">
                   Fill out the form below to join our partner network
@@ -632,7 +629,7 @@ export function PartnerSection() {
                               <div className="flex-1 min-w-0">
                                 <FormLabel
                                   htmlFor="accept_privacy"
-                                  className="text-sm text-gray-700 flex flex-wrap gap-1"
+                                  className="text-sm text-gray-700 flex flex-wrap gap-1 whitespace-nowrap"
                                 >
                                   I confirm that I have read, understood and
                                   accept the terms and conditions in the{' '}

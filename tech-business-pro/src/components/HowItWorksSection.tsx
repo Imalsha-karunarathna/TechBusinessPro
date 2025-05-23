@@ -15,11 +15,8 @@ const HowItWorksSection = () => {
           <span className="inline-block px-3 py-1 bg-white text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
             Process
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            How Tech Mista{' '}
-            <span className="text-transparent bg-clip-text bg-[#3069FE]">
-              Works
-            </span>
+          <h2 className="text-4xl font-extrabold tracking-tight text-gray-800 sm:text-5xl">
+            How Tech Mista Works
           </h2>
           <p className="mt-6 max-w-2xl text-xl text-gray-500 mx-auto">
             A simple process to connect solution providers with businesses in
