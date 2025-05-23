@@ -49,142 +49,147 @@ export function PartnerApplicationsTable({
   return (
     <>
       <div className="rounded-md border border-[#42C3EE]/20 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-        <Table>
-          <TableHeader className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5">
-            <TableRow>
-              <TableHead className="font-medium text-[#3069FE]">
-                Organization
-              </TableHead>
-              <TableHead className="font-medium text-[#3069FE]">
-                Contact
-              </TableHead>
-              <TableHead className="font-medium text-[#3069FE]">
-                Expertise
-              </TableHead>
-              <TableHead className="font-medium text-[#3069FE]">
-                Designation
-              </TableHead>
-              <TableHead className="font-medium text-[#3069FE]">
-                Status
-              </TableHead>
-              <TableHead className="font-medium text-[#3069FE]">
-                Submitted
-              </TableHead>
-              <TableHead className="text-right font-medium text-[#3069FE]">
-                Actions
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {applications.length === 0 ? (
+        <div className="w-full overflow-auto">
+          <Table>
+            <TableHeader className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5">
               <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center py-10 text-muted-foreground"
-                >
-                  <div className="flex flex-col items-center justify-center space-y-3">
-                    <Building className="h-10 w-10 text-[#42C3EE]/40" />
-                    <p className="text-lg font-medium text-gray-500">
-                      No partner applications found
-                    </p>
-                    <p className="text-sm text-gray-400">
-                      Partner applications will appear here once submitted
-                    </p>
-                  </div>
-                </TableCell>
+                <TableHead className="font-medium text-[#3069FE]">
+                  Organization
+                </TableHead>
+                <TableHead className="font-medium text-[#3069FE]">
+                  Contact
+                </TableHead>
+                <TableHead className="font-medium text-[#3069FE]">
+                  Expertise
+                </TableHead>
+                <TableHead className="font-medium text-[#3069FE]">
+                  Designation
+                </TableHead>
+                <TableHead className="font-medium text-[#3069FE]">
+                  Status
+                </TableHead>
+                <TableHead className="font-medium text-[#3069FE]">
+                  Submitted
+                </TableHead>
+                <TableHead className="text-right font-medium text-[#3069FE]">
+                  Actions
+                </TableHead>
               </TableRow>
-            ) : (
-              applications.map((application) => (
-                <TableRow
-                  key={application.id}
-                  className="hover:bg-gradient-to-r hover:from-[#3069FE]/5 hover:to-[#42C3EE]/5 transition-colors"
-                >
-                  <TableCell>
-                    <div className="flex items-center space-x-3">
-                      <div className="h-9 w-9 rounded-full bg-gradient-to-r from-[#3069FE]/20 to-[#42C3EE]/20 flex items-center justify-center">
-                        <Building className="h-5 w-5 text-[#3069FE]" />
-                      </div>
-                      <div className="font-medium">
-                        {application.organization_name}
-                      </div>
+            </TableHeader>
+            <TableBody>
+              {applications.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-10 text-muted-foreground"
+                  >
+                    <div className="flex flex-col items-center justify-center space-y-3">
+                      <Building className="h-10 w-10 text-[#42C3EE]/40" />
+                      <p className="text-lg font-medium text-gray-500">
+                        No partner applications found
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        Partner applications will appear here once submitted
+                      </p>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <div className="font-medium flex items-center">
-                        <User className="h-3.5 w-3.5 mr-1.5 text-[#3069FE]" />
-                        {application.partner_name}
-                      </div>
-                      <div className="text-sm text-muted-foreground flex items-center">
-                        <Mail className="h-3.5 w-3.5 mr-1 text-[#42C3EE]" />
-                        {application.email}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {Array.isArray(application.expertise) ? (
-                      <div className="flex flex-wrap gap-1">
-                        {application.expertise.map(
-                          (exp: string, index: number) => (
-                            <Badge
-                              key={index}
-                              variant="outline"
-                              className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30 px-2 py-0.5 rounded-full text-xs font-medium"
-                            >
-                              <Briefcase className="h-3 w-3 mr-1 inline" />
-                              {exp}
-                            </Badge>
-                          ),
-                        )}
-                      </div>
-                    ) : (
-                      <Badge
-                        variant="outline"
-                        className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30 px-2 py-0.5 rounded-full text-xs font-medium"
-                      >
-                        <Briefcase className="h-3 w-3 mr-1 inline" />
-                        {application.expertise}
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <FileText className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
-                      {application.designation}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge status={application.application_status} />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center text-gray-600">
-                      <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
-                      {application.created_at
-                        ? formatDistanceToNow(
-                            new Date(application.created_at),
-                            {
-                              addSuffix: true,
-                            },
-                          )
-                        : 'Unknown'}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-[#3069FE]/20 text-[#3069FE] hover:bg-[#3069FE]/10 transition-colors duration-200"
-                      onClick={() => openViewDialog(application)}
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </Button>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                applications.map((application) => (
+                  <TableRow
+                    key={application.id}
+                    className="hover:bg-gradient-to-r hover:from-[#3069FE]/5 hover:to-[#42C3EE]/5 transition-colors"
+                  >
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <div className="h-9 w-9 rounded-full bg-gradient-to-r from-[#3069FE]/20 to-[#42C3EE]/20 flex items-center justify-center">
+                          <Building className="h-5 w-5 text-[#3069FE]" />
+                        </div>
+                        <div className="font-medium">
+                          {application.organization_name}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <div className="font-medium flex items-center">
+                          <User className="h-3.5 w-3.5 mr-1.5 text-[#3069FE]" />
+                          {application.partner_name}
+                        </div>
+                        <div
+                          className="text-sm text-muted-foreground flex items-center max-w-[150px]"
+                          title={application.email}
+                        >
+                          <Mail className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-[#42C3EE]" />
+                          <span className="truncate">{application.email}</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {Array.isArray(application.expertise) ? (
+                        <div className="flex flex-wrap gap-1 max-w-[200px]">
+                          {application.expertise.map(
+                            (exp: string, index: number) => (
+                              <Badge
+                                key={index}
+                                variant="outline"
+                                className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30 px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap"
+                              >
+                                <Briefcase className="h-3 w-3 mr-1 inline" />
+                                {exp}
+                              </Badge>
+                            ),
+                          )}
+                        </div>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30 px-2 py-0.5 rounded-full text-xs font-medium"
+                        >
+                          <Briefcase className="h-3 w-3 mr-1 inline" />
+                          {application.expertise}
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        <FileText className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                        {application.designation}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <StatusBadge status={application.application_status} />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center text-gray-600">
+                        <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                        {application.created_at
+                          ? formatDistanceToNow(
+                              new Date(application.created_at),
+                              {
+                                addSuffix: true,
+                              },
+                            )
+                          : 'Unknown'}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-[#3069FE]/20 text-[#3069FE] hover:bg-[#3069FE]/10 transition-colors duration-200"
+                        onClick={() => openViewDialog(application)}
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* View Application Dialog */}

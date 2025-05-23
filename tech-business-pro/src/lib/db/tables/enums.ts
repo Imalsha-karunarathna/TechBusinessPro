@@ -5,6 +5,7 @@ export const userRoleEnum = pgEnum('user_role', [
   'admin',
   'solution_provider',
   'solution_seeker',
+  'agent',
 ]);
 
 // Status enum for application statuses

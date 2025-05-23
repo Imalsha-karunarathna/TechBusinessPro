@@ -1,239 +1,286 @@
 'use client';
 
-import type React from 'react';
 import { useState } from 'react';
-import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useRouter } from 'next/navigation';
-import {
-  AlertCircle,
-  CheckCircle2,
-  User,
-  Mail,
-  Lock,
-  ArrowRight,
-  Home,
-} from 'lucide-react';
-import { registerAgent } from '@/app/actions/agent-auth';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { UserPlus, Mail, Lock, Home } from 'lucide-react';
+import { registerAgent } from '@/app/actions/agent-auth';
 
-export default function RegisterAgentPage() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+const registerSchema = z
+  .object({
+    username: z.string().min(3, 'Username must be at least 3 characters'),
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z
+      .string()
+      .min(6, 'Password must be at least 6 characters'),
+    acceptPolicy: z.boolean().refine((val) => val === true, {
+      message: 'You must accept the policy.',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+export default function AgentRegisterPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setLoading(false);
-      return;
-    }
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      acceptPolicy: false,
+    },
+  });
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
-      setLoading(false);
-      return;
-    }
+  const onSubmit = async (data: RegisterFormValues) => {
+    setIsLoading(true);
+    setError(null);
 
     try {
+      // Call the server action to register the agent
       const result = await registerAgent({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
+        username: data.username,
+        email: data.email,
+        password: data.password,
       });
 
-      if (result.success) {
-        setSuccess(true);
-        // Redirect to login after 2 seconds
-        setTimeout(() => {
-          router.push('/agent/login');
-        }, 2000);
-      } else {
-        setError(result.error || 'Registration failed');
+      if (!result.success) {
+        throw new Error(result.error || 'Registration failed');
       }
+
+      // Redirect to login page with success message
+      router.push('/auth-page?registered=true&role=agent');
     } catch (err) {
-      setError('An unexpected error occurred');
-      console.error(err);
+      console.error('Registration error:', err);
+      setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 p-4">
       <div className="w-full max-w-md">
-        <Card className="border-none shadow-xl bg-white overflow-hidden">
-          <CardHeader className="-mt-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white p-2 rounded-sm">
-            <div className="mb-4 text-center">
-              <Link
-                href="/"
-                className="inline-flex items-center text-sm text-gray-300 hover:underline"
-              >
-                <Home className="h-4 w-4 mr-2" />
-                Back to Home
-              </Link>
-            </div>
-            <div className="flex justify-center mb-4">
-              <div className="h-16 w-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                <User className="h-8 w-8 text-gray-800" />
-              </div>
-            </div>
-            <CardTitle className="text-center text-2xl font-bold">
-              Become an Agent
-            </CardTitle>
-            <CardDescription className="text-center text-white text-opacity-90">
-              Join our global network of business agents
-            </CardDescription>
-          </CardHeader>
+        <div className="text-center mb-8">
+          <div className="mb-4">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sm text-[#3069FE] hover:underline"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              Back to Home
+            </Link>
+          </div>
+          <div className="inline-flex items-center justify-center h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full mb-6">
+            <UserPlus className="h-8 w-8 text-white" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900">Become an Agent</h2>
+          <p className="mt-2 text-gray-600">
+            Register to connect businesses with solutions
+          </p>
+        </div>
 
-          <CardContent className="p-6 pt-8">
-            {success ? (
-              <div className="bg-green-50 border border-green-100 rounded-lg p-4 flex items-center">
-                <CheckCircle2 className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                <p className="text-green-700">
-                  Registration successful! Redirecting to login...
-                </p>
-              </div>
-            ) : error ? (
-              <div className="bg-red-50 border border-red-100 rounded-lg p-4 flex items-center">
-                <AlertCircle className="h-5 w-5 text-red-500 mr-3 flex-shrink-0" />
-                <p className="text-red-700">{error}</p>
-              </div>
-            ) : null}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+            {error}
+          </div>
+        )}
 
-            <form onSubmit={handleSubmit} className="space-y-5 mt-6">
-              <div className="space-y-2">
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <User className="h-5 w-5" />
-                  </div>
-                  <Input
-                    id="username"
-                    name="username"
-                    type="text"
-                    required
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-[#3069FE] focus:ring-[#3069FE]"
-                    placeholder="Username"
-                  />
-                </div>
-              </div>
+        <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-100">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Choose a username"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
 
-              <div className="space-y-2">
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Mail className="h-5 w-5" />
-                  </div>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-[#3069FE] focus:ring-[#3069FE]"
-                    placeholder="Email address"
-                  />
-                </div>
-              </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Mail className="h-4 w-4 text-gray-500" />
+                      Email
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
 
-              <div className="space-y-2">
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-[#3069FE] focus:ring-[#3069FE]"
-                    placeholder="Password"
-                  />
-                </div>
-              </div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Lock className="h-4 w-4 text-gray-500" />
+                      Password
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Create a password"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
 
-              <div className="space-y-2">
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    required
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className="pl-10 bg-gray-50 border-gray-200 focus:border-purple-400 focus:ring-[#3069FE]"
-                    placeholder="Confirm password"
-                  />
-                </div>
-              </div>
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Lock className="h-4 w-4 text-gray-500" />
+                      Confirm Password
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Confirm your password"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="acceptPolicy"
+                render={({ field }) => (
+                  <FormItem className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg mt-6">
+                    <div className="flex items-center h-5">
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="acceptPolicy"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <FormLabel
+                        htmlFor="acceptPolicy"
+                        className="text-sm text-gray-700 mr-2 font-normal !mt-0 block"
+                      >
+                        I confirm that I have read, understood and accept the
+                        terms and conditions in the{' '}
+                        <a
+                          href="/privacy-policy"
+                          target="_blank"
+                          className="text-[#3069FE] underline hover:text-[#3069FE]"
+                          rel="noreferrer"
+                        >
+                          Privacy Policy
+                        </a>
+                        .
+                      </FormLabel>
+                      <FormMessage className="text-red-500 mt-1" />
+                    </div>
+                  </FormItem>
+                )}
+              />
 
               <Button
                 type="submit"
-                disabled={loading}
-                className="w-full py-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-6 mt-6 cursor-pointer bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200"
+                disabled={isLoading}
               >
-                {loading ? 'Processing...' : 'Register as Agent'}
-                {!loading && <ArrowRight className="h-4 w-4" />}
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Creating account...
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <UserPlus className="h-5 w-5 mr-2" />
+                    Register as Agent
+                  </div>
+                )}
               </Button>
             </form>
-          </CardContent>
+          </Form>
 
-          <CardFooter className="p-6 pt-0 text-center">
+          <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an agent account?{' '}
               <Link
-                href="/agent/login"
+                href="/auth-page"
                 className="font-medium text-[#3069FE] hover:text-[#3069FE] transition-colors"
               >
                 Login
               </Link>
             </p>
-          </CardFooter>
-        </Card>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>
-            By registering, you agree to our{' '}
-            <Link href="/terms" className="text-[#3069FE] hover:underline">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="text-[#3069FE] hover:underline">
-              Privacy Policy
-            </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>

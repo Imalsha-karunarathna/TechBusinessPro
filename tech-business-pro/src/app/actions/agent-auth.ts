@@ -1,138 +1,94 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { createHash } from 'crypto';
-import { agents } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { SignJWT, jwtVerify } from 'jose';
 import { db } from '@/db';
+import { users } from '@/lib/db/tables/users';
+import { eq } from 'drizzle-orm';
+import { hash } from 'bcryptjs';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-secret-key-min-32-chars-long!!',
-);
+export async function getAgentProfile() {
+  try {
+    // Get the user ID from the session cookie
+    const cookieStore = cookies();
+    const sessionCookie = (await cookieStore).get('session');
 
-function hashPassword(password: string): string {
-  return createHash('sha256').update(password).digest('hex');
+    if (!sessionCookie?.value) {
+      return { success: false, message: 'Not authenticated' };
+    }
+
+    const userId = Number.parseInt(sessionCookie.value);
+
+    // Get the user from the database
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    // Check if the user is an agent or admin
+    if (user.role !== 'agent' && user.role !== 'admin') {
+      return { success: false, message: 'Not an agent' };
+    }
+
+    // Return the agent profile
+    return {
+      success: true,
+      agent: {
+        id: String(user.id),
+        username: user.username,
+        email: user.email,
+        createdAt: user.created_at,
+      },
+    };
+  } catch (error) {
+    console.error('Error getting agent profile:', error);
+    return { success: false, message: 'Error getting agent profile' };
+  }
 }
 
-export async function registerAgent({
-  username,
-  email,
-  password,
-}: {
+export async function registerAgent(data: {
   username: string;
   email: string;
   password: string;
 }) {
   try {
-    const existingAgent = await db.query.agents.findFirst({
-      where: eq(agents.email, email),
+    // Check if username or email already exists
+    const existingUser = await db.query.users.findFirst({
+      where: (users, { or, eq }) =>
+        or(eq(users.username, data.username), eq(users.email, data.email)),
     });
 
-    if (existingAgent) {
-      return { success: false, error: 'Email already in use' };
+    if (existingUser) {
+      return {
+        success: false,
+        error: 'Username or email already exists',
+      };
     }
 
-    const hashedPassword = hashPassword(password);
+    // Hash the password (implement proper hashing)
+    const hashedPassword = await hash(data.password, 10);
 
-    const [newAgent] = await db
-      .insert(agents)
+    // Insert the new user with agent role
+    const result = await db
+      .insert(users)
       .values({
-        username,
-        email,
+        username: data.username,
+        email: data.email,
         password: hashedPassword,
+        name: data.username, // Use username as name initially
+        role: 'agent',
       })
-      .returning({ id: agents.id });
+      .returning();
 
-    return { success: true, agentId: newAgent.id };
-  } catch (error) {
-    console.error('Agent registration error:', error);
-    return { success: false, error: 'Failed to register agent' };
-  }
-}
-
-export async function loginAgent({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
-  try {
-    const agent = await db.query.agents.findFirst({
-      where: eq(agents.email, email),
-    });
-
-    if (!agent) {
-      return { success: false, error: 'Invalid email or password' };
+    if (!result || result.length === 0) {
+      throw new Error('Failed to create agent');
     }
-
-    const hashedPassword = hashPassword(password);
-    if (agent.password !== hashedPassword) {
-      return { success: false, error: 'Invalid email or password' };
-    }
-
-    const token = await new SignJWT({
-      agentId: agent.id,
-      role: 'agent',
-    })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setIssuedAt()
-      .setExpirationTime('24h')
-      .sign(JWT_SECRET);
-
-    (await cookies()).set({
-      name: 'agent_token',
-      value: token,
-      httpOnly: true,
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24,
-    });
 
     return { success: true };
   } catch (error) {
-    console.error('Agent login error:', error);
-    return { success: false, error: 'Failed to login' };
+    console.error('Error registering agent:', error);
+    return { success: false, error: 'Error registering agent' };
   }
-}
-
-export async function getAgentProfile() {
-  try {
-    const token = (await cookies()).get('agent_token')?.value;
-
-    if (!token) {
-      return { success: false, error: 'Not authenticated' };
-    }
-
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-
-    if (!payload.agentId || payload.role !== 'agent') {
-      return { success: false, error: 'Invalid token' };
-    }
-
-    const agent = await db.query.agents.findFirst({
-      where: eq(agents.id, payload.agentId as string),
-      columns: {
-        id: true,
-        username: true,
-        email: true,
-        createdAt: true,
-      },
-    });
-
-    if (!agent) {
-      return { success: false, error: 'Agent not found' };
-    }
-
-    return { success: true, agent };
-  } catch (error) {
-    console.error('Get agent profile error:', error);
-    return { success: false, error: 'Failed to get agent profile' };
-  }
-}
-
-export async function logoutAgent() {
-  (await cookies()).delete('agent_token');
-  return { success: true };
 }

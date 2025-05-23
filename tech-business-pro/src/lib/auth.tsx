@@ -58,7 +58,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ? '/admin/partner-application'
           : user.role === 'solution_provider'
             ? '/solutionProvider'
-            : '/';
+            : user.role === 'solution_seeker'
+              ? '/#solutions'
+              : user.role === 'agent'
+                ? '/agent/dashboard'
+                : '/';
       window.location.href = path;
     },
 
