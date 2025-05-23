@@ -1,6 +1,6 @@
 'use client';
 
-import { updateUserRole, updateUserStatus } from '@/app/actions/users';
+import { updateUserStatus } from '@/app/actions/users';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -64,28 +64,28 @@ export function UsersTable({ users }: UsersTableProps) {
     }
   };
 
-  const handleRoleChange = async (userId: number, role: string) => {
-    setIsUpdating(true);
-    try {
-      const result = await updateUserRole(userId, role);
-      if (result.success) {
-        toast('Role Updated', {
-          description: `User role has been changed to ${role.replace('_', ' ')}.`,
-        });
-        // Force a refresh to show the updated data
-        window.location.reload();
-      } else {
-        throw new Error(result.error || 'Failed to update role');
-      }
-    } catch (error) {
-      console.error('Error updating role:', error);
-      toast('Update Failed', {
-        description: 'There was an error updating the user role.',
-      });
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+  // const handleRoleChange = async (userId: number, role: string) => {
+  //   setIsUpdating(true);
+  //   try {
+  //     const result = await updateUserRole(userId, role);
+  //     if (result.success) {
+  //       toast('Role Updated', {
+  //         description: `User role has been changed to ${role.replace('_', ' ')}.`,
+  //       });
+  //       // Force a refresh to show the updated data
+  //       window.location.reload();
+  //     } else {
+  //       throw new Error(result.error || 'Failed to update role');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating role:', error);
+  //     toast('Update Failed', {
+  //       description: 'There was an error updating the user role.',
+  //     });
+  //   } finally {
+  //     setIsUpdating(false);
+  //   }
+  // };
 
   const getRoleBadge = (role: string) => {
     switch (role) {
@@ -101,6 +101,13 @@ export function UsersTable({ users }: UsersTableProps) {
           <Badge className="bg-[#42C3EE]/10 text-[#42C3EE] border border-[#42C3EE]/30 px-2 py-0.5 rounded-full">
             <ShieldCheck className="h-3.5 w-3.5 mr-1 inline" />
             Solution Provider
+          </Badge>
+        );
+      case 'agent':
+        return (
+          <Badge className="bg-[#42C3EE]/10 text-[#42C3EE] border border-[#42C3EE]/30 px-2 py-0.5 rounded-full">
+            <ShieldCheck className="h-3.5 w-3.5 mr-1 inline" />
+            Agent
           </Badge>
         );
       default:
@@ -253,16 +260,16 @@ export function UsersTable({ users }: UsersTableProps) {
                       <DropdownMenuSeparator className="bg-gray-700" />
 
                       {/* Role actions */}
-                      <DropdownMenuLabel>Change Role</DropdownMenuLabel>
-                      <DropdownMenuItem
+                      {/* <DropdownMenuLabel>Change Role</DropdownMenuLabel> */}
+                      {/* <DropdownMenuItem
                         onClick={() => handleRoleChange(user.id, 'admin')}
                         disabled={user.role === 'admin'}
                         className={`${user.role !== 'admin' ? 'hover:bg-[#3069FE]/20 cursor-pointer' : 'opacity-50'}`}
                       >
                         <ShieldAlert className="h-4 w-4 mr-2" />
                         Make Admin
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
+                      </DropdownMenuItem> */}
+                      {/* <DropdownMenuItem
                         onClick={() =>
                           handleRoleChange(user.id, 'solution_provider')
                         }
@@ -275,8 +282,8 @@ export function UsersTable({ users }: UsersTableProps) {
                       >
                         <ShieldCheck className="h-4 w-4 mr-2" />
                         Make Solution Provider
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
+                      </DropdownMenuItem> */}
+                      {/* <DropdownMenuItem
                         onClick={() =>
                           handleRoleChange(user.id, 'solution_seeker')
                         }
@@ -289,7 +296,7 @@ export function UsersTable({ users }: UsersTableProps) {
                       >
                         <User className="h-4 w-4 mr-2" />
                         Make Solution Seeker
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

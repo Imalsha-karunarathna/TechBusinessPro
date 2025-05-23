@@ -48,13 +48,21 @@ export async function updateUserRole(userId: number, role: string) {
     await requireAdmin();
 
     // Validate role
-    if (!['admin', 'solution_provider', 'solution_seeker'].includes(role)) {
+    if (
+      !['admin', 'solution_provider', 'solution_seeker', 'agent'].includes(role)
+    ) {
       return { success: false, error: 'Invalid role' };
     }
 
     await db
       .update(users)
-      .set({ role: role as 'admin' | 'solution_provider' | 'solution_seeker' })
+      .set({
+        role: role as
+          | 'admin'
+          | 'solution_provider'
+          | 'solution_seeker'
+          | 'agent',
+      })
       .where(eq(users.id, userId));
 
     revalidatePath('/admin/users');

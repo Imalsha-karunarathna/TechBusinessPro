@@ -111,6 +111,8 @@ export default function AuthPage() {
         router.push('/solutionProvider');
       } else if (user.role === 'solution_seeker') {
         router.push('/#solutions'); // Go to homepage with hash
+      } else if (user.role === 'agent') {
+        router.push('/agent/dashboard');
       } else {
         router.push('/');
       }
@@ -252,7 +254,7 @@ export default function AuthPage() {
                     className="py-4 data-[state=active]:bg-white data-[state=active]:text-[#3069FE] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#3069FE] rounded-lg cursor-pointer"
                   >
                     <UserPlus className="h-4 w-4 mr-2" />
-                    Register
+                    Register as Seeker
                   </TabsTrigger>
                 </TabsList>
 
@@ -489,13 +491,13 @@ export default function AuthPage() {
                                   id="acceptPolicy"
                                 />
                               </div>
-                              <div className="flex-2 min-w-0">
+                              <div className="flex-1 min-w-0">
                                 <FormLabel
                                   htmlFor="acceptPolicy"
-                                  className="text-sm text-gray-700 font-normal !mt-0 flex flex-wrap items-center whitespace-nowrap"
+                                  className="text-sm text-gray-700 mr-2 font-normal !mt-0 block"
                                 >
                                   I confirm that I have read, understood and
-                                  accept the terms and conditions in the
+                                  accept the terms and conditions in the{' '}
                                   <a
                                     href="/privacy-policy"
                                     target="_blank"
@@ -504,6 +506,7 @@ export default function AuthPage() {
                                   >
                                     Privacy Policy
                                   </a>
+                                  .
                                 </FormLabel>
                                 <FormMessage className="text-red-500 mt-1" />
                               </div>
@@ -565,10 +568,23 @@ export default function AuthPage() {
                 onClick={() =>
                   setActiveTab(activeTab === 'login' ? 'register' : 'login')
                 }
-                className="text-[#3069FE] hover:text-[#3069FE] font-medium "
+                className="text-[#3069FE] hover:text-[#3069FE] font-medium cursor-pointer "
               >
-                {activeTab === 'login' ? 'Register' : 'Log in'}
+                {activeTab === 'login' ? 'Register as Seeker' : 'Log in'}
               </button>
+
+              {activeTab === 'login' && (
+                <>
+                  {''} or{'  '}
+                  <button
+                    type="button"
+                    onClick={() => router.push('/agent/register-agent')}
+                    className="text-[#3069FE] hover:text-[#3069FE] font-medium cursor-pointer"
+                  >
+                    Register as Agent
+                  </button>
+                </>
+              )}
             </p>
           </div>
         </div>

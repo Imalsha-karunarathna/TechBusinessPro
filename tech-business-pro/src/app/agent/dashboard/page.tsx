@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut, User, Briefcase, Settings, PieChart } from 'lucide-react';
 import Link from 'next/link';
 import { getAgentProfile } from '@/app/actions/agent-auth';
+import { useAuth } from '@/lib/auth';
 
 interface AgentProfile {
   id: string;
@@ -15,6 +16,7 @@ interface AgentProfile {
 
 export default function AgentDashboard() {
   const router = useRouter();
+  const { logoutMutation } = useAuth();
   const [agent, setAgent] = useState<AgentProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,11 +27,11 @@ export default function AgentDashboard() {
         if (result.success && result.agent) {
           setAgent(result.agent);
         } else {
-          router.push('/agent/login');
+          router.push('/auth-page');
         }
       } catch (error) {
         console.error('Failed to fetch agent profile:', error);
-        router.push('/agent/login');
+        router.push('/auth-page');
       } finally {
         setLoading(false);
       }
@@ -38,13 +40,12 @@ export default function AgentDashboard() {
     fetchAgentData();
   }, [router]);
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/agent/logout', { method: 'POST' });
-      router.push('/agent/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        window.location.href = '/';
+      },
+    });
   };
 
   if (loading) {
