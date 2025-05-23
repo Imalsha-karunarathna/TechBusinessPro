@@ -19,6 +19,7 @@ import {
   Clock,
   MessageSquare,
 } from 'lucide-react';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -159,10 +160,31 @@ export function PartnerSection() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-12">
+        <div className="flex flex-col lg:flex-row justify-center items-start gap-8 lg:gap-12">
           <div className="w-full lg:w-5/12">
-            <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 transform transition-all hover:scale-105 duration-300 h-full">
-              <div className="space-y-6">
+            {/* EOI Image */}
+            <div className="relative mb-20 mt-20 rounded-2xl overflow-hidden shadow-xl transform transition-all hover:scale-105 duration-300">
+              <Image
+                src="/assets/EOI.jpg"
+                alt="Partnership collaboration"
+                width={600}
+                height={400}
+                className="w-full h-64 lg:h-80 object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div className="absolute bottom-6 left-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">
+                  Join Our Global Network
+                </h3>
+                <p className="text-white/90">
+                  Connect with businesses worldwide
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl p-8 transform transition-all hover:scale-105 duration-300">
+              <div className="space-y-6 mb-10 mt-10">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-to-r from-[#3069FE] to-[#42C3EE] text-white">
