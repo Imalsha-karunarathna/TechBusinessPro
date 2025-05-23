@@ -125,11 +125,8 @@ const ContactSection = () => {
           <span className="inline-block px-3 bg-white py-1 text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
             Get in Touch
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Let Tech Mista{' '}
-            <span className="text-transparent bg-clip-text bg-[#3069FE]">
-              Assist You
-            </span>
+          <h2 className="text-4xl font-extrabold tracking-tight text-gray-800 sm:text-5xl">
+            Let Tech Mista Assist You
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Complete the form below to receive an AI-powered response with

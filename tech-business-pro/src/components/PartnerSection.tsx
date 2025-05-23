@@ -147,11 +147,8 @@ export function PartnerSection() {
           <span className="inline-block px-3 py-1 bg-white text-sm font-medium rounded-lg text-[#3069FE] mb-4">
             Partnership Program
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Partner with Us &{' '}
-            <span className="text-transparent bg-clip-text bg-[#3069FE]">
-              Unlock Global Growth
-            </span>
+          <h2 className="text-4xl font-extrabold tracking-tight text-gray-800 sm:text-5xl">
+            Partner with Us & Unlock Global Growth
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
             Tap into international markets and expand your reach with strategic

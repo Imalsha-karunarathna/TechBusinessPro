@@ -31,11 +31,8 @@ const AboutSection = () => {
           <span className="inline-block px-3 bg-white py-1 text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
             About Us
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Our Vision &{' '}
-            <span className="text-transparent bg-clip-text bg-[#3069FE]">
-              Mission
-            </span>
+          <h2 className="text-4xl font-extrabold tracking-tight text-gray-800 sm:text-5xl">
+            Our Vision & Mission
           </h2>
           <p className="mt-6 max-w-4xl text-xl text-gray-500 lg:mx-auto leading-relaxed">
             Tech Mista is transforming global collaboration by connecting
@@ -92,11 +89,8 @@ const AboutSection = () => {
             <span className="inline-block px-3 py-1 bg-white text-sm font-medium rounded-lg  text-[#3069FE] mb-4">
               What We Do
             </span>
-            <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-              Our{' '}
-              <span className="text-transparent bg-clip-text bg-[#3069FE]">
-                Focus
-              </span>
+            <h2 className="text-4xl font-extrabold tracking-tight text-gray-800 sm:text-5xl">
+              Our Focus
             </h2>
           </div>
 
@@ -141,7 +135,7 @@ const AboutSection = () => {
                 </div>
               </div>
               <h3 className="font-bold text-xl text-gray-900 group-hover:text-[#3069FE] transition-colors">
-                Comprehensive Services
+                Comprehensive Solutions
               </h3>
               <p className="text-gray-600 mt-3 leading-relaxed">
                 Offering a wide range of solutions across diverse technology
