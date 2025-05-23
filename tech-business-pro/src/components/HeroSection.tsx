@@ -90,8 +90,8 @@ const HeroSection = () => {
                 <div className="absolute -inset-4 rounded-2xl blur-xs"></div>
                 <img
                   className="relative h-100 w-full object-cover rounded-xl shadow-2xl transform transition-all duration-500 hover:scale-105"
-                  src="https://images.pexels.com/photos/3184432/pexels-photo-3184432.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                  alt="Global business connections"
+                  src="../assets/hero.jpg"
+                  alt="hero image"
                 />
               </div>
             </div>
