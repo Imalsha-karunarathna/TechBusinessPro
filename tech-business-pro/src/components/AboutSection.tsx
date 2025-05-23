@@ -113,22 +113,6 @@ const AboutSection = () => {
 
             <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
               <div className="mb-6 relative">
-                <div className="absolute inset-0 bg-purple-100 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
-                <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
-                  <Shield className="h-8 w-8 text-white" />
-                </div>
-              </div>
-              <h3 className="font-bold text-xl text-gray-900 group-hover:text-[#3069FE] transition-colors">
-                Quality Assurance
-              </h3>
-              <p className="text-gray-600 mt-3 leading-relaxed">
-                Ensuring solution providers meet stringent standards for
-                quality.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
-              <div className="mb-6 relative">
                 <div className="absolute inset-0 bg-purple-100  rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
                 <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
                   <Lightbulb className="h-8 w-8 text-white" />
@@ -140,6 +124,22 @@ const AboutSection = () => {
               <p className="text-gray-600 mt-3 leading-relaxed">
                 Offering a wide range of solutions across diverse technology
                 needs.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group">
+              <div className="mb-6 relative">
+                <div className="absolute inset-0 bg-purple-100 rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+                <div className="relative h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full flex items-center justify-center">
+                  <Shield className="h-8 w-8 text-white" />
+                </div>
+              </div>
+              <h3 className="font-bold text-xl text-gray-900 group-hover:text-[#3069FE] transition-colors">
+                Quality Assurance
+              </h3>
+              <p className="text-gray-600 mt-3 leading-relaxed">
+                Ensuring solution providers meet stringent standards for
+                quality.
               </p>
             </div>
 
