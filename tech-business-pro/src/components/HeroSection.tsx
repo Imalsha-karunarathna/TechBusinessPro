@@ -36,8 +36,8 @@ const HeroSection = () => {
         <div className="relative z-10 max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text section */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+            <div className="text-center lg:text-left ">
+              <h1 className="text-4xl tracking-tight sm:text-5xl md:text-6xl font-bold">
                 Building{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-100">
                   Global
@@ -51,7 +51,7 @@ const HeroSection = () => {
               <div className="mt-8 space-y-4 sm:space-y-0 sm:flex sm:flex-row sm:justify-center lg:justify-start sm:gap-4">
                 <Link
                   href="/#solutions"
-                  className="group w-full sm:w-auto px-3 py-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
+                  className="group w-full sm:w-auto px-3 py-4 text-center text-base  rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
                   <span className="relative flex items-center">
@@ -62,7 +62,7 @@ const HeroSection = () => {
 
                 <Link
                   href="/#partner"
-                  className="group w-full sm:w-auto px-3 py-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
+                  className="group w-full sm:w-auto px-3 py-4 text-center text-base  rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
                   <span className="relative flex items-center">
@@ -73,7 +73,7 @@ const HeroSection = () => {
 
                 <Link
                   href="/agent/register-agent"
-                  className="group w-full sm:w-auto px-3 py-4 text-center text-base font-semibold rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
+                  className="group w-full sm:w-auto px-3 py-4 text-center text-base  rounded-xl bg-gradient-to-r from-white/20 to-white/30 text-white backdrop-blur-sm border border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105 hover:-translate-y-1 flex items-center justify-center relative overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-white/5 group-hover:bg-white/15 transition-all duration-300"></span>
                   <span className="relative flex items-center">
