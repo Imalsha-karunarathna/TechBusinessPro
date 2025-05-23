@@ -165,7 +165,7 @@ export function PartnerSection() {
             {/* EOI Image */}
             <div className="relative mb-20 mt-20 rounded-2xl overflow-hidden shadow-xl transform transition-all hover:scale-105 duration-300">
               <Image
-                src="/assets/EOI.jpg"
+                src="/assets/eoi.jpg"
                 alt="Partnership collaboration"
                 width={600}
                 height={400}
