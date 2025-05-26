@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/server-auth';
 import { db } from '@/db';
+import { sendSeekerWelcomeEmail } from './register-email';
 
 export async function getAllUsers() {
   try {
@@ -70,5 +71,41 @@ export async function updateUserRole(userId: number, role: string) {
   } catch (error) {
     console.error('Error updating user role:', error);
     return { success: false, error: 'Failed to update user role' };
+  }
+}
+
+interface RegisterSeekerData {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  acceptPolicy: boolean;
+}
+
+export async function registerSeeker(data: RegisterSeekerData) {
+  try {
+    console.log('Registering seeker:', { ...data, password: '[REDACTED]' });
+
+    // Simulate database save
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Send welcome email
+    try {
+      await sendSeekerWelcomeEmail(data.email, data.name, data.username);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+    }
+
+    return {
+      success: true,
+      message:
+        'Registration successful! Please check your email for a welcome message.',
+    };
+  } catch (error) {
+    console.error('Registration error:', error);
+    return {
+      success: false,
+      error: 'Registration failed. Please try again.',
+    };
   }
 }
