@@ -61,27 +61,7 @@ import {
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { sendContactRequestWithFiles } from '@/app/actions/contact-provider-action';
-
-// Define time slots with timezone information
-const timeSlots = [
-  { value: '9:00 AM - 10:00 AM', label: '9:00 AM - 10:00 AM (AEST/AEDT)' },
-  { value: '10:00 AM - 11:00 AM', label: '10:00 AM - 11:00 AM (AEST/AEDT)' },
-  { value: '11:00 AM - 12:00 PM', label: '11:00 AM - 12:00 PM (AEST/AEDT)' },
-  { value: '12:00 PM - 1:00 PM', label: '12:00 PM - 1:00 PM (AEST/AEDT)' },
-  { value: '1:00 PM - 2:00 PM', label: '1:00 PM - 2:00 PM (AEST/AEDT)' },
-  { value: '2:00 PM - 3:00 PM', label: '2:00 PM - 3:00 PM (AEST/AEDT)' },
-  { value: '3:00 PM - 4:00 PM', label: '3:00 PM - 4:00 PM (AEST/AEDT)' },
-  { value: '4:00 PM - 5:00 PM', label: '4:00 PM - 5:00 PM (AEST/AEDT)' },
-  // Sri Lankan time (UTC+5:30)
-  { value: '9:00 AM - 10:00 AM (SLT)', label: '9:00 AM - 10:00 AM (SLT)' },
-  { value: '10:00 AM - 11:00 AM (SLT)', label: '10:00 AM - 11:00 AM (SLT)' },
-  { value: '11:00 AM - 12:00 PM (SLT)', label: '11:00 AM - 12:00 PM (SLT)' },
-  { value: '12:00 PM - 1:00 PM (SLT)', label: '12:00 PM - 1:00 PM (SLT)' },
-  { value: '1:00 PM - 2:00 PM (SLT)', label: '1:00 PM - 2:00 PM (SLT)' },
-  { value: '2:00 PM - 3:00 PM (SLT)', label: '2:00 PM - 3:00 PM (SLT)' },
-  { value: '3:00 PM - 4:00 PM (SLT)', label: '3:00 PM - 4:00 PM (SLT)' },
-  { value: '4:00 PM - 5:00 PM (SLT)', label: '4:00 PM - 5:00 PM (SLT)' },
-];
+import { TIMEZONES, TIME_SLOTS } from '@/lib/constants';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = [
@@ -99,6 +79,7 @@ const contactFormSchema = z.object({
     .string()
     .min(10, 'Please describe your requirements in at least 10 characters'),
   preferredDate: z.date().min(new Date(), 'Please select a future date'),
+  preferredTimezone: z.string().min(1, 'Please select a timezone'),
   preferredTimeSlot: z.string().min(1, 'Please select a time slot'),
   urgency: z.enum(['low', 'medium', 'high']),
   phone: z.string().optional(),
@@ -108,7 +89,6 @@ const contactFormSchema = z.object({
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms to proceed',
   }),
-  // We'll handle file validation separately since it's not directly part of the form data
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -134,6 +114,7 @@ export function ContactProviderModal({
   const [fileError, setFileError] = useState<string | null>(null);
   const [summaryValues, setSummaryValues] = useState({
     preferredDate: new Date(),
+    preferredTimezone: '',
     preferredTimeSlot: '',
     urgency: 'medium',
   });
@@ -143,6 +124,7 @@ export function ContactProviderModal({
     defaultValues: {
       requirements: '',
       preferredDate: new Date(),
+      preferredTimezone: '',
       preferredTimeSlot: '',
       urgency: 'medium',
       phone: '',
@@ -156,15 +138,21 @@ export function ContactProviderModal({
   // Watch form values for summary updates
   const watchedValues = useWatch({
     control: form.control,
-    name: ['preferredDate', 'preferredTimeSlot', 'urgency'],
+    name: [
+      'preferredDate',
+      'preferredTimezone',
+      'preferredTimeSlot',
+      'urgency',
+    ],
   });
 
   // Update summary when form values change
   useEffect(() => {
     setSummaryValues({
       preferredDate: watchedValues[0] || new Date(),
-      preferredTimeSlot: watchedValues[1] || '',
-      urgency: watchedValues[2] || 'medium',
+      preferredTimezone: watchedValues[1] || '',
+      preferredTimeSlot: watchedValues[2] || '',
+      urgency: watchedValues[3] || 'medium',
     });
   }, [watchedValues]);
 
@@ -226,6 +214,9 @@ export function ContactProviderModal({
       // Create FormData to handle file uploads
       const formData = new FormData();
 
+      // Combine timezone and time slot for backward compatibility
+      const combinedTimeSlot = `${data.preferredTimeSlot} (${data.preferredTimezone === 'AEST' ? 'AEST/AEDT' : 'SLT'})`;
+
       // Add form data
       formData.append('providerId', providerId.toString());
       formData.append('seekerId', user.id.toString());
@@ -234,7 +225,8 @@ export function ContactProviderModal({
       formData.append('seekerEmail', user.email);
       formData.append('requirements', data.requirements);
       formData.append('preferredDate', data.preferredDate.toISOString());
-      formData.append('preferredTimeSlot', data.preferredTimeSlot);
+      formData.append('preferredTimeSlot', combinedTimeSlot);
+      formData.append('preferredTimezone', data.preferredTimezone);
       formData.append('urgency', data.urgency);
       formData.append('phone', data.phone || '');
       formData.append('companyName', data.companyName || '');
@@ -262,7 +254,7 @@ export function ContactProviderModal({
           description: result.error || 'An error occurred. Please try again.',
         });
       }
-      /*eslint-disable @typescript-eslint/no-unused-vars */
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast('Error sending request', {
         description: `An error occurred. Please try again.`,
@@ -302,9 +294,14 @@ export function ContactProviderModal({
     setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
   };
 
-  // Get the display label for a time slot
+  // Get the display label for timezone and time slot combination
+  const getTimezoneLabel = (value: string) => {
+    const timezone = TIMEZONES.find((tz) => tz.value === value);
+    return timezone ? timezone.label : value;
+  };
+
   const getTimeSlotLabel = (value: string) => {
-    const slot = timeSlots.find((slot) => slot.value === value);
+    const slot = TIME_SLOTS.find((slot) => slot.value === value);
     return slot ? slot.label : value;
   };
 
@@ -350,7 +347,7 @@ export function ContactProviderModal({
                 )}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <FormField
                   control={form.control}
                   name="preferredDate"
@@ -380,84 +377,124 @@ export function ContactProviderModal({
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        {/* <PopoverContent className="w-auto p-0" align="start"> */}
                         <Calendar
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date: Date) => date < new Date()}
+                          disabled={(date) => {
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0); // normalize time to start of day
+                            return date <= today; // disables today and earlier
+                          }}
                           initialFocus
                           className="rounded-md border-0"
                         />
-                        {/* </PopoverContent> */}
                       </Popover>
                       <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="preferredTimeSlot"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center text-[#3069FE] font-medium">
-                        <Clock3 className="h-4 w-4 mr-2" />
-                        Preferred Time Slot{' '}
-                        <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="border-[#42C3EE]/30 focus:ring-[#3069FE] focus:border-[#3069FE]">
-                            <SelectValue placeholder="Select a time slot" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-white border border-[#42C3EE]/20 max-h-[300px]">
-                          <div className="p-2 border-b border-[#42C3EE]/20">
-                            <div className="flex items-center text-sm font-medium text-[#3069FE]">
-                              <Globe className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
-                              Australian Eastern Time
-                            </div>
-                          </div>
-                          {timeSlots.slice(0, 8).map((slot) => (
-                            <SelectItem
-                              key={slot.value}
-                              value={slot.value}
-                              className="hover:bg-[#3069FE]/5"
-                            >
-                              <div className="flex items-center">
-                                <Clock className="h-4 w-4 mr-2 text-[#42C3EE]" />
-                                {slot.label}
-                              </div>
-                            </SelectItem>
-                          ))}
-                          <div className="p-2 border-t border-b border-[#42C3EE]/20 mt-1">
-                            <div className="flex items-center text-sm font-medium text-[#3069FE]">
-                              <Globe className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
-                              Sri Lanka Time
-                            </div>
-                          </div>
-                          {timeSlots.slice(8).map((slot) => (
-                            <SelectItem
-                              key={slot.value}
-                              value={slot.value}
-                              className="hover:bg-[#3069FE]/5"
-                            >
-                              <div className="flex items-center">
-                                <Clock className="h-4 w-4 mr-2 text-[#42C3EE]" />
-                                {slot.label}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="preferredTimezone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                          <Globe className="h-4 w-4 mr-2" />
+                          Timezone <span className="text-red-500 ml-1">*</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            // Reset time slot when timezone changes
+                            form.setValue('preferredTimeSlot', '');
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="border-[#42C3EE]/30 focus:ring-[#3069FE] focus:border-[#3069FE]">
+                              <SelectValue placeholder="Select timezone" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-white border border-[#42C3EE]/20 max-h-60 overflow-y-auto py-10">
+                            {TIMEZONES.map((timezone) => (
+                              <SelectItem
+                                key={timezone.value}
+                                value={timezone.value}
+                                className="hover:bg-[#3069FE]/5 "
+                              >
+                                <div className="flex items-center">
+                                  <Globe className="h-4 w-4 mr-4 text-[#42C3EE]" />
+                                  <div>
+                                    <div className="text-md  ">
+                                      {timezone.label}
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                      UTC {timezone.offset}
+                                    </div>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage className="text-red-500" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="preferredTimeSlot"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center text-[#3069FE] font-medium">
+                          <Clock3 className="h-4 w-4 mr-2" />
+                          Time Slot <span className="text-red-500 ml-1">*</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          disabled={!form.watch('preferredTimezone')}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="border-[#42C3EE]/30 focus:ring-[#3069FE] focus:border-[#3069FE]">
+                              <SelectValue
+                                placeholder={
+                                  !form.watch('preferredTimezone')
+                                    ? 'Select timezone first'
+                                    : 'Select time slot'
+                                }
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-white border border-[#42C3EE]/20 max-h-[300px]">
+                            {TIME_SLOTS.map((slot) => (
+                              <SelectItem
+                                key={slot.value}
+                                value={slot.value}
+                                className="hover:bg-[#3069FE]/5"
+                              >
+                                <div className="flex items-center">
+                                  <Clock className="h-4 w-4 mr-2 text-[#42C3EE]" />
+                                  {slot.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage className="text-red-500" />
+                        {!form.watch('preferredTimezone') && (
+                          <FormDescription className="text-gray-500 text-sm">
+                            Please select a timezone first
+                          </FormDescription>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <FormField
@@ -517,7 +554,7 @@ export function ContactProviderModal({
                             Medium
                           </FormLabel>
                           <p className="text-xs text-gray-500">
-                            Somewhat urgent
+                            Some what urgent
                           </p>
                         </div>
                       </FormItem>
@@ -771,6 +808,15 @@ export function ContactProviderModal({
                       <CalendarIcon2 className="h-3.5 w-3.5 mr-1.5" />
                       {format(summaryValues.preferredDate, 'PPP')}
                     </Badge>
+                    {summaryValues.preferredTimezone && (
+                      <Badge
+                        variant="outline"
+                        className="bg-[#3069FE]/10 text-[#3069FE] border-[#42C3EE]/30"
+                      >
+                        <Globe className="h-3.5 w-3.5 mr-1.5" />
+                        {getTimezoneLabel(summaryValues.preferredTimezone)}
+                      </Badge>
+                    )}
                     {summaryValues.preferredTimeSlot && (
                       <Badge
                         variant="outline"

@@ -43,6 +43,32 @@ export const BLOG_CATEGORY_COLORS = {
   'How-To Guide': 'orange',
   'Industry News': 'teal',
 };
+export const TIMEZONES = [
+  {
+    value: 'AEST',
+    label: 'Australian Eastern Time ',
+    abbreviation: 'AEST/AEDT',
+    offset: '+10/+11',
+  },
+  {
+    value: 'SLT',
+    label: 'Sri Lanka Time (SLT)',
+    abbreviation: 'SLT',
+    offset: '+5:30',
+  },
+];
+
+export const TIME_SLOTS = [
+  { value: '9:00 AM - 10:00 AM', label: '9:00 AM - 10:00 AM' },
+  { value: '10:00 AM - 11:00 AM', label: '10:00 AM - 11:00 AM' },
+  { value: '11:00 AM - 12:00 PM', label: '11:00 AM - 12:00 PM' },
+  { value: '12:00 PM - 1:00 PM', label: '12:00 PM - 1:00 PM' },
+  { value: '1:00 PM - 2:00 PM', label: '1:00 PM - 2:00 PM' },
+  { value: '2:00 PM - 3:00 PM', label: '2:00 PM - 3:00 PM' },
+  { value: '3:00 PM - 4:00 PM', label: '3:00 PM - 4:00 PM' },
+  { value: '4:00 PM - 5:00 PM', label: '4:00 PM - 5:00 PM' },
+];
+
 export const timeSlots = [
   {
     value: '9:00 AM - 10:00 AM (AEST/AEDT)',
