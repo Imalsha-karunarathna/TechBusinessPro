@@ -28,6 +28,7 @@ import {
   XCircle,
   Clock,
   Mail,
+  UserCircle,
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -105,8 +106,8 @@ export function UsersTable({ users }: UsersTableProps) {
         );
       case 'agent':
         return (
-          <Badge className="bg-[#42C3EE]/10 text-[#42C3EE] border border-[#42C3EE]/30 px-2 py-0.5 rounded-full">
-            <ShieldCheck className="h-3.5 w-3.5 mr-1 inline" />
+          <Badge className="bg-[#42C3EE]/10 text-blue-900 border border-[#42C3EE]/30 px-2 py-0.5 rounded-full">
+            <UserCircle className="h-3.5 w-3.5 mr-1 inline" />
             Agent
           </Badge>
         );
