@@ -5,6 +5,13 @@ import { db } from '@/db';
 import { users } from '@/lib/db/tables/users';
 import { eq } from 'drizzle-orm';
 import { hash } from 'bcryptjs';
+import { sendAgentWelcomeEmail } from './register-email';
+
+interface RegisterAgentData {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export async function getAgentProfile() {
   try {
@@ -48,11 +55,7 @@ export async function getAgentProfile() {
   }
 }
 
-export async function registerAgent(data: {
-  username: string;
-  email: string;
-  password: string;
-}) {
+export async function registerAgent(data: RegisterAgentData) {
   try {
     // Check if username or email already exists
     const existingUser = await db.query.users.findFirst({
@@ -66,8 +69,6 @@ export async function registerAgent(data: {
         error: 'Username or email already exists',
       };
     }
-
-    // Hash the password (implement proper hashing)
     const hashedPassword = await hash(data.password, 10);
 
     // Insert the new user with agent role
@@ -86,9 +87,21 @@ export async function registerAgent(data: {
       throw new Error('Failed to create agent');
     }
 
-    return { success: true };
+    try {
+      await sendAgentWelcomeEmail(data.email, data.username);
+    } catch (emailError) {
+      console.error('Failed to send agent welcome email:', emailError);
+    }
+
+    return {
+      success: true,
+      message: 'Agent registration successful! Please check your email',
+    };
   } catch (error) {
-    console.error('Error registering agent:', error);
-    return { success: false, error: 'Error registering agent' };
+    console.error('Agent registration error:', error);
+    return {
+      success: false,
+      error: 'Registration failed. Please try again.',
+    };
   }
 }
