@@ -17,7 +17,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { UserPlus, Mail, Lock, Home } from 'lucide-react';
+import { UserPlus, Mail, Lock, Home, CheckCircle2 } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { registerAgent } from '@/app/actions/agent-auth';
 
 const registerSchema = z
@@ -42,6 +43,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function AgentRegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
 
   const form = useForm<RegisterFormValues>({
@@ -58,9 +60,9 @@ export default function AgentRegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
 
     try {
-      // Call the server action to register the agent
       const result = await registerAgent({
         username: data.username,
         email: data.email,
@@ -71,8 +73,13 @@ export default function AgentRegisterPage() {
         throw new Error(result.error || 'Registration failed');
       }
 
-      // Redirect to login page with success message
-      router.push('/auth-page?registered=true&role=agent');
+      setSuccess(result.message || 'Agent registration successful!');
+      form.reset();
+
+      // Redirect to login page after successful registration
+      setTimeout(() => {
+        router.push('/auth-page?registered=true&role=agent');
+      }, 3000);
     } catch (err) {
       console.error('Registration error:', err);
       setError(err instanceof Error ? err.message : 'Registration failed');
@@ -104,9 +111,19 @@ export default function AgentRegisterPage() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
-            {error}
-          </div>
+          <Alert
+            variant="destructive"
+            className="mb-6 bg-red-50 border border-red-200 text-red-800"
+          >
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {success && (
+          <Alert className="mb-6 bg-green-50 border border-green-200 text-green-800">
+            <CheckCircle2 className="h-4 w-4 mr-2" />
+            <AlertDescription>{success}</AlertDescription>
+          </Alert>
         )}
 
         <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-100">
