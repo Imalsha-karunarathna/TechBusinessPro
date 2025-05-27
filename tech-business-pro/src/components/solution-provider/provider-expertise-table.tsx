@@ -27,6 +27,7 @@ import {
   Calendar,
   CheckCircle,
   AlertCircle,
+  X,
 } from 'lucide-react';
 import {
   Dialog,
@@ -84,6 +85,7 @@ export function ProviderExpertiseTable({
 
         if (result.success) {
           console.log('Provider expertise loaded:', result.data);
+          // Show all expertise including rejected ones
           setProviderExpertise(result.data || []);
         } else {
           console.error('Error loading provider expertise:', result.error);
@@ -352,6 +354,14 @@ export function ProviderExpertiseTable({
                         >
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Approved
+                        </Badge>
+                      ) : item.status === 'rejected' ? (
+                        <Badge
+                          variant="destructive"
+                          className="bg-gradient-to-r from-red-500/20 to-red-400/20 text-red-700 border border-red-300 flex items-center w-fit"
+                        >
+                          <X className="h-3 w-3 mr-1" />
+                          Rejected
                         </Badge>
                       ) : (
                         <Badge
