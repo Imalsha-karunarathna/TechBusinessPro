@@ -13,6 +13,7 @@ export * from '../tables/visitorChats';
 export * from '../tables/passwordResetTokens';
 export * from '../tables/providerExpertise';
 export * from '../tables/contactRequest';
+export * from '../tables/forgotPassword';
 // Export relations files
 export * from '../relations/userRelations';
 export * from '../relations/solutionProviderRelations';

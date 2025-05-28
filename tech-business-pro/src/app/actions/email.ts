@@ -1,6 +1,6 @@
 'use server';
 
-import PasswordResetEmail from '@/components/email/email-template';
+import PasswordResetEmail from '@/components/email/provider-register-email';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
