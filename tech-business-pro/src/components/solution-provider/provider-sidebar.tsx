@@ -60,8 +60,8 @@ export function ProviderSidebar({
         />
       </div>
       <div className="mb-8 px-4 py-3">
-        <h1 className="text-xl font-bold">Provider Dashboard</h1>
-        <p className="text-sm text-gray-400 mt-1">Manage your tech solutions</p>
+        <h1 className="text-lg font-bold">Provider Dashboard</h1>
+        <p className="text-xs text-gray-400 mt-1">Manage your tech solutions</p>
       </div>
 
       <nav className="space-y-1">

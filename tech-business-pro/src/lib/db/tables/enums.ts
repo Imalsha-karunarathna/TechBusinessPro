@@ -33,5 +33,4 @@ export const solutionCategoryEnum = pgEnum('solution_category', [
   'it_security',
   'crm_systems',
   'business_applications',
-  'other',
 ]);

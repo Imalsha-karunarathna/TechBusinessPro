@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import {
   Briefcase,
   Globe,
@@ -48,6 +48,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { submitPartnerApplication } from '@/app/actions/partner-applications';
 
 const partnerFormSchema = z.object({
   partner_name: z
@@ -88,7 +89,7 @@ type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 export function PartnerSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<PartnerFormValues>({
     resolver: zodResolver(partnerFormSchema),
@@ -108,36 +109,34 @@ export function PartnerSection() {
   });
 
   async function onSubmit(data: PartnerFormValues) {
-    setIsSubmitting(true);
-    try {
-      const response = await fetch('/api/partner-applications', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+    const formattedData = {
+      ...data,
+      expertise: Array.isArray(data.expertise)
+        ? data.expertise
+        : [data.expertise],
+    };
+    startTransition(async () => {
+      try {
+        const result = await submitPartnerApplication(formattedData);
 
-      const result = await response.json();
-
-      if (result.success) {
-        setIsSubmitted(true);
-        toast('Application Submitted', {
-          description:
-            'Your partner application has been submitted successfully.',
+        if (result.success) {
+          setIsSubmitted(true);
+          toast('Application Submitted', {
+            description: result.message,
+          });
+          form.reset();
+        } else {
+          toast('Submission Failed', {
+            description: result.message,
+          });
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        toast('Submission Failed', {
+          description: 'There was an unexpected error. Please try again.',
         });
-      } else {
-        throw new Error(result.message || 'Failed to submit application');
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast('Submission Failed', {
-        description:
-          'There was an error submitting your application. Please try again.',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   }
 
   return (
@@ -258,6 +257,16 @@ export function PartnerSection() {
                       Your expression of interest has been received. We&apos;ll
                       review your application and get back to you soon.
                     </p>
+                    <Button
+                      onClick={() => {
+                        setIsSubmitted(false);
+                        form.reset();
+                      }}
+                      variant="outline"
+                      className="mt-4"
+                    >
+                      Submit Another Application
+                    </Button>
                   </div>
                 ) : (
                   <Form {...form}>
@@ -280,6 +289,7 @@ export function PartnerSection() {
                                   {...field}
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="Your full name"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -301,6 +311,7 @@ export function PartnerSection() {
                                   {...field}
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="Your company name"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -325,6 +336,7 @@ export function PartnerSection() {
                                   {...field}
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="you@company.com"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -347,6 +359,7 @@ export function PartnerSection() {
                                   {...field}
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                   placeholder="+1 (555) 123-4567"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -370,6 +383,7 @@ export function PartnerSection() {
                                 {...field}
                                 className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
                                 placeholder="https://yourcompany.com"
+                                disabled={isPending}
                               />
                             </FormControl>
                             <FormMessage className="text-red-500" />
@@ -389,7 +403,6 @@ export function PartnerSection() {
                             <div className="relative">
                               <Select
                                 onValueChange={(value) => {
-                                  // Convert single selection to array if it's the first selection
                                   const currentValues = Array.isArray(
                                     field.value,
                                   )
@@ -398,7 +411,6 @@ export function PartnerSection() {
                                       ? [field.value]
                                       : [];
 
-                                  // If value is already selected, remove it, otherwise add it
                                   const newValues = currentValues.includes(
                                     value,
                                   )
@@ -407,6 +419,7 @@ export function PartnerSection() {
 
                                   field.onChange(newValues);
                                 }}
+                                disabled={isPending}
                               >
                                 <FormControl>
                                   <SelectTrigger className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]">
@@ -463,12 +476,6 @@ export function PartnerSection() {
                                   >
                                     Artificial Intelligence
                                   </SelectItem>
-                                  <SelectItem
-                                    value="Other"
-                                    className="hover:bg-purple-50 cursor-pointer"
-                                  >
-                                    Other
-                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
@@ -494,6 +501,7 @@ export function PartnerSection() {
                                             );
                                           }
                                         }}
+                                        disabled={isPending}
                                       >
                                         ×
                                       </button>
@@ -525,6 +533,7 @@ export function PartnerSection() {
                                   {...field}
                                   placeholder="Tell us about your company"
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -547,6 +556,7 @@ export function PartnerSection() {
                                   {...field}
                                   placeholder="Your role in the company"
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -578,6 +588,7 @@ export function PartnerSection() {
                                     )
                                   }
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE]"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -600,6 +611,7 @@ export function PartnerSection() {
                                   {...field}
                                   placeholder="100 words max"
                                   className="border-gray-300 focus:border-[#3069FE] focus:ring-[#3069FE] resize-none"
+                                  disabled={isPending}
                                 />
                               </FormControl>
                               <FormDescription className="text-gray-500 text-sm">
@@ -624,6 +636,7 @@ export function PartnerSection() {
                                   onChange={field.onChange}
                                   id="accept_privacy"
                                   className="h-4 w-4 text-[#3069FE] border-gray-300 rounded focus:ring-[#3069FE]"
+                                  disabled={isPending}
                                 />
                               </div>
                               <div className="flex-1 min-w-0">
@@ -653,9 +666,9 @@ export function PartnerSection() {
                       <Button
                         type="submit"
                         className="w-full cursor-pointer py-6 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] hover:from-[#42C3EE] hover:to-[#3069FE] text-white font-medium rounded-md transition-all duration-200"
-                        disabled={isSubmitting}
+                        disabled={isPending}
                       >
-                        {isSubmitting ? (
+                        {isPending ? (
                           <div className="flex items-center justify-center">
                             <svg
                               className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"

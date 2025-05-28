@@ -34,28 +34,22 @@ export async function getAllExpertiseCategories() {
 // Get expertise for a specific provider
 export async function getProviderExpertise(providerId: number) {
   try {
-    // First, check if the provider exists
-    const provider = await db.query.solutionProviders.findFirst({
-      where: eq(solutionProviders.id, providerId),
-    });
+    const expertise = await db
+      .select()
+      .from(providerExpertise)
+      .where(eq(providerExpertise.provider_id, providerId))
+      .orderBy(providerExpertise.created_at);
 
-    if (!provider) {
-      return { success: false, error: 'Provider not found' };
-    }
-
-    // Get all expertise entries for this provider
-    const expertise = await db.query.providerExpertise.findMany({
-      where: eq(providerExpertise.provider_id, providerId),
-      // orderBy: [
-      //   { status: 'asc' }, // Pending first, then approved
-      //   { created_at: 'desc' }, // Newest first
-      // ],
-    });
-
-    return { success: true, data: expertise };
+    return {
+      success: true,
+      data: expertise,
+    };
   } catch (error) {
     console.error('Error fetching provider expertise:', error);
-    return { success: false, error: 'Failed to fetch provider expertise' };
+    return {
+      success: false,
+      error: 'Failed to fetch expertise',
+    };
   }
 }
 
@@ -181,85 +175,67 @@ export async function addProviderExpertise(
 }
 
 // Delete an expertise
-export async function deleteProviderExpertise(expertiseId: number) {
+export async function deleteApplicationExpertise(
+  providerId: number,
+  expertiseName: string,
+  applicationId: number,
+) {
   try {
-    console.log(`Attempting to delete expertise with ID: ${expertiseId}`);
+    // Get the solution provider to find their email
+    const provider = await db
+      .select()
+      .from(solutionProviders)
+      .where(eq(solutionProviders.id, providerId))
+      .limit(1);
 
-    const session = await auth();
-    if (!session?.user) {
-      console.error('No authenticated user found');
-      return { success: false, error: 'Unauthorized' };
-    }
-
-    console.log(`User ID from session: ${session.user.id}`);
-
-    // Get the expertise to check if it exists
-    const expertise = await db.query.providerExpertise.findFirst({
-      where: eq(providerExpertise.id, expertiseId),
-    });
-
-    if (!expertise) {
-      console.error(`Expertise with ID ${expertiseId} not found`);
-      return { success: false, error: 'Expertise not found' };
-    }
-
-    console.log(
-      `Found expertise: ${expertise.name} for provider ID: ${expertise.provider_id}`,
-    );
-
-    // Get the provider to check if it belongs to the current user
-    const provider = await db.query.solutionProviders.findFirst({
-      where: eq(solutionProviders.id, expertise.provider_id),
-    });
-
-    if (!provider) {
-      console.error(`Provider with ID ${expertise.provider_id} not found`);
-      return { success: false, error: 'Provider not found' };
-    }
-
-    console.log(
-      `Provider user_id: ${provider.user_id}, Session user.id: ${session.user.id}`,
-    );
-
-    // Check if the provider belongs to the current user or if user is admin
-    if (provider.user_id !== session.user.id && !session.user.isAdmin) {
-      console.error('User is not authorized to delete this expertise');
+    if (!provider.length) {
       return {
         success: false,
-        error: 'Unauthorized - you cannot delete expertise for this provider',
+        error: 'Provider not found',
       };
     }
 
-    // Delete the expertise - using prepared statement for safety
-    console.log(`Deleting expertise ID: ${expertiseId}`);
-    const result = await db
-      .delete(providerExpertise)
-      .where(eq(providerExpertise.id, expertiseId))
-      .returning();
+    // Get the specific application
+    const application = await db
+      .select()
+      .from(partnerApplications)
+      .where(eq(partnerApplications.id, applicationId))
+      .limit(1);
 
-    console.log(`Delete operation result:`, result);
-
-    if (!result || result.length === 0) {
-      console.error('Delete operation did not return any results');
-      return { success: false, error: 'Failed to delete expertise' };
+    if (!application.length) {
+      return {
+        success: false,
+        error: 'Application not found',
+      };
     }
 
-    // Revalidate relevant paths
-    revalidatePath('/providers');
-    revalidatePath('/admin/expertise-requests');
-    revalidatePath('/solution-provider/expertise');
+    // Remove the expertise from the application's expertise array
+    const currentExpertise = application[0].expertise || [];
+    const updatedExpertise = currentExpertise.filter(
+      (skill) => skill !== expertiseName,
+    );
 
-    return { success: true, data: result[0] };
+    // Update the application
+    await db
+      .update(partnerApplications)
+      .set({
+        expertise: updatedExpertise,
+      })
+      .where(eq(partnerApplications.id, applicationId));
+
+    revalidatePath('/solutionProvider');
+
+    return {
+      success: true,
+    };
   } catch (error) {
-    console.error('Error deleting provider expertise:', error);
+    console.error('Error deleting application expertise:', error);
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : 'Failed to delete expertise',
+      error: 'Failed to delete expertise from application',
     };
   }
 }
-
 // Get all pending expertise requests (for admin)
 export async function getPendingExpertiseRequests() {
   try {
@@ -349,5 +325,253 @@ export async function updateExpertiseStatus(
   } catch (error) {
     console.error('Error updating expertise status:', error);
     return { success: false, error: 'Failed to update expertise status' };
+  }
+}
+
+export async function getAllApprovedExpertise(providerId: number) {
+  try {
+    // Get the solution provider to find their email
+    const provider = await db
+      .select()
+      .from(solutionProviders)
+      .where(eq(solutionProviders.id, providerId))
+      .limit(1);
+
+    if (!provider.length) {
+      return {
+        success: false,
+        error: 'Provider not found',
+      };
+    }
+
+    // Get approved partner applications for this provider's email
+    const approvedApplications = await db
+      .select()
+      .from(partnerApplications)
+      .where(
+        and(
+          eq(partnerApplications.email, provider[0].email),
+          eq(partnerApplications.application_status, 'approved'),
+        ),
+      );
+
+    // Get approved additional expertise
+    const approvedAdditionalExpertise = await db
+      .select()
+      .from(providerExpertise)
+      .where(
+        and(
+          eq(providerExpertise.provider_id, providerId),
+          eq(providerExpertise.status, 'approved'),
+        ),
+      );
+
+    // Create a Set to track which expertise names are covered by additional expertise
+    const additionalExpertiseNames = new Set(
+      approvedAdditionalExpertise.map((item) => item.name.toLowerCase().trim()),
+    );
+
+    // Extract expertise from approved applications (only if not covered by additional expertise)
+    const applicationExpertise: Array<{
+      name: string;
+      source: 'application';
+      status: 'approved';
+      created_at: Date;
+      application_id: number;
+      deletable: boolean;
+    }> = [];
+
+    approvedApplications.forEach((application) => {
+      if (application.expertise && Array.isArray(application.expertise)) {
+        application.expertise.forEach((skill) => {
+          const skillName = skill.toLowerCase().trim();
+          // Only add if this expertise is NOT covered by additional expertise
+          if (!additionalExpertiseNames.has(skillName)) {
+            applicationExpertise.push({
+              name: skill,
+              source: 'application',
+              status: 'approved',
+              created_at: application.created_at,
+              application_id: application.id,
+              deletable: true,
+            });
+          }
+        });
+      }
+    });
+
+    // Format additional expertise (these take priority)
+    const additionalExpertise = approvedAdditionalExpertise.map((item) => ({
+      id: item.id,
+      name: item.name,
+      source: 'additional' as const,
+      status: item.status,
+      created_at: item.created_at,
+      reviewed_at: item.reviewed_at,
+      deletable: true,
+    }));
+
+    // Combine expertise with additional expertise taking priority
+    const allExpertise = [...additionalExpertise, ...applicationExpertise];
+
+    return {
+      success: true,
+      data: allExpertise,
+    };
+  } catch (error) {
+    console.error('Error fetching all approved expertise:', error);
+    return {
+      success: false,
+      error: 'Failed to fetch approved expertise',
+    };
+  }
+}
+
+export async function getPendingAndRejectedExpertise(providerId: number) {
+  try {
+    const expertise = await db
+      .select()
+      .from(providerExpertise)
+      .where(
+        and(
+          eq(providerExpertise.provider_id, providerId),
+          // Get pending and rejected expertise
+          eq(providerExpertise.status, 'pending'),
+        ),
+      )
+      .orderBy(providerExpertise.created_at);
+
+    const rejectedExpertise = await db
+      .select()
+      .from(providerExpertise)
+      .where(
+        and(
+          eq(providerExpertise.provider_id, providerId),
+          eq(providerExpertise.status, 'rejected'),
+        ),
+      )
+      .orderBy(providerExpertise.created_at);
+
+    return {
+      success: true,
+      data: [...expertise, ...rejectedExpertise],
+    };
+  } catch (error) {
+    console.error('Error fetching pending/rejected expertise:', error);
+    return {
+      success: false,
+      error: 'Failed to fetch expertise',
+    };
+  }
+}
+
+export async function deleteProviderExpertise(expertiseId: number) {
+  try {
+    console.log(`Deleting provider expertise with ID: ${expertiseId}`);
+
+    // First, get the expertise details before deleting
+    const expertise = await db
+      .select()
+      .from(providerExpertise)
+      .where(eq(providerExpertise.id, expertiseId))
+      .limit(1);
+
+    if (!expertise.length) {
+      console.error(`Expertise with ID ${expertiseId} not found`);
+      return {
+        success: false,
+        error: 'Expertise not found',
+      };
+    }
+
+    const expertiseItem = expertise[0];
+    console.log(`Found expertise to delete:`, expertiseItem);
+
+    // Get the provider details to find their email and applications
+    const provider = await db
+      .select()
+      .from(solutionProviders)
+      .where(eq(solutionProviders.id, expertiseItem.provider_id))
+      .limit(1);
+
+    if (!provider.length) {
+      console.error(`Provider with ID ${expertiseItem.provider_id} not found`);
+      return {
+        success: false,
+        error: 'Provider not found',
+      };
+    }
+
+    const providerData = provider[0];
+    console.log(`Found provider:`, providerData);
+
+    // Delete the expertise from provider_expertise table
+    const deleteResult = await db
+      .delete(providerExpertise)
+      .where(eq(providerExpertise.id, expertiseId))
+      .returning();
+
+    console.log(`Deleted from provider_expertise:`, deleteResult);
+
+    // Also remove this expertise from ALL partner applications for this provider's email
+    const applications = await db
+      .select()
+      .from(partnerApplications)
+      .where(eq(partnerApplications.email, providerData.email));
+
+    console.log(
+      `Found ${applications.length} applications for email ${providerData.email}`,
+    );
+
+    for (const application of applications) {
+      if (application.expertise && Array.isArray(application.expertise)) {
+        const currentExpertise = application.expertise;
+        const expertiseExists = currentExpertise.some(
+          (skill) =>
+            skill.toLowerCase().trim() ===
+            expertiseItem.name.toLowerCase().trim(),
+        );
+
+        if (expertiseExists) {
+          console.log(
+            `Removing "${expertiseItem.name}" from application ${application.id}`,
+          );
+
+          const updatedExpertise = currentExpertise.filter(
+            (skill) =>
+              skill.toLowerCase().trim() !==
+              expertiseItem.name.toLowerCase().trim(),
+          );
+
+          await db
+            .update(partnerApplications)
+            .set({
+              expertise: updatedExpertise,
+            })
+            .where(eq(partnerApplications.id, application.id));
+
+          console.log(
+            `Updated application ${application.id} expertise from:`,
+            currentExpertise,
+            `to:`,
+            updatedExpertise,
+          );
+        }
+      }
+    }
+
+    revalidatePath('/solutionProvider');
+
+    return {
+      success: true,
+      data: deleteResult[0],
+      message: `Expertise "${expertiseItem.name}" has been completely removed from all sources`,
+    };
+  } catch (error) {
+    console.error('Error deleting provider expertise:', error);
+    return {
+      success: false,
+      error: 'Failed to delete expertise',
+    };
   }
 }
