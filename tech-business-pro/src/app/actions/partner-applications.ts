@@ -8,6 +8,10 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { createUserWithResetToken } from './reset-token';
 import { setupProviderFromApplication } from './provider-profile-setup';
 import { revalidatePath } from 'next/cache';
+import {
+  createPartnerApplication,
+  PartnerApplicationInput,
+} from '@/lib/db/partnerApplication/write';
 
 export async function getPartnerApplications(status?: string) {
   // Prevent caching to ensure fresh data every time
@@ -186,5 +190,26 @@ export async function getPartnerApplicationById(id: number) {
   } catch (error) {
     console.error('Error fetching partner application:', error);
     return null;
+  }
+}
+export async function submitPartnerApplication(data: PartnerApplicationInput) {
+  try {
+    const result = await createPartnerApplication(data);
+
+    // Revalidate the partner page to reflect any changes
+    revalidatePath('/');
+
+    return {
+      success: true,
+      message: 'Your partner application has been submitted successfully.',
+      application: result.application,
+    };
+  } catch (error) {
+    console.error('Error in submitPartnerApplication:', error);
+    return {
+      success: false,
+      message:
+        'There was an error submitting your application. Please try again.',
+    };
   }
 }
