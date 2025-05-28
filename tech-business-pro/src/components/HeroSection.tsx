@@ -5,8 +5,8 @@ import { Globe, Users, Briefcase } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-gray-300 to-gray-200">
-      <div className="bg-gradient-to-r from-[#3069FE] via-[#42C3EE] to-[#3069FE] text-white relative z-0">
+    <div className="relative overflow-hidden bg-gradient-to-b from-gray-200 to-gray-200">
+      <div className="bg-gradient-to-r from-[#3069FE] via-[#3069FE] to-[#42C3EE] text-white relative z-0">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10 z-0">
           <svg
@@ -99,15 +99,15 @@ const HeroSection = () => {
         </div>
 
         {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0 z-0">
+        <div className="absolute bottom-0 left-0 right-0 z-0 border-transparent">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1440 120"
             className="w-full h-auto"
           >
             <path
-              fill="#ffffff"
-              fillOpacity="1"
+              fill="#42C3EE"
+              fillOpacity="0.6"
               d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"
             ></path>
           </svg>

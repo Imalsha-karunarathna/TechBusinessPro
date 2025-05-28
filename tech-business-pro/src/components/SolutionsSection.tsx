@@ -315,7 +315,7 @@ const SolutionsSection = () => {
                                   {provider.verification_status ===
                                     'approved' && (
                                     <div className="absolute top-4 right-4">
-                                      <div className="bg-white text-green-600 text-xs font-bold px-3 py-1 rounded-full flex items-center shadow-md">
+                                      <div className="bg-white text-green-600 text-xs font-bold px-3 py-1 -mt-2 rounded-full flex items-center shadow-md">
                                         <CheckCircle className="h-3 w-3 mr-1" />
                                         Verified
                                       </div>
@@ -374,7 +374,7 @@ const SolutionsSection = () => {
                                       </div>
                                       <div className="flex flex-wrap gap-2">
                                         {provider.expertise
-                                          .slice(0, 3)
+                                          .slice(0, 7)
                                           .map((skill, index) => (
                                             <Badge
                                               key={index}
@@ -384,12 +384,12 @@ const SolutionsSection = () => {
                                               {skill}
                                             </Badge>
                                           ))}
-                                        {provider.expertise.length > 3 && (
+                                        {provider.expertise.length > 7 && (
                                           <Badge
                                             variant="outline"
                                             className="bg-gray-50 text-gray-600 border-gray-200 px-3 py-1 rounded-full"
                                           >
-                                            +{provider.expertise.length - 3}{' '}
+                                            +{provider.expertise.length - 7}{' '}
                                             more
                                           </Badge>
                                         )}

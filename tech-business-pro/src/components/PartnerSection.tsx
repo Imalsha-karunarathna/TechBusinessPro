@@ -476,12 +476,6 @@ export function PartnerSection() {
                                   >
                                     Artificial Intelligence
                                   </SelectItem>
-                                  <SelectItem
-                                    value="Other"
-                                    className="hover:bg-purple-50 cursor-pointer"
-                                  >
-                                    Other
-                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
