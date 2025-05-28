@@ -127,6 +127,13 @@
       "when": 1748416140406,
       "tag": "0017_cuddly_betty_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1748431133370,
+      "tag": "0018_known_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }

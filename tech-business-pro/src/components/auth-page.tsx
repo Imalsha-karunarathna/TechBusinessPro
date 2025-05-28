@@ -27,10 +27,11 @@ import {
   LogIn,
   Home,
 } from 'lucide-react';
-import { useAuth } from '@/lib/auth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { useAuth } from '@/lib/auth';
+import { ForgotPasswordForm } from './forgotPasswordForm';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -59,6 +60,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function AuthPage() {
   const { user, loginMutation, registerMutation, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('login');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
@@ -133,6 +135,86 @@ export default function AuthPage() {
   // If user is already authenticated, don't render the form
   if (user) {
     return null;
+  }
+
+  // Show forgot password form
+  if (showForgotPassword) {
+    return (
+      <div className="flex min-h-screen">
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-primary-600 to-primary-700 flex-col justify-center p-16 text-black">
+          <h1 className="text-4xl font-bold mb-6">Welcome to Tech Mista</h1>
+          <p className="text-xl mb-8">
+            Your gateway to finding the perfect tech solutions for your business
+            needs.
+          </p>
+          <div className="space-y-6">
+            <div className="flex items-start space-x-4">
+              <div className="bg-white bg-opacity-20 p-2 rounded-full">
+                <User className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Find Solutions</h3>
+                <p className="text-black text-opacity-80">
+                  Browse our curated collection of technology solutions to
+                  address your business challenges.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-white bg-opacity-20 p-2 rounded-full">
+                <Mail className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">
+                  Connect with Providers
+                </h3>
+                <p className="text-black text-opacity-80">
+                  Directly connect with solution providers who specialize in
+                  your specific needs.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-white bg-opacity-20 p-2 rounded-full">
+                <Lock className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Secure and Trusted</h3>
+                <p className="text-black text-opacity-80">
+                  All solution providers are vetted and verified to ensure
+                  quality and reliability.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full md:w-1/2 flex items-center justify-center p-6">
+          <div className="w-full max-w-md">
+            <div className="text-center mb-8">
+              <div className="mb-4 text-center">
+                <Link
+                  href="/"
+                  className="inline-flex items-center text-sm text-[#3069FE] hover:underline"
+                >
+                  <Home className="h-4 w-4 mr-2" />
+                  Back to Home
+                </Link>
+              </div>
+              <div className="inline-flex items-center justify-center h-16 w-16 bg-gradient-to-r from-[#3069FE] to-[#42C3EE] rounded-full mb-6">
+                <Mail className="h-8 w-8 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Forgot Password
+              </h2>
+              <p className="mt-2 text-gray-600">Reset your account password</p>
+            </div>
+
+            <ForgotPasswordForm onBack={() => setShowForgotPassword(false)} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -297,12 +379,13 @@ export default function AuthPage() {
                                   <Key className="h-4 w-4 text-gray-500" />
                                   Password
                                 </FormLabel>
-                                <a
-                                  href="#"
-                                  className="text-sm text-[#3069FE] hover:text-[#3069FE]"
+                                <button
+                                  type="button"
+                                  onClick={() => setShowForgotPassword(true)}
+                                  className="text-sm text-[#3069FE] hover:text-[#3069FE] hover:underline"
                                 >
                                   Forgot password?
-                                </a>
+                                </button>
                               </div>
                               <FormControl>
                                 <Input
