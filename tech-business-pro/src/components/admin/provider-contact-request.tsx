@@ -1,11 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  getContactRequestsForProvider,
-  updateContactRequestStatus,
-  markRequestAsRead,
-} from '@/app/actions/contact-provider-action';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -50,10 +45,16 @@ import type { ContactRequest, DocumentInfo } from '@/lib/types';
 import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
+import {
+  getContactRequestsForProviderAction,
+  getAllContactRequestsAction,
+  markRequestAsReadAction,
+  updateContactRequestStatusAction,
+} from '@/app/actions/contact-provider-action';
 
 interface ProviderContactRequestsProps {
   providerId?: number;
-  providerName?: string; // Make providerId optional for admin view
+  providerName?: string;
 }
 
 export function ProviderContactRequests({
@@ -73,14 +74,12 @@ export function ProviderContactRequests({
     async function fetchRequests() {
       setLoading(true);
       try {
-        // If providerId is provided, fetch requests for that provider
-        // Otherwise, fetch all requests (admin view)
         let result;
         if (providerId) {
-          result = await getContactRequestsForProvider(providerId);
+          result = await getContactRequestsForProviderAction(providerId);
         } else {
           // For admin view, fetch all contact requests
-          result = await getAllContactRequests();
+          result = await getAllContactRequestsAction();
         }
 
         if (result.success) {
@@ -90,8 +89,8 @@ export function ProviderContactRequests({
             description: result.error || 'Failed to load contact requests',
           });
         }
-        /*eslint-disable @typescript-eslint/no-unused-vars */
       } catch (error) {
+        console.error('Error fetching requests:', error);
         toast('Error', {
           description: 'An unexpected error occurred',
         });
@@ -107,23 +106,6 @@ export function ProviderContactRequests({
     return () => clearInterval(interval);
   }, [providerId]);
 
-  // Function to fetch all contact requests (for admin)
-  async function getAllContactRequests() {
-    try {
-      const response = await fetch('/api/admin/contact-request');
-      const data = await response.json();
-
-      return { success: true, data };
-    } catch (error) {
-      console.error('Error fetching all contact requests:', error);
-      return {
-        success: false,
-        error: 'Failed to fetch contact requests',
-        data: [],
-      };
-    }
-  }
-
   const handleViewRequest = async (request: ContactRequest) => {
     setSelectedRequest(request);
     setNotes(request.notes || '');
@@ -132,13 +114,15 @@ export function ProviderContactRequests({
     // Mark as read if it's unread
     if (!request.read) {
       try {
-        await markRequestAsRead(request.id!);
-        // Update local state
-        setRequests(
-          requests.map((req) =>
-            req.id === request.id ? { ...req, read: true } : req,
-          ),
-        );
+        const result = await markRequestAsReadAction(request.id!);
+        if (result.success) {
+          // Update local state
+          setRequests(
+            requests.map((req) =>
+              req.id === request.id ? { ...req, read: true } : req,
+            ),
+          );
+        }
       } catch (error) {
         console.error('Failed to mark request as read:', error);
       }
@@ -152,7 +136,7 @@ export function ProviderContactRequests({
 
     setStatusUpdateLoading(true);
     try {
-      const result = await updateContactRequestStatus(
+      const result = await updateContactRequestStatusAction(
         selectedRequest.id!,
         status,
         notes,
@@ -175,8 +159,8 @@ export function ProviderContactRequests({
           description: result.error || 'Failed to update status',
         });
       }
-      /*eslint-disable @typescript-eslint/no-unused-vars */
     } catch (error) {
+      console.error('Error updating status:', error);
       toast('Error', {
         description: 'An unexpected error occurred',
       });
@@ -280,7 +264,6 @@ export function ProviderContactRequests({
     }
   };
 
-  // Function to get file icon based on mime type
   const getFileIcon = (mimeType: string) => {
     if (mimeType.includes('pdf')) {
       return <File className="h-4 w-4 text-red-500" />;
@@ -294,7 +277,6 @@ export function ProviderContactRequests({
     return <File className="h-4 w-4 text-gray-500" />;
   };
 
-  // Function to format file size
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + ' B';
     else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
@@ -302,14 +284,11 @@ export function ProviderContactRequests({
   };
 
   const formatTimeSlot = (timeSlot: string) => {
-    // If the time slot already includes time zone info (SLT), return as is
     if (timeSlot.includes('SLT')) {
       return timeSlot;
     }
 
-    // For time slots that don't have time zone info, add AEST/AEDT
     if (!timeSlot.includes('AEST') && !timeSlot.includes('AEDT')) {
-      // Check if it's a standard time slot format (e.g., "9:00 AM - 10:00 AM")
       const timeSlotRegex = /^\d{1,2}:\d{2} [AP]M - \d{1,2}:\d{2} [AP]M$/;
       if (timeSlotRegex.test(timeSlot)) {
         return `${timeSlot} (AEST/AEDT)`;
@@ -318,7 +297,7 @@ export function ProviderContactRequests({
 
     return timeSlot;
   };
-  // Helper function to check if documents exist
+
   const hasDocuments = (request: ContactRequest) => {
     return (
       request.documents &&
@@ -327,7 +306,6 @@ export function ProviderContactRequests({
     );
   };
 
-  // Helper function to get documents array
   const getDocuments = (request: ContactRequest): DocumentInfo[] => {
     if (request.documents && Array.isArray(request.documents)) {
       return request.documents;
@@ -460,7 +438,6 @@ export function ProviderContactRequests({
                   </CardHeader>
                   <CardContent className="pb-3">
                     <div className="space-y-3">
-                      {/* Show provider info in admin view */}
                       {!providerId && request.provider_name && (
                         <div className="bg-[#3069FE]/5 p-2 rounded-md">
                           <div className="text-xs font-medium text-[#3069FE] mb-1">
@@ -488,7 +465,6 @@ export function ProviderContactRequests({
                         </p>
                       </div>
 
-                      {/* Show document count if there are any */}
                       {hasDocuments(request) && (
                         <div className="flex items-center text-sm text-[#3069FE]">
                           <Paperclip className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
@@ -511,14 +487,9 @@ export function ProviderContactRequests({
                           {formatDate(request.preferred_date)}
                         </div>
 
-                        <div>
-                          <div key={request.id} className="mb-4">
-                            <div className="flex items-center text-gray-600">
-                              <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
-                              {formatTimeSlot(request.preferred_time_slot)}
-                            </div>
-                            {/* Other request details */}
-                          </div>
+                        <div className="flex items-center text-gray-600">
+                          <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                          {formatTimeSlot(request.preferred_time_slot)}
                         </div>
                       </div>
 
@@ -834,7 +805,6 @@ export function ProviderContactRequests({
                   size="sm"
                   className="gap-1 border-[#42C3EE]/30 hover:bg-[#3069FE]/5 hover:text-[#3069FE]"
                   onClick={() => {
-                    // Create a mailto link with pre-filled subject and body
                     const subject = `Re: Your inquiry about our services`;
                     const body = `Hello ${selectedRequest.seeker_name},\n\nThank you for your inquiry. I'm writing in response to your request regarding:\n\n"${selectedRequest.requirements.substring(0, 100)}..."\n\nI'd like to discuss this further with you.\n\nBest regards,`;
                     window.location.href = `mailto:${selectedRequest.seeker_email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
