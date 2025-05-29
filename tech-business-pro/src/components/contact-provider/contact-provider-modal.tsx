@@ -188,29 +188,6 @@ export function ContactProviderModal({
     setIsSubmitting(true);
 
     try {
-      // First check if there's an existing pending request
-      const checkResponse = await fetch(`/api/admin/contact-request`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          seekerId: user.id,
-          providerId: providerId,
-        }),
-      });
-
-      const checkResult = await checkResponse.json();
-
-      if (checkResult.exists) {
-        toast('Request already exists', {
-          description:
-            'You already have a pending request with this provider. Please wait for a response.',
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
       // Create FormData to handle file uploads
       const formData = new FormData();
 

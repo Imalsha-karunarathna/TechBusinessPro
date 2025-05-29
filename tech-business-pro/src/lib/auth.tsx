@@ -7,30 +7,35 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-
-import { getQueryFn, apiRequest, queryClient } from '@/lib/queryClient';
-
-import type { User } from './db/schema';
 import { toast } from 'sonner';
-
-type LoginData = {
-  username: string;
-  password: string;
-  isAdmin?: boolean;
-};
-
-type RegisterData = LoginData & {
-  name: string;
-  email: string;
-};
+import {
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from '@/app/actions/user-auth';
+import {
+  AuthResult,
+  LoginData,
+  RegisterData,
+  UserWithoutPassword,
+} from './types';
 
 type AuthContextType = {
-  user: User | null;
+  user: UserWithoutPassword | null;
   isLoading: boolean;
   error: Error | null;
-  loginMutation: UseMutationResult<User, Error, LoginData>;
-  logoutMutation: UseMutationResult<void, Error, void>;
-  registerMutation: UseMutationResult<User, Error, RegisterData>;
+  loginMutation: UseMutationResult<
+    AuthResult<UserWithoutPassword>,
+    Error,
+    LoginData
+  >;
+  logoutMutation: UseMutationResult<AuthResult, Error, void>;
+  registerMutation: UseMutationResult<
+    AuthResult<UserWithoutPassword>,
+    Error,
+    RegisterData
+  >;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -42,77 +47,93 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     data: user,
     error,
     isLoading,
-  } = useQuery<User | null, Error>({
-    queryKey: ['/api/user'],
-    queryFn: getQueryFn({ on401: 'returnNull' }),
+    refetch,
+  } = useQuery<UserWithoutPassword | null, Error>({
+    queryKey: ['currentUser'],
+    queryFn: getCurrentUser,
+    retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  const loginMutation = useMutation({
-    mutationFn: async (credentials: LoginData) => {
-      const res = await apiRequest('POST', '/api/login', credentials);
-      return await res.json();
-    },
-    onSuccess: (user: User) => {
-      const path =
-        user.role === 'admin'
-          ? '/admin/partner-application'
-          : user.role === 'solution_provider'
-            ? '/solutionProvider'
-            : user.role === 'solution_seeker'
-              ? '/#solutions'
-              : user.role === 'agent'
-                ? '/agent/dashboard'
-                : '/';
-      window.location.href = path;
-    },
+  const loginMutation = useMutation<
+    AuthResult<UserWithoutPassword>,
+    Error,
+    LoginData
+  >({
+    mutationFn: loginUser,
+    onSuccess: (result) => {
+      if (result.success && result.user) {
+        refetch(); // Refetch user data
 
+        const path =
+          result.user.role === 'admin'
+            ? '/admin/partner-application'
+            : result.user.role === 'solution_provider'
+              ? '/solutionProvider'
+              : result.user.role === 'solution_seeker'
+                ? '/#solutions'
+                : result.user.role === 'agent'
+                  ? '/agent/dashboard'
+                  : '/';
+
+        window.location.href = path;
+      } else {
+        toast('Login failed', {
+          description: result.error || 'Invalid username or password',
+        });
+      }
+    },
     onError: (error: Error) => {
       toast('Login failed', {
         description: error.message || 'Invalid username or password',
-        // variant: "destructive",
       });
     },
   });
 
-  const registerMutation = useMutation({
-    mutationFn: async (credentials: RegisterData) => {
-      const res = await apiRequest('POST', '/api/register', credentials);
-      return await res.json();
-    },
-    onSuccess: (user: User) => {
-      queryClient.setQueryData(['/api/user'], user);
-      toast('Registration successful', {
-        description: 'Your account has been created',
-      });
-
-      // Redirect to home page after registration
-      router.push('/');
+  const registerMutation = useMutation<
+    AuthResult<UserWithoutPassword>,
+    Error,
+    RegisterData
+  >({
+    mutationFn: registerUser,
+    onSuccess: (result) => {
+      if (result.success) {
+        refetch(); // Refetch user data
+        toast('Registration successful', {
+          description: result.message || 'Your account has been created',
+        });
+        router.push('/');
+      } else {
+        toast('Registration failed', {
+          description: result.error || 'Could not create account',
+        });
+      }
     },
     onError: (error: Error) => {
       toast('Registration failed', {
         description: error.message || 'Could not create account',
-        // variant: "destructive",
       });
     },
   });
 
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      await apiRequest('POST', '/api/logout');
-    },
-    onSuccess: () => {
-      queryClient.setQueryData(['/api/user'], null);
-      toast('Logged out', {
-        description: 'You have been logged out successfully',
-      });
-
-      // Redirect to home page after logout
-      router.push('/');
+  const logoutMutation = useMutation<AuthResult, Error, void>({
+    mutationFn: logoutUser,
+    onSuccess: (result) => {
+      if (result.success) {
+        refetch(); // This will return null after logout
+        toast('Logged out', {
+          description: 'You have been logged out successfully',
+        });
+        router.push('/');
+      } else {
+        toast('Logout failed', {
+          description: result.error || 'Logout failed',
+        });
+      }
     },
     onError: (error: Error) => {
       toast('Logout failed', {
         description: error.message,
-        //  variant: "destructive",
       });
     },
   });
