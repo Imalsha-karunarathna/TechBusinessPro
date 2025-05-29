@@ -1,7 +1,6 @@
 import { users } from '@/lib/db/tables/users';
 import { eq } from 'drizzle-orm';
-import { User } from '@/lib/db/schemas/userSchema';
-
+import type { User } from '@/lib/db/schemas/userSchema';
 import { db } from '@/db';
 import { compare } from 'bcryptjs';
 
@@ -75,5 +74,23 @@ export async function validateUserCredentials(
   } catch (error) {
     console.error('Error validating user credentials:', error);
     return null;
+  }
+}
+
+export async function getAllUsers() {
+  try {
+    const allUsers = await db.query.users.findMany({
+      orderBy: (users, { desc }) => [desc(users.created_at)],
+    });
+
+    // Remove password from user objects
+    return allUsers.map((user) => {
+      /*eslint-disable @typescript-eslint/no-unused-vars */
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
   }
 }

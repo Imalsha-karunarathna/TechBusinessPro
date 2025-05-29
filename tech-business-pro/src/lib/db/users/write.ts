@@ -1,76 +1,97 @@
 import { users } from '@/lib/db/tables/users';
-import type { InsertUser, User } from '@/lib/db/schemas/userSchema';
-import { hash } from 'bcryptjs';
-import { db } from '@/db';
 import { eq } from 'drizzle-orm';
-import { sendSeekerWelcomeEmail } from '@/app/actions/register-email';
+import { db } from '@/db';
+import { hash } from 'bcryptjs';
+import { getUserByUsername, getUserByEmail } from './read';
 
-type CreateUserResult =
-  | {
-      success: true;
-      message: string;
-      user: User;
-    }
-  | {
-      success: false;
-      error: string;
-    };
+interface CreateUserData {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  role?: 'admin' | 'solution_provider' | 'solution_seeker' | 'agent';
+}
 
-export async function createUser(
-  userData: Omit<InsertUser, 'password'> & { password: string },
-): Promise<CreateUserResult> {
+export async function createUser(userData: CreateUserData) {
   try {
-    const existingUser = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.username, userData.username || userData.email));
-
-    if (existingUser.length > 0) {
-      return {
-        success: false,
-        error: 'Username or email already exists',
-      };
+    // Check if username or email already exists
+    const existingUser = await getUserByUsername(userData.username);
+    if (existingUser) {
+      return { success: false, error: 'Username already exists' };
     }
 
-    const hashedPassword = await hash(userData.password, 10);
+    const existingEmail = await getUserByEmail(userData.email);
+    if (existingEmail) {
+      return { success: false, error: 'Email already exists' };
+    }
 
-    const result = await db
+    // Hash password
+    const hashedPassword = await hash(userData.password, 12);
+
+    // Create user
+    const [newUser] = await db
       .insert(users)
       .values({
-        ...userData,
+        name: userData.name,
+        username: userData.username,
+        email: userData.email,
         password: hashedPassword,
+        role: userData.role || 'solution_seeker',
+        is_active: true,
         created_at: new Date(),
       })
       .returning();
-
-    if (!result || result.length === 0) {
-      throw new Error('Failed to create user');
-    }
-
-    const newUser = result[0];
-
-    // Send welcome email (don't fail registration if email fails)
-    try {
-      await sendSeekerWelcomeEmail(
-        userData.email,
-        userData.name,
-        userData.username,
-      );
-    } catch (emailError) {
-      console.error('Failed to send seeker welcome email:', emailError);
-    }
+    /*eslint-disable @typescript-eslint/no-unused-vars */
+    const { password, ...userWithoutPassword } = newUser;
 
     return {
       success: true,
-      message:
-        'Seeker registration successful! Please check your email for a welcome message.',
-      user: newUser,
+      user: userWithoutPassword,
+      message: 'User created successfully',
     };
   } catch (error) {
-    console.error('Seeker registration error:', error);
-    return {
-      success: false,
-      error: 'Registration failed. Please try again.',
-    };
+    console.error('Error creating user:', error);
+    return { success: false, error: 'Failed to create user' };
+  }
+}
+
+export async function updateUserStatus(userId: number, isActive: boolean) {
+  try {
+    await db
+      .update(users)
+      .set({ is_active: isActive })
+      .where(eq(users.id, userId));
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating user status:', error);
+    return { success: false, error: 'Failed to update user status' };
+  }
+}
+
+export async function updateUserRole(userId: number, role: string) {
+  try {
+    // Validate role
+    if (
+      !['admin', 'solution_provider', 'solution_seeker', 'agent'].includes(role)
+    ) {
+      return { success: false, error: 'Invalid role' };
+    }
+
+    await db
+      .update(users)
+      .set({
+        role: role as
+          | 'admin'
+          | 'solution_provider'
+          | 'solution_seeker'
+          | 'agent',
+      })
+      .where(eq(users.id, userId));
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    return { success: false, error: 'Failed to update user role' };
   }
 }

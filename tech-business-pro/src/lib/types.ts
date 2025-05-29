@@ -135,3 +135,37 @@ export interface DocumentInfo {
   mimeType: string;
   url: string;
 }
+
+export type UserWithoutPassword = {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'solution_provider' | 'solution_seeker' | 'agent';
+  avatar_url: string | null;
+  organization_id: number | null;
+  is_active: boolean;
+  last_login: Date | null;
+  created_at: Date;
+};
+
+export type AuthResult<T = UserWithoutPassword> = {
+  success: boolean;
+  user?: T;
+  error?: string;
+  message?: string;
+};
+
+export type LoginData = {
+  username: string;
+  password: string;
+  isAdmin?: boolean;
+};
+
+export type RegisterData = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  acceptPolicy: boolean;
+};
