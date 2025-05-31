@@ -435,46 +435,42 @@ export function PartnerSection() {
                                 </FormControl>
                                 <SelectContent className="max-h-[600px] bg-white">
                                   <SelectItem
-                                    value="IT Security"
+                                    value="Website development"
                                     className="hover:bg-purple-50 cursor-pointer"
                                   >
-                                    IT Security
+                                    Website development
                                   </SelectItem>
                                   <SelectItem
-                                    value="CRM Implementation"
+                                    value="Web Application Development"
                                     className="hover:bg-purple-50 cursor-pointer"
                                   >
-                                    CRM Implementation
+                                    Web Application Development
                                   </SelectItem>
                                   <SelectItem
-                                    value="Web Development"
+                                    value="Mobile Application Development"
                                     className="hover:bg-purple-50 cursor-pointer"
                                   >
-                                    Web Development
+                                    Mobile Application Development
+                                  </SelectItem>
+
+                                  <SelectItem
+                                    value="IT Security (Audit)"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    IT Security (Audit)
+                                  </SelectItem>
+
+                                  <SelectItem
+                                    value="System Integration"
+                                    className="hover:bg-purple-50 cursor-pointer"
+                                  >
+                                    System Integration
                                   </SelectItem>
                                   <SelectItem
-                                    value="Business Applications"
+                                    value="Technical Business Consultancy"
                                     className="hover:bg-purple-50 cursor-pointer"
                                   >
-                                    Business Applications
-                                  </SelectItem>
-                                  <SelectItem
-                                    value="Cloud Computing"
-                                    className="hover:bg-purple-50 cursor-pointer"
-                                  >
-                                    Cloud Computing
-                                  </SelectItem>
-                                  <SelectItem
-                                    value="Data Analytics"
-                                    className="hover:bg-purple-50 cursor-pointer"
-                                  >
-                                    Data Analytics
-                                  </SelectItem>
-                                  <SelectItem
-                                    value="Artificial Intelligence"
-                                    className="hover:bg-purple-50 cursor-pointer"
-                                  >
-                                    Artificial Intelligence
+                                    Technical Business Consultancy
                                   </SelectItem>
                                 </SelectContent>
                               </Select>

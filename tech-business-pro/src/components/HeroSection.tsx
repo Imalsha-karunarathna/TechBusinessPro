@@ -38,11 +38,11 @@ const HeroSection = () => {
             {/* Text section */}
             <div className="text-center lg:text-left ">
               <h1 className="text-4xl tracking-tight sm:text-5xl md:text-6xl font-bold">
-                Building{' '}
+                Digital{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-100">
-                  Global
+                  Excellence
                 </span>{' '}
-                Partnerships
+                Through Global Partnerships
               </h1>
               <p className="mt-6 max-w-md mx-auto lg:mx-0 text-xl text-white text-opacity-90 sm:text-2xl">
                 Transforming Vision into Business Success

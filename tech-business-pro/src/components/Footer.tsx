@@ -55,7 +55,7 @@ const Footer = () => {
                   href="#"
                   className="text-gray-300 hover:text-white text-sm"
                 >
-                  IT Security
+                  Web application development
                 </Link>
               </li>
               <li>
@@ -63,7 +63,7 @@ const Footer = () => {
                   href="#"
                   className="text-gray-300 hover:text-white text-sm"
                 >
-                  CRM Implementation
+                  Mobile application development
                 </Link>
               </li>
               <li>
@@ -71,7 +71,23 @@ const Footer = () => {
                   href="#"
                   className="text-gray-300 hover:text-white text-sm"
                 >
-                  Business Applications
+                  IT Security ( Audit )
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
+                  System Integration
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
+                  Technical Business Consultancy
                 </Link>
               </li>
             </ul>
@@ -90,28 +106,13 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="#blog"
-                  className="text-gray-300 hover:text-white text-sm"
-                >
-                  Blog
-                </Link>
-              </li>
+
               <li>
                 <Link
                   href="#partner"
                   className="text-gray-300 hover:text-white text-sm"
                 >
                   Partners
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-300 hover:text-white text-sm"
-                >
-                  Careers
                 </Link>
               </li>
             </ul>
@@ -130,7 +131,7 @@ const Footer = () => {
                   Privacy Policy
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="#"
                   className="text-gray-300 hover:text-white text-sm"
@@ -145,7 +146,7 @@ const Footer = () => {
                 >
                   Cookie Policy
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
