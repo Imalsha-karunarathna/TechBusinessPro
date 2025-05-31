@@ -362,15 +362,15 @@ const SolutionsSection = () => {
                                 </div>
 
                                 <div className="p-6">
-                                  <p className="text-gray-600 text-sm line-clamp-3 mb-4 h-[4.5rem]">
+                                  <p className="text-gray-600 text-sm line-clamp-3 mb-0 ">
                                     {provider.description}
                                   </p>
 
                                   {/* Expertise areas - using type guard */}
                                   {hasExpertise(provider) && (
-                                    <div className="mb-4">
+                                    <div className="mb-4 mt-4">
                                       <div className="text-xs font-medium text-gray-500 mb-2">
-                                        Expertise
+                                        Expertise Areas
                                       </div>
                                       <div className="flex flex-wrap gap-2">
                                         {provider.expertise
