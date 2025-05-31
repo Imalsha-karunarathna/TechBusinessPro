@@ -122,8 +122,8 @@ export function UsersTable({ users }: UsersTableProps) {
   };
 
   return (
-    <div className="rounded-md border border-[#42C3EE]/20 shadow-md hover:shadow-lg hover:shadow-[#3069FE]/10 transition-all duration-300">
-      <div className="w-full overflow-auto">
+    <div className="rounded-md border border-[#42C3EE]/20 shadow-md hover:shadow-lg hover:shadow-[#3069FE]/10 transition-all duration-300 ">
+      <div className="w-full overflow-auto overflow-x-hidden">
         <Table>
           <TableHeader className="bg-gradient-to-r from-[#3069FE]/5 to-[#42C3EE]/5">
             <TableRow>

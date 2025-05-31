@@ -13,15 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import {
-  Eye,
-  Building,
-  User,
-  Mail,
-  Briefcase,
-  Clock,
-  FileText,
-} from 'lucide-react';
+import { Eye, Building, User, Mail, Briefcase, Clock } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -62,7 +54,7 @@ export function PartnerApplicationsTable({
                 <TableHead className="font-medium text-[#3069FE]">
                   Expertise
                 </TableHead>
-                <TableHead className="font-medium text-[#3069FE]">
+                <TableHead className="font-medium text-[#3069FE] ">
                   Designation
                 </TableHead>
                 <TableHead className="font-medium text-[#3069FE]">
@@ -152,8 +144,7 @@ export function PartnerApplicationsTable({
                       )}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center">
-                        <FileText className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
+                      <div className="flex items-center ml-5">
                         {application.designation}
                       </div>
                     </TableCell>
@@ -162,7 +153,6 @@ export function PartnerApplicationsTable({
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center text-gray-600">
-                        <Clock className="h-3.5 w-3.5 mr-1.5 text-[#42C3EE]" />
                         {application.created_at
                           ? formatDistanceToNow(
                               new Date(application.created_at),
