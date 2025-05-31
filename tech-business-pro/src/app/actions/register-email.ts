@@ -17,7 +17,7 @@ export async function sendSeekerWelcomeEmail(
     );
 
     const { data, error } = await resend.emails.send({
-      from: `TechMista <no-reply@techmista.com.au>`,
+      from: 'TechMista <info@techmista.com.au>',
       to: email,
       subject: 'Welcome to TechMista - Your Solution Seeker Account is Ready!',
       html: emailHtml,
@@ -43,7 +43,7 @@ export async function sendAgentWelcomeEmail(email: string, username: string) {
     );
 
     const { data, error } = await resend.emails.send({
-      from: `TechMista <no-reply@techmista.com.au>`,
+      from: 'TechMista <info@techmista.com.au>',
       to: email,
       subject: 'Welcome to TechMista - Your Agent Account is Active!',
       html: emailHtml,

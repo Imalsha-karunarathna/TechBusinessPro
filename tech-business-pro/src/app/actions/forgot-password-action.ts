@@ -211,7 +211,7 @@ async function sendPasswordResetEmail(email: string, token: string) {
     const resetUrl = `${baseUrl}/forgot-password/${token}`;
 
     const result = await resend.emails.send({
-      from: `TechMista <no-reply@techmista.com.au>`,
+      from: 'TechMista <info@techmista.com.au>',
       to: email,
       subject: 'Reset Your Password - Tech Mista',
       react: ForgotPasswordEmail({ resetUrl, userEmail: email }),

@@ -52,7 +52,7 @@ export default async function Page({
         </Card>
 
         <p className="text-center text-sm text-muted-foreground mt-4">
-          Need help? Contact our support team at support@techmista.com.au
+          Need help? Contact our support team at info@techmista.com.au
         </p>
       </div>
     </div>

@@ -18,7 +18,7 @@ export async function sendPasswordResetEmail({
 }) {
   try {
     const { data, error } = await resend.emails.send({
-      from: `TechMista <no-reply@techmista.com.au>`,
+      from: 'TechMista <info@techmista.com.au>',
       to: email,
       subject: `Reset Your Password for TechMista`,
       react: PasswordResetEmail({
