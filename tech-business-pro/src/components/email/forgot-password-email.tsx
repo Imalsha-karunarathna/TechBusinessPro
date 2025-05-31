@@ -139,8 +139,8 @@ export const ForgotPasswordEmail = ({
       <p style={{ color: '#999', fontSize: '14px', lineHeight: '1.5' }}>
         If you&apos;re having trouble with your account, please contact our
         support team at{' '}
-        <a href="mailto:support@techmista.com" style={{ color: '#3069FE' }}>
-          support@techmista.com
+        <a href="mailto:info@techmista.com.au" style={{ color: '#3069FE' }}>
+          info@techmista.com.au
         </a>
       </p>
     </div>
