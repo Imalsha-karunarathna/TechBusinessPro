@@ -195,9 +195,17 @@ export function PartnerApplicationDetail({
               <Award className="h-4 w-4 mr-1.5 text-[#42C3EE]" />
               Area of Expertise
             </h3>
-            <p className="bg-[#3069FE]/10 text-[#3069FE] px-3 py-1 rounded-full text-sm font-medium inline-block">
-              {application.expertise}
-            </p>
+            <div className="flex flex-wrap gap-2">
+              {Array.isArray(application.expertise) &&
+                application.expertise.map((item: string, index: number) => (
+                  <p
+                    key={index}
+                    className="bg-[#3069FE]/10 text-[#3069FE] px-3 py-1 rounded-full text-sm font-medium"
+                  >
+                    {item}
+                  </p>
+                ))}
+            </div>
           </div>
 
           {application.reason && (

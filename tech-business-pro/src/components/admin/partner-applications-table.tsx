@@ -195,7 +195,7 @@ export function PartnerApplicationsTable({
       {/* View Application Dialog */}
       {selectedApplication && (
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="sm:max-w-[600px] bg-gradient-to-br from-gray-900 to-[#3069FE]/90 text-white border border-[#42C3EE]/30 rounded-xl shadow-xl">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-900 to-[#3069FE]/90 text-white border border-[#42C3EE]/30 rounded-xl shadow-xl">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold flex items-center">
                 <Building className="h-5 w-5 mr-2 text-[#42C3EE]" />
