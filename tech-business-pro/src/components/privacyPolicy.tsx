@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { Home } from 'lucide-react';
 
 export default function PrivacyPolicy() {
   return (
@@ -18,6 +20,15 @@ export default function PrivacyPolicy() {
       </header>
 
       <div className="max-w-5xl mx-auto py-5 px-4">
+        <div className="absolute top-4 right-65">
+          <Link
+            href="/"
+            className="inline-flex items-center text-sm text-[#3069FE] hover:underline"
+          >
+            <Home className="h-4 w-4 mr-2" />
+            Back to Home
+          </Link>
+        </div>
         <div className="text-center mb-5">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">
             Privacy Policy
